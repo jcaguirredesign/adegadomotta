@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adega do Motta</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #cc0000;
+    --red-hot: #ff2200;
+    --yellow: #ffcc00;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #f0f0f0;
+    --muted: #888;
+  }
+ 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+ 
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+ 
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+ 
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, var(--red-hot), var(--yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+ 
+  nav { display: flex; gap: 24px; align-items: center; }
+ 
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--yellow); }
+ 
+  .insta-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    color: white;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: opacity 0.2s;
+  }
+  .insta-btn:hover { opacity: 0.85; }
+ 
+  .cart-btn {
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+    position: relative;
+  }
+  .cart-btn:hover { background: var(--red-hot); }
+ 
+  .cart-count {
+    background: var(--yellow);
+    color: var(--black);
+    font-size: 11px;
+    font-weight: 800;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+ 
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 80px 24px 60px;
+    text-align: center;
+    overflow: hidden;
+  }
+ 
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(204,0,0,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+ 
+  .hero-tag {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+ 
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 10vw, 100px);
+    line-height: 0.95;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+ 
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--red-hot), var(--yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+ 
+  .hero p {
+    color: var(--muted);
+    font-size: 16px;
+    margin-bottom: 32px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+ 
+  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+ 
+  .btn-primary {
+    background: var(--red);
+    color: white;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-primary:hover { background: var(--red-hot); transform: translateY(-1px); }
+ 
+  .btn-outline {
+    background: transparent;
+    color: var(--yellow);
+    padding: 14px 32px;
+    border: 2px solid var(--yellow);
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-outline:hover { background: rgba(255,204,0,0.1); }
+ 
+  /* BADGES */
+  .badges {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+ 
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+ 
+  .badge-icon {
+    color: var(--yellow);
+    font-size: 18px;
+  }
+ 
+  /* SECTION */
+  section { padding: 60px 24px; max-width: 1200px; margin: 0 auto; }
+ 
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+ 
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+  }
+ 
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+ 
+  /* CATEGORIES */
+  .categories {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+ 
+  .cat-btn {
+    background: var(--card);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 8px 18px;
+    border-radius: 3px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cat-btn:hover, .cat-btn.active {
+    background: var(--red);
+    color: white;
+    border-color: var(--red);
+  }
+ 
+  /* PRODUCT GRID */
+  .products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+ 
+  .product-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .product-card:hover {
+    border-color: var(--red);
+    transform: translateY(-3px);
+  }
+ 
+  .product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+  }
+ 
+  .product-info { padding: 14px; }
+ 
+  .product-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+ 
+  .product-vol {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+ 
+  .product-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+ 
+  .product-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--yellow);
+    letter-spacing: 1px;
+  }
+ 
+  .add-btn {
+    background: var(--red);
+    color: white;
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .add-btn:hover { background: var(--red-hot); }
+ 
+  /* DELIVERY SECTION */
+  .delivery-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+ 
+  @media (max-width: 600px) {
+    .delivery-section { grid-template-columns: 1fr; }
+  }
+ 
+  .delivery-option {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .delivery-option:hover { border-color: var(--red); }
+ 
+  .delivery-icon { font-size: 36px; margin-bottom: 10px; }
+ 
+  .delivery-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+ 
+  .delivery-desc { color: var(--muted); font-size: 14px; }
+ 
+  /* CART SIDEBAR */
+  .cart-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    backdrop-filter: blur(4px);
+  }
+  .cart-overlay.open { display: block; }
+ 
+  .cart-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 360px;
+    max-width: 100vw;
+    background: var(--dark);
+    border-left: 1px solid var(--border);
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+  .cart-sidebar.open { transform: translateX(0); }
+ 
+  .cart-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+ 
+  .cart-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+ 
+  .close-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .close-btn:hover { color: white; }
+ 
+  .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+ 
+  .cart-empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 0;
+    font-size: 14px;
+  }
+ 
+  .cart-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+ 
+  .cart-item-emoji { font-size: 28px; }
+ 
+  .cart-item-info { flex: 1; }
+ 
+  .cart-item-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+  }
+ 
+  .cart-item-price { color: var(--yellow); font-size: 14px; font-weight: 500; }
+ 
+  .cart-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+ 
+  .qty-btn {
+    background: var(--border);
+    border: none;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .qty-btn:hover { background: var(--red); }
+ 
+  .cart-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+  }
+ 
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+ 
+  .cart-total-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--yellow);
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+ 
+  .checkout-btn {
+    width: 100%;
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background 0.2s;
+  }
+  .checkout-btn:hover { background: var(--red-hot); }
+ 
+  .whatsapp-checkout {
+    width: 100%;
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .whatsapp-checkout:hover { background: #1fb855; }
+ 
+  /* WHATSAPP FLOAT */
+  .whatsapp-float {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 150;
+    background: #25d366;
+    color: white;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 28px rgba(37,211,102,0.6);
+  }
+ 
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 32px 24px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+ 
+  footer .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    background: linear-gradient(135deg, var(--red-hot), var(--yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    margin-bottom: 8px;
+  }
+ 
+  /* HAMBURGER */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-left: 12px;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+ 
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: rgba(10,10,10,0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+    padding: 8px 20px 16px;
+    flex-direction: column;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    color: var(--text);
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover { color: var(--yellow); }
+ 
+  /* TABLET */
+  @media (max-width: 900px) {
+    section { padding: 48px 20px; }
+    .products { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  }
+ 
+  /* MOBILE */
+  @media (max-width: 640px) {
+    header { padding: 0 16px; height: 56px; }
+    .logo { font-size: 22px; }
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .cart-btn { padding: 8px 12px; gap: 6px; }
+ 
+    .hero { padding: 40px 16px 32px; }
+    .hero p { font-size: 15px; }
+    .hero-btns { flex-direction: column; align-items: center; }
+    .hero-btns > * { width: 100%; max-width: 300px; }
+    .hero-btns a { display: block; }
+    .hero-btns a button { width: 100%; }
+ 
+    .badges {
+      gap: 16px;
+      padding: 14px 16px;
+      justify-content: flex-start;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    .badge { white-space: nowrap; flex-shrink: 0; }
+ 
+    section { padding: 32px 16px; }
+ 
+    .categories {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .cat-btn { flex-shrink: 0; }
+ 
+    .products { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .product-img { height: 130px; font-size: 40px; }
+    .product-info { padding: 10px; }
+    .product-name { font-size: 14px; }
+    .product-price { font-size: 18px; }
+    .add-btn { width: 30px; height: 30px; font-size: 16px; }
+ 
+    .delivery-section { grid-template-columns: 1fr; padding: 20px; gap: 16px; }
+    footer { padding: 24px 16px; }
+    .cart-sidebar { width: 100vw; }
+  }
+ 
+  /* LARGE SCREENS */
+  @media (min-width: 1400px) {
+    .hero h1 { font-size: 120px; }
+    section { max-width: 1400px; }
+    .products { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+ 
+<!-- HEADER -->
+<header>
+  <div class="logo">Adega do Motta</div>
+  <nav>
+    <a href="#produtos">Produtos</a>
+    <a href="#entrega">Entrega</a>
+    <a href="https://wa.me/5547984217666" target="_blank">Contato</a>
+    <a class="insta-btn" href="https://www.instagram.com/adega_domotta?igsh=MTlobWlrMHU0MTdzOA==" target="_blank">📷 Instagram</a>
+  </nav>
+  <div style="display:flex;align-items:center;gap:8px">
+    <button class="cart-btn" onclick="toggleCart()">
+      🛒 Carrinho
+      <span class="cart-count" id="cart-count">0</span>
+    </button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+ 
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#produtos" onclick="toggleMenu()">🍺 Produtos</a>
+  <a href="#entrega" onclick="toggleMenu()">🚚 Entrega</a>
+  <a href="https://wa.me/5547984217666" target="_blank" onclick="toggleMenu()">💬 WhatsApp</a>
+  <a href="https://www.instagram.com/adega_domotta?igsh=MTlobWlrMHU0MTdzOA==" target="_blank" onclick="toggleMenu()">📷 Instagram</a>
+</div>
+ 
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-tag">🔥 Delivery & Retirada</span>
+  <h1>ADEGA<br><span>DO MOTTA</span></h1>
+  <p>As melhores bebidas da região. Cerveja, destilados, vinhos e muito mais.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">Ver produtos</button>
+    <a href="https://wa.me/5547984217666" target="_blank"><button class="btn-outline">💬 WhatsApp</button></a>
+  </div>
+</div>
+ 
+<!-- BADGES -->
+<div class="badges">
+  <div class="badge"><span class="badge-icon">🚚</span> Delivery rápido</div>
+  <div class="badge"><span class="badge-icon">🏪</span> Retirada na loja</div>
+  <div class="badge"><span class="badge-icon">💳</span> Cartão & Pix</div>
+  <div class="badge"><span class="badge-icon">🍺</span> +50 produtos</div>
+</div>
+ 
+<!-- PRODUTOS -->
+<section id="produtos">
+  <div class="section-header">
+    <h2 class="section-title">Produtos</h2>
+    <div class="section-line"></div>
+  </div>
+ 
+  <div class="categories">
+    <button class="cat-btn active" onclick="filterCat(this,'todos')">Todos</button>
+    <button class="cat-btn" onclick="filterCat(this,'cerveja')">🍺 Cervejas</button>
+    <button class="cat-btn" onclick="filterCat(this,'destilado')">🥃 Destilados</button>
+    <button class="cat-btn" onclick="filterCat(this,'vinho')">🍷 Vinhos</button>
+    <button class="cat-btn" onclick="filterCat(this,'energetico')">⚡ Energéticos</button>
+  </div>
+ 
+  <div class="products" id="products-grid"></div>
+</section>
+ 
+<!-- ENTREGA -->
+<section id="entrega" style="padding-top:0">
+  <div class="section-header">
+    <h2 class="section-title">Como receber</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="delivery-section">
+    <div class="delivery-option">
+      <div class="delivery-icon">🚚</div>
+      <div class="delivery-title">Delivery</div>
+      <div class="delivery-desc">Entregamos na sua casa. Pedido mínimo R$50. Frete consultar no WhatsApp.</div>
+    </div>
+    <div class="delivery-option">
+      <div class="delivery-icon">🏪</div>
+      <div class="delivery-title">Retirada</div>
+      <div class="delivery-desc">Retire direto na loja sem taxa de entrega. Pedido pronto em minutos.</div>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Adega do Motta</span>
+  <div style="display:flex;justify-content:center;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+    <a href="https://wa.me/5547984217666" target="_blank" style="color:#25d366;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px">💬 WhatsApp</a>
+    <a href="https://www.instagram.com/adega_domotta?igsh=MTlobWlrMHU0MTdzOA==" target="_blank" style="color:#fd1d1d;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px">📷 @adega_domotta</a>
+  </div>
+  <p>© 2025 Adega do Motta · Todos os direitos reservados</p>
+  <p style="margin-top:6px">Venda e consumo de bebidas alcoólicas proibidos para menores de 18 anos.</p>
+</footer>
+ 
+<!-- WHATSAPP FLOAT -->
+<a class="whatsapp-float" href="https://wa.me/5547984217666" target="_blank" title="Falar no WhatsApp">💬</a>
+ 
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cart-sidebar">
+  <div class="cart-header">
+    <span class="cart-title">🛒 Seu carrinho</span>
+    <button class="close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">Seu carrinho está vazio.<br>Adicione produtos!</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total</span></div>
+    <div class="cart-total-val" id="cart-total">R$ 0,00</div>
+    <button class="checkout-btn">💳 Finalizar pedido</button>
+    <button class="whatsapp-checkout" onclick="checkoutWhatsApp()">💬 Pedir pelo WhatsApp</button>
+  </div>
+</div>
+ 
+<script>
+const WHATSAPP = '5547984217666'; // ← TROQUE PELO SEU NÚMERO
+ 
+const products = [
+  { id:1, name:'Heineken Long Neck', vol:'330ml', price:7.90, emoji:'🍺', cat:'cerveja' },
+  { id:2, name:'Budweiser Lata', vol:'350ml', price:5.50, emoji:'🍺', cat:'cerveja' },
+  { id:3, name:'Skol Pilsen', vol:'600ml', price:9.90, emoji:'🍺', cat:'cerveja' },
+  { id:4, name:'Brahma Duplo Malte', vol:'350ml', price:5.90, emoji:'🍺', cat:'cerveja' },
+  { id:5, name:'Jack Daniel\'s', vol:'1L', price:139.90, emoji:'🥃', cat:'destilado' },
+  { id:6, name:'Vodka Absolut', vol:'750ml', price:79.90, emoji:'🥃', cat:'destilado' },
+  { id:7, name:'Cachaça 51', vol:'1L', price:29.90, emoji:'🥃', cat:'destilado' },
+  { id:8, name:'Vinho Suave Tinto', vol:'750ml', price:34.90, emoji:'🍷', cat:'vinho' },
+  { id:9, name:'Vinho Seco Branco', vol:'750ml', price:39.90, emoji:'🍷', cat:'vinho' },
+  { id:10, name:'Red Bull Original', vol:'250ml', price:14.90, emoji:'⚡', cat:'energetico' },
+  { id:11, name:'Monster Energy', vol:'473ml', price:12.90, emoji:'⚡', cat:'energetico' },
+  { id:12, name:'Coronita Extra', vol:'210ml', price:8.90, emoji:'🍺', cat:'cerveja' },
+];
+ 
+let cart = {};
+let currentCat = 'todos';
+ 
+function fmt(v) { return 'R$ ' + v.toFixed(2).replace('.', ','); }
+ 
+function renderProducts(cat) {
+  const list = cat === 'todos' ? products : products.filter(p => p.cat === cat);
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = list.map(p => `
+    <div class="product-card">
+      <div class="product-img">${p.emoji}</div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-vol">${p.vol}</div>
+        <div class="product-bottom">
+          <span class="product-price">${fmt(p.price)}</span>
+          <button class="add-btn" onclick="addToCart(${p.id})">+</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+ 
+function filterCat(btn, cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCat = cat;
+  renderProducts(cat);
+}
+ 
+function addToCart(id) {
+  const p = products.find(x => x.id === id);
+  if (!cart[id]) cart[id] = { ...p, qty: 0 };
+  cart[id].qty++;
+  updateCart();
+}
+ 
+function removeFromCart(id) {
+  if (cart[id]) {
+    cart[id].qty--;
+    if (cart[id].qty <= 0) delete cart[id];
+    updateCart();
+  }
+}
+ 
+function updateCart() {
+  const items = Object.values(cart);
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const count = items.reduce((s, i) => s + i.qty, 0);
+ 
+  document.getElementById('cart-count').textContent = count;
+  document.getElementById('cart-total').textContent = fmt(total);
+ 
+  const container = document.getElementById('cart-items');
+  if (!items.length) {
+    container.innerHTML = '<div class="cart-empty">Seu carrinho está vazio.<br>Adicione produtos!</div>';
+    return;
+  }
+ 
+  container.innerHTML = items.map(i => `
+    <div class="cart-item">
+      <span class="cart-item-emoji">${i.emoji}</span>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${i.name}</div>
+        <div class="cart-item-price">${fmt(i.price * i.qty)}</div>
+      </div>
+      <div class="cart-item-qty">
+        <button class="qty-btn" onclick="removeFromCart(${i.id})">−</button>
+        <span>${i.qty}</span>
+        <button class="qty-btn" onclick="addToCart(${i.id})">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+ 
+function toggleCart() {
+  document.getElementById('cart-overlay').classList.toggle('open');
+  document.getElementById('cart-sidebar').classList.toggle('open');
+}
+ 
+function checkoutWhatsApp() {
+  const items = Object.values(cart);
+  if (!items.length) { alert('Adicione produtos ao carrinho primeiro!'); return; }
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  let msg = '🛒 *Pedido - Adega do Motta*\n\n';
+  items.forEach(i => { msg += `• ${i.name} x${i.qty} — ${fmt(i.price * i.qty)}\n`; });
+  msg += `\n💰 *Total: ${fmt(total)}*\n\nGostaria de fazer meu pedido!`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+ 
+renderProducts('todos');
+ 
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+</script>
+</body>
+</html>
