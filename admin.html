@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Admin — Adega do Motta</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #cc0000;
+    --red-hot: #ff2200;
+    --yellow: #ffcc00;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #1a1a1a;
+    --card2: #222;
+    --border: #2a2a2a;
+    --text: #f0f0f0;
+    --muted: #888;
+    --green: #25d366;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--black); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; }
+ 
+  /* LOGIN */
+  .login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: radial-gradient(ellipse at center, rgba(204,0,0,0.15) 0%, transparent 70%);
+  }
+  .login-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px 32px;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+  .login-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    background: linear-gradient(135deg, var(--red-hot), var(--yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+  }
+  .login-sub { color: var(--muted); font-size: 13px; margin-bottom: 32px; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 2px; text-transform: uppercase; }
+  .login-label { display: block; text-align: left; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .login-input {
+    width: 100%;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: 'Barlow', sans-serif;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .login-input:focus { outline: none; border-color: var(--red); }
+  .login-btn {
+    width: 100%;
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 4px;
+  }
+  .login-btn:hover { background: var(--red-hot); }
+  .login-error { color: #ff4444; font-size: 13px; margin-top: 10px; display: none; }
+ 
+  /* ADMIN PANEL */
+  .admin-screen { display: none; min-height: 100vh; }
+ 
+  .admin-header {
+    background: var(--dark);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .admin-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; background: linear-gradient(135deg, var(--red-hot), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .admin-user { display: flex; align-items: center; gap: 10px; }
+  .user-badge { background: var(--card2); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+  .user-badge.dono { border-color: var(--yellow); color: var(--yellow); }
+  .user-badge.func { border-color: #4488ff; color: #4488ff; }
+  .logout-btn { background: none; border: 1px solid var(--border); color: var(--muted); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s; }
+  .logout-btn:hover { border-color: var(--red); color: var(--red); }
+ 
+  .admin-body { padding: 24px 20px; max-width: 900px; margin: 0 auto; }
+ 
+  /* TABS */
+  .tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .tab { background: none; border: none; color: var(--muted); padding: 10px 18px; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; margin-bottom: -1px; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--red); border-bottom-color: var(--red); }
+ 
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+ 
+  /* STATS */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--yellow); letter-spacing: 1px; }
+  .stat-label { color: var(--muted); font-size: 12px; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+ 
+  /* PRODUCT LIST */
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 2px; margin-bottom: 16px; }
+ 
+  .add-product-btn {
+    background: var(--red);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .add-product-btn:hover { background: var(--red-hot); }
+ 
+  .product-list { display: flex; flex-direction: column; gap: 10px; }
+ 
+  .product-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.2s;
+  }
+  .product-row:hover { border-color: #333; }
+  .product-emoji { font-size: 28px; flex-shrink: 0; }
+  .product-details { flex: 1; min-width: 0; }
+  .product-row-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; }
+  .product-row-meta { color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .product-row-price { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--yellow); flex-shrink: 0; }
+  .product-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .edit-btn { background: var(--card2); border: 1px solid var(--border); color: var(--text); width: 34px; height: 34px; border-radius: 4px; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .edit-btn:hover { border-color: var(--yellow); }
+  .del-btn { background: var(--card2); border: 1px solid var(--border); color: var(--muted); width: 34px; height: 34px; border-radius: 4px; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .del-btn:hover { border-color: var(--red); color: var(--red); }
+ 
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 460px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; margin-bottom: 20px; }
+  .form-group { margin-bottom: 14px; }
+  .form-label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .form-input, .form-select {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 11px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: 'Barlow', sans-serif;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus { outline: none; border-color: var(--red); }
+  .form-select option { background: var(--dark); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+  .modal-save { flex: 1; background: var(--red); color: white; border: none; padding: 13px; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .modal-save:hover { background: var(--red-hot); }
+  .modal-cancel { background: var(--card); color: var(--muted); border: 1px solid var(--border); padding: 13px 20px; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+  .modal-cancel:hover { color: var(--text); }
+ 
+  /* USERS TAB */
+  .user-list { display: flex; flex-direction: column; gap: 10px; }
+  .user-row { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .user-icon { font-size: 28px; }
+  .user-info { flex: 1; }
+  .user-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; }
+  .user-role { font-size: 13px; margin-top: 2px; }
+  .user-role.dono { color: var(--yellow); }
+  .user-role.func { color: #4488ff; }
+ 
+  /* EXPORT */
+  .export-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+  .export-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; margin-bottom: 8px; }
+  .export-desc { color: var(--muted); font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
+  .export-btn { background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 6px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+  .export-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+ 
+  /* EMPTY */
+  .empty { text-align: center; color: var(--muted); padding: 40px; font-size: 14px; }
+ 
+  @media (max-width: 500px) {
+    .admin-body { padding: 16px; }
+    .form-row { grid-template-columns: 1fr; }
+    .product-row-price { display: none; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+ 
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Adega do Motta</div>
+    <div class="login-sub">Painel Administrativo</div>
+    <label class="login-label">Usuário</label>
+    <input class="login-input" type="text" id="login-user" placeholder="Digite seu usuário">
+    <label class="login-label">Senha</label>
+    <input class="login-input" type="password" id="login-pass" placeholder="Digite sua senha" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">🔐 Entrar</button>
+    <div class="login-error" id="login-error">Usuário ou senha incorretos</div>
+  </div>
+</div>
+ 
+<!-- ADMIN PANEL -->
+<div class="admin-screen" id="admin-screen">
+  <div class="admin-header">
+    <div class="admin-logo">⚙️ Admin — Adega do Motta</div>
+    <div class="admin-user">
+      <span class="user-badge" id="role-badge">Dono</span>
+      <button class="logout-btn" onclick="doLogout()">Sair</button>
+    </div>
+  </div>
+ 
+  <div class="admin-body">
+ 
+    <!-- TABS -->
+    <div class="tabs" id="tabs">
+      <button class="tab active" onclick="switchTab('produtos')">🍺 Produtos</button>
+      <button class="tab" onclick="switchTab('usuarios')" id="tab-usuarios">👥 Usuários</button>
+      <button class="tab" onclick="switchTab('exportar')">📤 Exportar</button>
+    </div>
+ 
+    <!-- TAB: PRODUTOS -->
+    <div class="tab-content active" id="tab-produtos">
+      <div class="stats" id="stats"></div>
+      <h2 class="section-title">Gerenciar Produtos</h2>
+      <button class="add-product-btn" id="btn-add-product" onclick="openModal()">＋ Adicionar produto</button>
+      <div class="product-list" id="product-list"></div>
+    </div>
+ 
+    <!-- TAB: USUÁRIOS (só dono) -->
+    <div class="tab-content" id="tab-usuarios">
+      <h2 class="section-title">Usuários</h2>
+      <div class="user-list" id="user-list"></div>
+    </div>
+ 
+    <!-- TAB: EXPORTAR -->
+    <div class="tab-content" id="tab-exportar">
+      <h2 class="section-title">Exportar Dados</h2>
+      <div class="export-box">
+        <div class="export-title">📋 Copiar código dos produtos</div>
+        <div class="export-desc">Gera o código atualizado da lista de produtos para você colar no arquivo <strong>index.html</strong> do site e atualizar o catálogo.</div>
+        <button class="export-btn" onclick="exportCode()">📋 Gerar código</button>
+      </div>
+      <div class="export-box">
+        <div class="export-title">💾 Backup dos produtos</div>
+        <div class="export-desc">Baixa um arquivo com todos os seus produtos salvos. Guarde como backup.</div>
+        <button class="export-btn" onclick="exportBackup()">💾 Baixar backup</button>
+      </div>
+      <textarea id="export-output" style="display:none;width:100%;height:200px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:6px;font-size:12px;font-family:monospace;margin-top:16px;resize:vertical"></textarea>
+    </div>
+ 
+  </div>
+</div>
+ 
+<!-- MODAL PRODUTO -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Novo Produto</div>
+    <div class="form-group">
+      <label class="form-label">Nome do produto</label>
+      <input class="form-input" id="f-name" placeholder="Ex: Heineken Long Neck">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Tamanho / Volume</label>
+        <input class="form-input" id="f-vol" placeholder="Ex: 330ml">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Preço (R$)</label>
+        <input class="form-input" id="f-price" type="number" step="0.01" placeholder="0,00">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-select" id="f-cat">
+          <option value="cerveja">🍺 Cerveja</option>
+          <option value="destilado">🥃 Destilado</option>
+          <option value="vinho">🍷 Vinho</option>
+          <option value="energetico">⚡ Energético</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Emoji do produto</label>
+        <input class="form-input" id="f-emoji" placeholder="🍺" maxlength="4">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Disponível?</label>
+      <select class="form-select" id="f-available">
+        <option value="1">✅ Sim, disponível</option>
+        <option value="0">❌ Fora de estoque</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="modal-save" onclick="saveProduct()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+ 
+<script>
+// =====================
+// USUÁRIOS E SENHAS
+// =====================
+// Senhas protegidas com hash SHA-256 (não é possível reverter)
+const USERS = [
+  { user: 'dono', passHash: '64f7eba2d0e2f5e0ce4199030482aad33df9aa18f830832f777bdf0c0a467736', role: 'dono', name: 'Jean Claude (Dono)' },
+  { user: 'func', passHash: '75b96e662678d418ef9a4d9d009f352d1ea7ea82011b9277eb96e4793300138d', role: 'funcionario', name: 'Funcionário' },
+];
+ 
+// =====================
+// PRODUTOS PADRÃO
+// =====================
+const DEFAULT_PRODUCTS = [
+  { id:1, name:'Heineken Long Neck', vol:'330ml', price:7.90, emoji:'🍺', cat:'cerveja', available:1 },
+  { id:2, name:'Budweiser Lata', vol:'350ml', price:5.50, emoji:'🍺', cat:'cerveja', available:1 },
+  { id:3, name:'Skol Pilsen', vol:'600ml', price:9.90, emoji:'🍺', cat:'cerveja', available:1 },
+  { id:4, name:'Brahma Duplo Malte', vol:'350ml', price:5.90, emoji:'🍺', cat:'cerveja', available:1 },
+  { id:5, name:"Jack Daniel's", vol:'1L', price:139.90, emoji:'🥃', cat:'destilado', available:1 },
+  { id:6, name:'Vodka Absolut', vol:'750ml', price:79.90, emoji:'🥃', cat:'destilado', available:1 },
+  { id:7, name:'Cachaça 51', vol:'1L', price:29.90, emoji:'🥃', cat:'destilado', available:1 },
+  { id:8, name:'Vinho Suave Tinto', vol:'750ml', price:34.90, emoji:'🍷', cat:'vinho', available:1 },
+  { id:9, name:'Vinho Seco Branco', vol:'750ml', price:39.90, emoji:'🍷', cat:'vinho', available:1 },
+  { id:10, name:'Red Bull Original', vol:'250ml', price:14.90, emoji:'⚡', cat:'energetico', available:1 },
+  { id:11, name:'Monster Energy', vol:'473ml', price:12.90, emoji:'⚡', cat:'energetico', available:1 },
+  { id:12, name:'Coronita Extra', vol:'210ml', price:8.90, emoji:'🍺', cat:'cerveja', available:1 },
+];
+ 
+// =====================
+// STATE
+// =====================
+let currentUser = null;
+let products = JSON.parse(localStorage.getItem('adega_products') || 'null') || DEFAULT_PRODUCTS;
+let editingId = null;
+ 
+function saveProducts() {
+  localStorage.setItem('adega_products', JSON.stringify(products));
+}
+ 
+// =====================
+// LOGIN / LOGOUT
+// =====================
+async function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value.trim();
+  const encoder = new TextEncoder();
+  const data = encoder.encode(p);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  const found = USERS.find(x => x.user === u && x.passHash === hashHex);
+  if (!found) {
+    document.getElementById('login-error').style.display = 'block';
+    return;
+  }
+  currentUser = found;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-screen').style.display = 'block';
+  const badge = document.getElementById('role-badge');
+  badge.textContent = found.role === 'dono' ? '👑 Dono' : '👤 Funcionário';
+  badge.className = 'user-badge ' + (found.role === 'dono' ? 'dono' : 'func');
+  if (found.role !== 'dono') {
+    document.getElementById('tab-usuarios').style.display = 'none';
+  }
+  renderAll();
+}
+ 
+function doLogout() {
+  currentUser = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('admin-screen').style.display = 'none';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+ 
+// =====================
+// TABS
+// =====================
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+ 
+// =====================
+// RENDER
+// =====================
+function fmt(v) { return 'R$ ' + Number(v).toFixed(2).replace('.', ','); }
+ 
+function renderAll() {
+  renderStats();
+  renderProducts();
+  renderUsers();
+}
+ 
+function renderStats() {
+  const total = products.length;
+  const available = products.filter(p => p.available).length;
+  const cats = [...new Set(products.map(p => p.cat))].length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Produtos</div></div>
+    <div class="stat-card"><div class="stat-num">${available}</div><div class="stat-label">Disponíveis</div></div>
+    <div class="stat-card"><div class="stat-num">${total - available}</div><div class="stat-label">Sem estoque</div></div>
+    <div class="stat-card"><div class="stat-num">${cats}</div><div class="stat-label">Categorias</div></div>
+  `;
+}
+ 
+function renderProducts() {
+  const isDono = currentUser.role === 'dono';
+  const list = document.getElementById('product-list');
+  document.getElementById('btn-add-product').style.display = isDono ? 'flex' : 'none';
+ 
+  if (!products.length) {
+    list.innerHTML = '<div class="empty">Nenhum produto cadastrado ainda.</div>';
+    return;
+  }
+ 
+  list.innerHTML = products.map(p => `
+    <div class="product-row" style="opacity:${p.available ? 1 : 0.5}">
+      <span class="product-emoji">${p.emoji}</span>
+      <div class="product-details">
+        <div class="product-row-name">${p.name} ${!p.available ? '<span style="color:#ff4444;font-size:12px">• Sem estoque</span>' : ''}</div>
+        <div class="product-row-meta">${p.vol} · ${p.cat}</div>
+      </div>
+      <div class="product-row-price">${fmt(p.price)}</div>
+      <div class="product-actions">
+        <button class="edit-btn" onclick="openModal(${p.id})" title="Editar">✏️</button>
+        ${isDono ? `<button class="del-btn" onclick="deleteProduct(${p.id})" title="Excluir">🗑️</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+ 
+function renderUsers() {
+  document.getElementById('user-list').innerHTML = USERS.map(u => `
+    <div class="user-row">
+      <span class="user-icon">${u.role === 'dono' ? '👑' : '👤'}</span>
+      <div class="user-info">
+        <div class="user-name">${u.name}</div>
+        <div class="user-role ${u.role === 'dono' ? 'dono' : 'func'}">${u.role === 'dono' ? 'Dono — acesso total' : 'Funcionário — editar preços'}</div>
+      </div>
+    </div>
+  `).join('');
+}
+ 
+// =====================
+// MODAL
+// =====================
+function openModal(id) {
+  editingId = id || null;
+  document.getElementById('modal-title').textContent = id ? 'Editar Produto' : 'Novo Produto';
+  if (id) {
+    const p = products.find(x => x.id === id);
+    document.getElementById('f-name').value = p.name;
+    document.getElementById('f-vol').value = p.vol;
+    document.getElementById('f-price').value = p.price;
+    document.getElementById('f-cat').value = p.cat;
+    document.getElementById('f-emoji').value = p.emoji;
+    document.getElementById('f-available').value = p.available;
+  } else {
+    document.getElementById('f-name').value = '';
+    document.getElementById('f-vol').value = '';
+    document.getElementById('f-price').value = '';
+    document.getElementById('f-cat').value = 'cerveja';
+    document.getElementById('f-emoji').value = '🍺';
+    document.getElementById('f-available').value = '1';
+  }
+ 
+  // Funcionário só pode editar preço e disponibilidade
+  const isDono = currentUser.role === 'dono';
+  ['f-name','f-vol','f-cat','f-emoji'].forEach(id => {
+    document.getElementById(id).disabled = !isDono;
+  });
+ 
+  document.getElementById('modal').classList.add('open');
+}
+ 
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  editingId = null;
+}
+ 
+function saveProduct() {
+  const name = document.getElementById('f-name').value.trim();
+  const vol = document.getElementById('f-vol').value.trim();
+  const price = parseFloat(document.getElementById('f-price').value);
+  const cat = document.getElementById('f-cat').value;
+  const emoji = document.getElementById('f-emoji').value.trim() || '🍺';
+  const available = parseInt(document.getElementById('f-available').value);
+ 
+  if (!name || !vol || isNaN(price)) { alert('Preencha nome, tamanho e preço!'); return; }
+ 
+  if (editingId) {
+    const idx = products.findIndex(x => x.id === editingId);
+    products[idx] = { ...products[idx], name, vol, price, cat, emoji, available };
+  } else {
+    const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+    products.push({ id: newId, name, vol, price, cat, emoji, available });
+  }
+ 
+  saveProducts();
+  renderAll();
+  closeModal();
+}
+ 
+function deleteProduct(id) {
+  if (!confirm('Tem certeza que quer excluir este produto?')) return;
+  products = products.filter(p => p.id !== id);
+  saveProducts();
+  renderAll();
+}
+ 
+// =====================
+// EXPORTAR
+// =====================
+function exportCode() {
+  const code = `const products = [\n${products.map(p =>
+    `  { id:${p.id}, name:'${p.name.replace(/'/g,"\\'")}', vol:'${p.vol}', price:${p.price}, emoji:'${p.emoji}', cat:'${p.cat}' }`
+  ).join(',\n')}\n];`;
+  const out = document.getElementById('export-output');
+  out.style.display = 'block';
+  out.value = code;
+  out.select();
+  document.execCommand('copy');
+  alert('✅ Código copiado! Cole no arquivo index.html do site.');
+}
+ 
+function exportBackup() {
+  const blob = new Blob([JSON.stringify(products, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'adega-produtos-backup.json';
+  a.click();
+}
+</script>
+</body>
+</html>
+ 
