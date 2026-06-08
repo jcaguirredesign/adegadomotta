@@ -17,6 +17,9 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;}
 
+.hidden{display:none!important;}
+
+/* LOGIN */
 .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
 .login-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:40px;width:100%;max-width:380px;text-align:center;}
 .login-logo{font-family:'Bebas Neue';font-size:36px;background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
@@ -24,12 +27,17 @@ body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;}
 .login-btn{width:100%;padding:14px;background:var(--red);border:none;color:#fff;font-weight:700;cursor:pointer;border-radius:6px;}
 .login-error{color:#ff4444;font-size:13px;display:none;}
 
+/* ADMIN */
 .admin-screen{display:none;min-height:100vh;}
 .admin-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:var(--dark);border-bottom:1px solid var(--border);}
 .admin-logo{font-family:'Bebas Neue';background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .logout-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;cursor:pointer;}
 
-.hidden{display:none!important;}
+.tabs{display:flex;gap:8px;padding:10px 20px;border-bottom:1px solid var(--border);}
+.tab{background:none;border:none;color:var(--muted);padding:10px;cursor:pointer;}
+.tab.active{color:var(--red);}
+.tab-content{display:none;padding:20px;}
+.tab-content.active{display:block;}
 </style>
 </head>
 
@@ -56,44 +64,39 @@ body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;}
     <button class="logout-btn" onclick="doLogout()">Sair</button>
   </div>
 
-  <div style="padding:20px">
-    <h2>Dashboard ativo</h2>
+  <div class="tabs">
+    <button class="tab active" onclick="openTab('produtos')">Produtos</button>
+    <button class="tab" onclick="openTab('pedidos')">Pedidos</button>
+    <button class="tab" onclick="openTab('usuarios')">Usuários</button>
+  </div>
+
+  <div id="produtos" class="tab-content active">
+    <h2>Produtos</h2>
+    <button onclick="alert('Novo produto')">+ Novo Produto</button>
+  </div>
+
+  <div id="pedidos" class="tab-content">
+    <h2>Pedidos</h2>
+  </div>
+
+  <div id="usuarios" class="tab-content">
+    <h2>Usuários</h2>
+    <div id="userList"></div>
   </div>
 
 </div>
 
 <script>
+
 /* =========================
-   USUÁRIOS MESCLADOS
+   USUÁRIOS MESCLADOS (2 SISTEMAS)
 ========================= */
 const USERS = [
-  // BASE FINAL (seu sistema atual)
-  {
-    user:'dono',
-    passHash:'64f7eba2d0e2f5e0ce4199030482aad33df9aa18f830832f777bdf0c0a467736',
-    role:'dono',
-    name:'Jean Claude (Dono)'
-  },
-  {
-    user:'func',
-    passHash:'75b96e662678d418ef9a4d9d009f352d1ea7ea82011b9277eb96e4793300138d8',
-    role:'funcionario',
-    name:'Funcionário'
-  },
+  {user:'dono', passHash:'64f7eba2d0e2f5e0ce4199030482aad33df9aa18f830832f777bdf0c0a467736', role:'dono', name:'Jean Claude'},
+  {user:'func', passHash:'75b96e662678d418ef9a4d9d009f352d1ea7ea82011b9277eb96e4793300138d8', role:'funcionario', name:'Funcionário'},
 
-  // SISTEMA ANTIGO (MOTTA)
-  {
-    user:'motta',
-    passHash:'fbf0f3bc8a9ac327ba375e9addcdbc13376653fb409b7d8ab5eed45dc460855e',
-    role:'dono',
-    name:'Jean Claude (Motta)'
-  },
-  {
-    user:'func_old',
-    passHash:'44f367ff96e1a885c57191f6000397f8e7717532afea50a127604650ce5b2ced',
-    role:'funcionario',
-    name:'Funcionário Antigo'
-  }
+  {user:'motta', passHash:'fbf0f3bc8a9ac327ba375e9addcdbc13376653fb409b7d8ab5eed45dc460855e', role:'dono', name:'Motta Admin'},
+  {user:'func_old', passHash:'44f367ff96e1a885c57191f6000397f8e7717532afea50a127604650ce5b2ced', role:'funcionario', name:'Funcionário 2'}
 ];
 
 let currentUser=null;
@@ -124,9 +127,36 @@ async function doLogin(){
   document.getElementById('admin-screen').style.display='block';
 }
 
+/* =========================
+   LOGOUT
+========================= */
 function doLogout(){
   location.reload();
 }
+
+/* =========================
+   TABS
+========================= */
+function openTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+
+  event.target.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+/* =========================
+   USERS UI
+========================= */
+function renderUsers(){
+  document.getElementById('userList').innerHTML =
+  USERS.map(u=>`
+    <div style="padding:10px;border:1px solid #333;margin:5px">
+      <b>${u.name}</b> - ${u.role}
+    </div>
+  `).join('');
+}
+
 </script>
 
 </body>
