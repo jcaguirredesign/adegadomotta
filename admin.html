@@ -14,18 +14,13 @@
   --yellow:#ffcc00;
   --bg:#0a0a0a;
   --card:#1a1a1a;
-  --card2:#222;
   --border:#2a2a2a;
   --text:#f1f1f1;
   --muted:#8a8a8a;
-  --green:#25d366;
-  --blue:#4488ff;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:Barlow,sans-serif;}
-
-.hidden{display:none!important;}
 
 /* LOGIN */
 .login{
@@ -33,7 +28,6 @@ body{background:var(--bg);color:var(--text);font-family:Barlow,sans-serif;}
   display:flex;
   align-items:center;
   justify-content:center;
-  background:radial-gradient(circle at center, rgba(204,0,0,.15), transparent 60%);
 }
 .login-box{
   width:100%;
@@ -71,10 +65,10 @@ body{background:var(--bg);color:var(--text);font-family:Barlow,sans-serif;}
   font-weight:700;
   cursor:pointer;
 }
-.btn:hover{background:var(--red2);}
-.error{color:#ff4444;margin-top:10px;font-size:13px;display:none;}
+.error{color:#ff4444;margin-top:10px;display:none;}
 
 /* ADMIN */
+.hidden{display:none!important;}
 .header{
   height:60px;
   display:flex;
@@ -84,58 +78,15 @@ body{background:var(--bg);color:var(--text);font-family:Barlow,sans-serif;}
   background:var(--card);
   border-bottom:1px solid var(--border);
 }
-.tabs{
-  display:flex;
-  gap:6px;
-  padding:10px;
-  border-bottom:1px solid var(--border);
-  overflow:auto;
-}
-.tab{
-  padding:8px 12px;
-  background:transparent;
-  border:0;
-  color:var(--muted);
-  cursor:pointer;
-}
-.tab.active{color:var(--red);border-bottom:2px solid var(--red);}
-
-.container{padding:16px;max-width:1100px;margin:auto;}
-
+.container{padding:16px;}
 .card{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:8px;
   padding:12px;
   margin-bottom:10px;
+  border-radius:8px;
 }
-
-/* PRODUCT */
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-
 .price{color:var(--yellow);font-weight:700}
-
-/* MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.7);
-  display:none;
-  align-items:center;
-  justify-content:center;
-}
-.modal-box{
-  width:100%;
-  max-width:420px;
-  background:var(--card);
-  padding:16px;
-  border-radius:10px;
-}
 </style>
 </head>
 
@@ -154,54 +105,18 @@ body{background:var(--bg);color:var(--text);font-family:Barlow,sans-serif;}
   </div>
 </div>
 
-<!-- ADMIN -->
+<!-- APP -->
 <div id="app" class="hidden">
 
   <div class="header">
-    <div><b>Admin Pro</b></div>
+    <b>Admin Pro</b>
     <button class="btn" style="width:auto;padding:8px 12px" onclick="Auth.logout()">Sair</button>
-  </div>
-
-  <div class="tabs">
-    <button class="tab active" onclick="UI.tab('produtos',this)">Produtos</button>
-    <button class="tab" onclick="UI.tab('pedidos',this)">Pedidos</button>
-    <button class="tab" onclick="UI.tab('config',this)">Config</button>
   </div>
 
   <div class="container">
 
-    <!-- PRODUTOS -->
-    <div id="tab-produtos">
-      <button class="btn" onclick="UI.openProduct()">+ Novo produto</button>
-      <div id="products"></div>
-    </div>
+    <div id="products"></div>
 
-    <!-- PEDIDOS -->
-    <div id="tab-pedidos" class="hidden">
-      <div id="orders"></div>
-    </div>
-
-    <!-- CONFIG -->
-    <div id="tab-config" class="hidden">
-      <div class="card">
-        <h3>Configurações</h3>
-        <button class="btn" onclick="API.saveConfig()">Salvar</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <h3>Produto</h3>
-
-    <input class="input" id="p_name" placeholder="Nome">
-    <input class="input" id="p_price" placeholder="Preço">
-
-    <button class="btn" onclick="API.saveProduct()">Salvar</button>
-    <button class="btn" style="background:#333" onclick="UI.closeModal()">Fechar</button>
   </div>
 </div>
 
@@ -211,31 +126,46 @@ body{background:var(--bg);color:var(--text);font-family:Barlow,sans-serif;}
 ========================= */
 const State = {
   user:null,
-  products:[],
-  orders:[]
+  products:[]
 }
 
 /* =========================
-   AUTH
+   AUTH (FINAL - SHA256)
 ========================= */
 const Auth = {
   users:[
-    {u:"dono",p:"123",role:"dono"},
-    {u:"func",p:"123",role:"func"}
+    {
+      u:"motta",
+      p:"fbf0f3bc8a9ac327ba375e9addcdbc13376653fb409b7d8ab5eed45dc460855e",
+      role:"dono"
+    },
+    {
+      u:"func",
+      p:"44f367ff96e1a885c57191f6000397f8e7717532afea50a127604650ce5b2ced",
+      role:"func"
+    }
   ],
 
-  login(){
-    const u = user.value
-    const p = pass.value
+  async login(){
+    const u = user.value.trim()
+    const p = pass.value.trim()
 
-    const ok = this.users.find(x=>x.u===u && x.p===p)
+    const enc = new TextEncoder()
+    const hashBuffer = await crypto.subtle.digest("SHA-256", enc.encode(p))
+
+    const hash = Array.from(new Uint8Array(hashBuffer))
+      .map(b => b.toString(16).padStart(2,'0'))
+      .join('')
+
+    const ok = this.users.find(x => x.u === u && x.p === hash)
 
     if(!ok){
-      err.style.display="block"
+      err.style.display = "block"
       return
     }
 
     State.user = ok
+
     login.classList.add("hidden")
     app.classList.remove("hidden")
 
@@ -248,37 +178,12 @@ const Auth = {
 }
 
 /* =========================
-   API (SUPABASE READY)
+   API (EXEMPLO)
 ========================= */
 const API = {
   async loadProducts(){
     State.products = await fetch("/rest/v1/produtos?select=*").then(r=>r.json())
-    UI.renderProducts()
-  },
-
-  async loadOrders(){
-    State.orders = await fetch("/rest/v1/pedidos?select=*").then(r=>r.json())
-    UI.renderOrders()
-  },
-
-  async saveProduct(){
-    const body = {
-      name:p_name.value,
-      price:Number(p_price.value)
-    }
-
-    await fetch("/rest/v1/produtos",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify(body)
-    })
-
-    UI.closeModal()
-    this.loadProducts()
-  },
-
-  async saveConfig(){
-    alert("Config salva (placeholder)")
+    UI.render()
   }
 }
 
@@ -286,51 +191,22 @@ const API = {
    UI
 ========================= */
 const UI = {
-
-  tab(name,btn){
-    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"))
-    btn.classList.add("active")
-
-    document.querySelectorAll("#tab-produtos,#tab-pedidos,#tab-config")
-      .forEach(t=>t.classList.add("hidden"))
-
-    document.getElementById("tab-"+name).classList.remove("hidden")
-  },
-
-  renderProducts(){
+  render(){
     products.innerHTML = State.products.map(p=>`
-      <div class="card row">
+      <div class="card">
         <div>${p.name}</div>
         <div class="price">R$ ${p.price}</div>
       </div>
     `).join("")
-  },
-
-  renderOrders(){
-    orders.innerHTML = State.orders.map(o=>`
-      <div class="card">
-        <b>#${o.id}</b>
-        <div>${o.nome}</div>
-      </div>
-    `).join("")
-  },
-
-  openProduct(){
-    modal.style.display="flex"
-  },
-
-  closeModal(){
-    modal.style.display="none"
   }
 }
 
 /* =========================
-   APP INIT
+   APP
 ========================= */
 const App = {
   async init(){
     await API.loadProducts()
-    await API.loadOrders()
   }
 }
 </script>
