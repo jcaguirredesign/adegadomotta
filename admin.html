@@ -3,211 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Pro — Adega do Motta</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Admin — Adega do Motta</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --red:#cc0000;
-  --red2:#ff2200;
-  --yellow:#ffcc00;
-  --bg:#0a0a0a;
-  --card:#1a1a1a;
-  --border:#2a2a2a;
-  --text:#f1f1f1;
-  --muted:#8a8a8a;
+  --red:#cc0000;--red-hot:#ff2200;--yellow:#ffcc00;
+  --black:#0a0a0a;--dark:#111;--card:#1a1a1a;--card2:#222;
+  --border:#2a2a2a;--text:#f0f0f0;--muted:#888;--green:#25d366;
 }
-
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:Barlow,sans-serif;}
+body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;}
 
-/* LOGIN */
-.login{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.login-box{
-  width:100%;
-  max-width:380px;
-  background:var(--card);
-  border:1px solid var(--border);
-  padding:32px;
-  border-radius:12px;
-  text-align:center;
-}
-.logo{
-  font-family:"Bebas Neue";
-  font-size:38px;
-  background:linear-gradient(135deg,var(--red2),var(--yellow));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.input{
-  width:100%;
-  margin-top:10px;
-  padding:12px;
-  border-radius:6px;
-  border:1px solid var(--border);
-  background:var(--bg);
-  color:var(--text);
-}
-.btn{
-  width:100%;
-  margin-top:12px;
-  padding:12px;
-  border:none;
-  border-radius:6px;
-  background:var(--red);
-  color:#fff;
-  font-weight:700;
-  cursor:pointer;
-}
-.error{color:#ff4444;margin-top:10px;display:none;}
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:40px;width:100%;max-width:380px;text-align:center;}
+.login-logo{font-family:'Bebas Neue';font-size:36px;background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.login-input{width:100%;padding:12px;margin:10px 0;border-radius:6px;border:1px solid var(--border);background:var(--dark);color:var(--text);}
+.login-btn{width:100%;padding:14px;background:var(--red);border:none;color:#fff;font-weight:700;cursor:pointer;border-radius:6px;}
+.login-error{color:#ff4444;font-size:13px;display:none;}
 
-/* ADMIN */
+.admin-screen{display:none;min-height:100vh;}
+.admin-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:var(--dark);border-bottom:1px solid var(--border);}
+.admin-logo{font-family:'Bebas Neue';background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logout-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 12px;cursor:pointer;}
+
 .hidden{display:none!important;}
-.header{
-  height:60px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0 16px;
-  background:var(--card);
-  border-bottom:1px solid var(--border);
-}
-.container{padding:16px;}
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  padding:12px;
-  margin-bottom:10px;
-  border-radius:8px;
-}
-.price{color:var(--yellow);font-weight:700}
 </style>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div class="login" id="login">
+<div class="login-screen" id="login-screen">
   <div class="login-box">
-    <div class="logo">ADEGA MOTTA</div>
+    <div class="login-logo">ADEGA MOTTA</div>
 
-    <input class="input" id="user" placeholder="Usuário">
-    <input class="input" id="pass" type="password" placeholder="Senha">
+    <input class="login-input" id="lu" placeholder="Usuário">
+    <input class="login-input" id="lp" type="password" placeholder="Senha">
 
-    <button class="btn" onclick="Auth.login()">Entrar</button>
-    <div class="error" id="err">Login inválido</div>
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="le">Login inválido</div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app" class="hidden">
+<!-- ADMIN -->
+<div class="admin-screen" id="admin-screen">
 
-  <div class="header">
-    <b>Admin Pro</b>
-    <button class="btn" style="width:auto;padding:8px 12px" onclick="Auth.logout()">Sair</button>
+  <div class="admin-header">
+    <div class="admin-logo">⚙️ Admin — Adega do Motta</div>
+    <button class="logout-btn" onclick="doLogout()">Sair</button>
   </div>
 
-  <div class="container">
-
-    <div id="products"></div>
-
+  <div style="padding:20px">
+    <h2>Dashboard ativo</h2>
   </div>
+
 </div>
 
 <script>
 /* =========================
-   STATE
+   USUÁRIOS MESCLADOS
 ========================= */
-const State = {
-  user:null,
-  products:[]
-}
-
-/* =========================
-   AUTH (FINAL - SHA256)
-========================= */
-const Auth = {
-  users:[
-    {
-      u:"motta",
-      p:"fbf0f3bc8a9ac327ba375e9addcdbc13376653fb409b7d8ab5eed45dc460855e",
-      role:"dono"
-    },
-    {
-      u:"func",
-      p:"44f367ff96e1a885c57191f6000397f8e7717532afea50a127604650ce5b2ced",
-      role:"func"
-    }
-  ],
-
-  async login(){
-    const u = user.value.trim()
-    const p = pass.value.trim()
-
-    const enc = new TextEncoder()
-    const hashBuffer = await crypto.subtle.digest("SHA-256", enc.encode(p))
-
-    const hash = Array.from(new Uint8Array(hashBuffer))
-      .map(b => b.toString(16).padStart(2,'0'))
-      .join('')
-
-    const ok = this.users.find(x => x.u === u && x.p === hash)
-
-    if(!ok){
-      err.style.display = "block"
-      return
-    }
-
-    State.user = ok
-
-    login.classList.add("hidden")
-    app.classList.remove("hidden")
-
-    App.init()
+const USERS = [
+  // BASE FINAL (seu sistema atual)
+  {
+    user:'dono',
+    passHash:'64f7eba2d0e2f5e0ce4199030482aad33df9aa18f830832f777bdf0c0a467736',
+    role:'dono',
+    name:'Jean Claude (Dono)'
+  },
+  {
+    user:'func',
+    passHash:'75b96e662678d418ef9a4d9d009f352d1ea7ea82011b9277eb96e4793300138d8',
+    role:'funcionario',
+    name:'Funcionário'
   },
 
-  logout(){
-    location.reload()
+  // SISTEMA ANTIGO (MOTTA)
+  {
+    user:'motta',
+    passHash:'fbf0f3bc8a9ac327ba375e9addcdbc13376653fb409b7d8ab5eed45dc460855e',
+    role:'dono',
+    name:'Jean Claude (Motta)'
+  },
+  {
+    user:'func_old',
+    passHash:'44f367ff96e1a885c57191f6000397f8e7717532afea50a127604650ce5b2ced',
+    role:'funcionario',
+    name:'Funcionário Antigo'
   }
-}
+];
+
+let currentUser=null;
 
 /* =========================
-   API (EXEMPLO)
+   LOGIN SHA256
 ========================= */
-const API = {
-  async loadProducts(){
-    State.products = await fetch("/rest/v1/produtos?select=*").then(r=>r.json())
-    UI.render()
+async function doLogin(){
+  const u=document.getElementById('lu').value.trim();
+  const p=document.getElementById('lp').value.trim();
+
+  const enc=new TextEncoder();
+  const hash=await crypto.subtle.digest("SHA-256",enc.encode(p));
+
+  const hex=Array.from(new Uint8Array(hash))
+    .map(b=>b.toString(16).padStart(2,'0')).join('');
+
+  const found=USERS.find(x=>x.user===u && x.passHash===hex);
+
+  if(!found){
+    document.getElementById('le').style.display='block';
+    return;
   }
+
+  currentUser=found;
+
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('admin-screen').style.display='block';
 }
 
-/* =========================
-   UI
-========================= */
-const UI = {
-  render(){
-    products.innerHTML = State.products.map(p=>`
-      <div class="card">
-        <div>${p.name}</div>
-        <div class="price">R$ ${p.price}</div>
-      </div>
-    `).join("")
-  }
-}
-
-/* =========================
-   APP
-========================= */
-const App = {
-  async init(){
-    await API.loadProducts()
-  }
+function doLogout(){
+  location.reload();
 }
 </script>
 
