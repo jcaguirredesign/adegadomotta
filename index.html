@@ -6,193 +6,170 @@
 <title>Adega do Motta</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --red: #cc0000; --red-hot: #ff2200; --yellow: #ffcc00;
-    --black: #0a0a0a; --dark: #111111; --card: #1a1a1a;
-    --border: #2a2a2a; --text: #f0f0f0; --muted: #888;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--black); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.4; }
-
-  /* HEADER */
-  header { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; background: linear-gradient(135deg, var(--red-hot), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  nav { display: flex; gap: 24px; align-items: center; }
-  nav a { color: var(--muted); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
-  nav a:hover { color: var(--yellow); }
-  .insta-btn { display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: white; text-decoration: none; padding: 6px 14px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; transition: opacity 0.2s; }
-  .insta-btn:hover { opacity: 0.85; }
-  .cart-btn { background: var(--red); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; }
-  .cart-btn:hover { background: var(--red-hot); }
-  .cart-count { background: var(--yellow); color: var(--black); font-size: 11px; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-
-  /* HERO */
-  .hero { position: relative; padding: 80px 24px 60px; text-align: center; overflow: hidden; }
-  .hero::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(204,0,0,0.25) 0%, transparent 70%); pointer-events: none; }
-  .hero-tag { display: inline-block; background: var(--red); color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 4px 14px; border-radius: 2px; margin-bottom: 20px; }
-  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 10vw, 100px); line-height: 0.95; letter-spacing: 3px; margin-bottom: 8px; }
-  .hero h1 span { background: linear-gradient(135deg, var(--red-hot), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .hero p { color: var(--muted); font-size: 16px; margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; }
-  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .btn-primary { background: var(--red); color: white; padding: 14px 32px; border: none; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.2s, transform 0.1s; }
-  .btn-primary:hover { background: var(--red-hot); transform: translateY(-1px); }
-  .btn-outline { background: transparent; color: var(--yellow); padding: 14px 32px; border: 2px solid var(--yellow); border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
-  .btn-outline:hover { background: rgba(255,204,0,0.1); }
-
-  /* BADGES */
-  .badges { display: flex; justify-content: center; gap: 32px; padding: 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-  .badge { display: flex; align-items: center; gap: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-  .badge-icon { color: var(--yellow); font-size: 18px; }
-
-  /* SECTION */
-  section { padding: 60px 24px; max-width: 1200px; margin: 0 auto; }
-  .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 32px; }
-  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; }
-  .section-line { flex: 1; height: 1px; background: var(--border); }
-
-  /* CATEGORIES */
-  .categories { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
-  .cat-btn { background: var(--card); color: var(--muted); border: 1px solid var(--border); padding: 8px 18px; border-radius: 3px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
-  .cat-btn:hover, .cat-btn.active { background: var(--red); color: white; border-color: var(--red); }
-
-  /* PRODUCT GRID */
-  .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-  .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; transition: border-color 0.2s, transform 0.2s; cursor: pointer; }
-  .product-card:hover { border-color: var(--red); transform: translateY(-3px); }
-  .product-img { width: 100%; height: 180px; background: #222; display: flex; align-items: center; justify-content: center; font-size: 56px; overflow: hidden; }
-  .product-img img { width: 100%; height: 100%; object-fit: cover; }
-  .product-info { padding: 14px; }
-  .product-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.5px; margin-bottom: 4px; }
-  .product-vol { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
-  .product-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .product-price { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--yellow); letter-spacing: 1px; }
-  .add-btn { background: var(--red); color: white; border: none; width: 34px; height: 34px; border-radius: 4px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; font-weight: 700; }
-  .add-btn:hover { background: var(--red-hot); }
-  .combo-badge { background: var(--yellow); color: var(--black); font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; margin-bottom: 6px; display: inline-block; }
-
-  /* SKELETON */
-  .skeleton { animation: pulse 1.5s ease-in-out infinite; }
-  .skeleton-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
-  .skeleton-img { width: 100%; height: 180px; background: #222; }
-  .skeleton-line { height: 14px; background: #2a2a2a; border-radius: 4px; margin: 8px 14px; }
-  .skeleton-line.short { width: 60%; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-
-  /* DELIVERY */
-  .delivery-section { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .delivery-option { border: 1px solid var(--border); border-radius: 6px; padding: 20px; text-align: center; transition: border-color 0.2s; cursor: pointer; }
-  .delivery-option:hover, .delivery-option.selected { border-color: var(--red); background: rgba(204,0,0,0.06); }
-  .delivery-icon { font-size: 36px; margin-bottom: 10px; }
-  .delivery-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; margin-bottom: 6px; }
-  .delivery-desc { color: var(--muted); font-size: 14px; }
-
-  /* CART SIDEBAR */
-  .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; backdrop-filter: blur(4px); }
-  .cart-overlay.open { display: block; }
-  .cart-sidebar { position: fixed; right: 0; top: 0; height: 100%; width: 400px; max-width: 100vw; background: var(--dark); border-left: 1px solid var(--border); z-index: 201; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s ease; }
-  .cart-sidebar.open { transform: translateX(0); }
-  .cart-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .cart-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; }
-  .close-btn { background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; line-height: 1; transition: color 0.2s; }
-  .close-btn:hover { color: white; }
-  .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
-  .cart-empty { text-align: center; color: var(--muted); padding: 40px 0; font-size: 14px; }
-  .cart-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: center; }
-  .cart-item-thumb { width: 44px; height: 44px; border-radius: 4px; overflow: hidden; background: #222; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-  .cart-item-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .cart-item-info { flex: 1; min-width: 0; }
-  .cart-item-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .cart-item-price { color: var(--yellow); font-size: 14px; }
-  .cart-item-qty { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  .qty-btn { background: var(--border); border: none; color: white; width: 26px; height: 26px; border-radius: 3px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
-  .qty-btn:hover { background: var(--red); }
-
-  /* CHECKOUT FORM */
-  .checkout-form { padding: 16px 24px; border-top: 1px solid var(--border); }
-  .checkout-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; margin-bottom: 12px; color: var(--yellow); }
-  .delivery-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
-  .delivery-toggle-btn { flex: 1; background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 8px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-align: center; }
-  .delivery-toggle-btn.active { background: var(--red); color: white; border-color: var(--red); }
-  .form-field { margin-bottom: 10px; }
-  .form-label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-  .form-input { width: 100%; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 4px; font-size: 14px; font-family: 'Barlow', sans-serif; transition: border-color 0.2s; }
-  .form-input:focus { outline: none; border-color: var(--red); }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .frete-info { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 10px 12px; margin-bottom: 10px; font-size: 13px; display: none; }
-  .frete-info.show { display: block; }
-  .frete-valor { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--yellow); }
-  .frete-loading { color: var(--muted); font-size: 13px; display: none; }
-  .frete-loading.show { display: block; }
-
-  /* TOTALS */
-  .cart-totals { padding: 14px 24px; border-top: 1px solid var(--border); }
-  .total-row { display: flex; justify-content: space-between; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
-  .total-final { font-family: 'Bebas Neue', sans-serif; font-size: 30px; color: var(--yellow); letter-spacing: 1px; margin: 8px 0 14px; }
-
-  /* PIX */
-  .pix-section { background: rgba(37,211,102,0.08); border: 1px solid rgba(37,211,102,0.3); border-radius: 6px; padding: 12px; margin-bottom: 10px; display: none; }
-  .pix-section.show { display: block; }
-  .pix-key { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; color: #25d366; letter-spacing: 1px; }
-  .pix-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
-
-  /* PAYMENT OPTIONS */
-  .payment-opts { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
-  .pay-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 7px 12px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
-  .pay-btn.active { background: var(--red); color: white; border-color: var(--red); }
-
-  .whatsapp-checkout { width: 100%; background: #25d366; color: white; border: none; padding: 14px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
-  .whatsapp-checkout:hover { background: #1fb855; }
-  .whatsapp-checkout:disabled { background: #555; cursor: not-allowed; }
-
-  /* FLOAT */
-  .whatsapp-float { position: fixed; bottom: 24px; right: 24px; z-index: 150; background: #25d366; color: white; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; text-decoration: none; box-shadow: 0 4px 20px rgba(37,211,102,0.4); transition: transform 0.2s; }
-  .whatsapp-float:hover { transform: scale(1.1); }
-
-  /* FOOTER */
-  footer { background: var(--dark); border-top: 1px solid var(--border); text-align: center; padding: 32px 24px; color: var(--muted); font-size: 14px; }
-  footer .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; background: linear-gradient(135deg, var(--red-hot), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 8px; }
-
-  /* HAMBURGER */
-  .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; margin-left: 12px; }
-  .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
-  .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
-  .mobile-menu { display: none; position: fixed; top: 56px; left: 0; right: 0; background: rgba(10,10,10,0.98); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 99; padding: 8px 20px 16px; flex-direction: column; }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a { color: var(--text); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 13px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
-  .mobile-menu a:last-child { border-bottom: none; }
-  .mobile-menu a:hover { color: var(--yellow); }
-  .products-empty { text-align: center; color: var(--muted); padding: 60px 20px; font-size: 15px; grid-column: 1/-1; }
-
-  /* RESPONSIVE */
-  @media (max-width: 900px) { section { padding: 48px 20px; } .products { grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); } }
-  @media (max-width: 640px) {
-    header { padding: 0 16px; height: 56px; } .logo { font-size: 22px; } nav { display: none; } .hamburger { display: flex; } .cart-btn { padding: 8px 12px; gap: 6px; }
-    .hero { padding: 40px 16px 32px; } .hero-btns { flex-direction: column; align-items: center; } .hero-btns > * { width: 100%; max-width: 300px; }
-    .badges { gap: 16px; padding: 14px 16px; justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; } .badge { white-space: nowrap; flex-shrink: 0; }
-    section { padding: 32px 16px; } .categories { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; } .cat-btn { flex-shrink: 0; }
-    .products { grid-template-columns: repeat(2,1fr); gap: 12px; } .product-img { height: 130px; font-size: 40px; } .skeleton-img { height: 130px; } .product-info { padding: 10px; } .product-name { font-size: 14px; } .product-price { font-size: 18px; } .add-btn { width: 30px; height: 30px; font-size: 16px; }
-    .delivery-section { grid-template-columns: 1fr; padding: 20px; gap: 16px; } footer { padding: 24px 16px; } .cart-sidebar { width: 100vw; }
-    .form-row { grid-template-columns: 1fr; }
-  }
-  @media (min-width: 1400px) { .hero h1 { font-size: 120px; } section { max-width: 1400px; } .products { grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); } }
+:root{--red:#cc0000;--red-hot:#ff2200;--yellow:#ffcc00;--black:#0a0a0a;--dark:#111111;--card:#1a1a1a;--border:#2a2a2a;--text:#f0f0f0;--muted:#888;--green:#25d366;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black);color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;}
+.closed-banner{background:#1a0000;border-bottom:2px solid var(--red);padding:12px 24px;text-align:center;display:none;}
+.closed-banner.show{display:block;}
+.closed-banner-text{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;letter-spacing:1px;color:#ff6666;}
+header{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+nav{display:flex;gap:20px;align-items:center;}
+nav>a{color:var(--muted);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:color 0.2s;display:flex;align-items:center;gap:6px;}
+nav>a:hover{color:var(--yellow);}
+.insta-btn{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:white!important;padding:6px 14px;border-radius:4px;}
+.cart-btn{background:var(--red);color:white;border:none;padding:8px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s;}
+.cart-btn:hover{background:var(--red-hot);}
+.cart-count{background:var(--yellow);color:var(--black);font-size:11px;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.hero{position:relative;padding:80px 24px 60px;text-align:center;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(204,0,0,0.25) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{display:inline-block;background:var(--red);color:white;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:4px 14px;border-radius:2px;margin-bottom:20px;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,10vw,100px);line-height:0.95;letter-spacing:3px;margin-bottom:8px;}
+.hero h1 span{background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{color:var(--muted);font-size:16px;margin-bottom:32px;max-width:400px;margin-left:auto;margin-right:auto;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--red);color:white;padding:14px 32px;border:none;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.btn-primary:hover{background:var(--red-hot);}
+.btn-outline{background:transparent;color:var(--yellow);padding:14px 32px;border:2px solid var(--yellow);border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px;}
+.badges{display:flex;justify-content:center;gap:32px;padding:24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.badge{display:flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.badge-icon{color:var(--yellow);font-size:18px;}
+section{padding:60px 24px;max-width:1200px;margin:0 auto;}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:32px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;}
+.section-line{flex:1;height:1px;background:var(--border);}
+.categories{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap;}
+.cat-btn{background:var(--card);color:var(--muted);border:1px solid var(--border);padding:8px 18px;border-radius:3px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.cat-btn:hover,.cat-btn.active{background:var(--red);color:white;border-color:var(--red);}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.product-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color 0.2s,transform 0.2s;}
+.product-card:hover{border-color:var(--red);transform:translateY(-3px);}
+.product-img{width:100%;height:180px;background:#222;display:flex;align-items:center;justify-content:center;font-size:56px;overflow:hidden;}
+.product-img img{width:100%;height:100%;object-fit:cover;}
+.product-info{padding:14px;}
+.combo-badge{background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-bottom:6px;display:inline-block;}
+.product-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.5px;margin-bottom:4px;}
+.product-vol{color:var(--muted);font-size:13px;margin-bottom:10px;}
+.product-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.product-price{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--yellow);letter-spacing:1px;}
+.add-btn{background:var(--red);color:white;border:none;width:34px;height:34px;border-radius:4px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;font-weight:700;}
+.add-btn:hover{background:var(--red-hot);}
+.skeleton{animation:pulse 1.5s ease-in-out infinite;}
+.skeleton-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.skeleton-img{width:100%;height:180px;background:#222;}
+.skeleton-line{height:14px;background:#2a2a2a;border-radius:4px;margin:8px 14px;}
+.skeleton-line.short{width:60%;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.delivery-section{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.delivery-option{border:1px solid var(--border);border-radius:6px;padding:20px;text-align:center;transition:border-color 0.2s;cursor:pointer;}
+.delivery-option:hover{border-color:var(--red);}
+.delivery-icon{font-size:36px;margin-bottom:10px;}
+.delivery-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:6px;}
+.delivery-desc{color:var(--muted);font-size:14px;}
+.cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;backdrop-filter:blur(4px);}
+.cart-overlay.open{display:block;}
+.cart-sidebar{position:fixed;right:0;top:0;height:100%;width:420px;max-width:100vw;background:var(--dark);border-left:1px solid var(--border);z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease;}
+.cart-sidebar.open{transform:translateX(0);}
+.cart-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.cart-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;}
+.close-btn{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;}
+.cart-steps{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;}
+.cart-step{flex:1;padding:8px 2px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;}
+.cart-step.active{color:var(--yellow);border-bottom-color:var(--yellow);}
+.cart-step.done{color:var(--green);}
+.cart-body{flex:1;overflow-y:auto;}
+.step-content{display:none;padding:16px 20px;}
+.step-content.active{display:block;}
+.cart-items-list{margin:0 -20px;padding:0 20px;}
+.cart-empty{text-align:center;color:var(--muted);padding:40px 0;font-size:14px;}
+.cart-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:center;}
+.cart-item-thumb{width:44px;height:44px;border-radius:4px;overflow:hidden;background:#222;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.cart-item-thumb img{width:100%;height:100%;object-fit:cover;}
+.cart-item-info{flex:1;min-width:0;}
+.cart-item-name{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cart-item-price{color:var(--yellow);font-size:13px;}
+.cart-item-qty{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.qty-btn{background:var(--border);border:none;color:white;width:24px;height:24px;border-radius:3px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.qty-btn:hover{background:var(--red);}
+.step-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--yellow);margin-bottom:14px;}
+.dtoggle{display:flex;gap:8px;margin-bottom:14px;}
+.dtoggle-btn{flex:1;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-align:center;}
+.dtoggle-btn.active{background:var(--red);color:white;border-color:var(--red);}
+.form-field{margin-bottom:10px;}
+.form-label{display:block;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.form-input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:4px;font-size:14px;font-family:'Barlow',sans-serif;transition:border-color 0.2s;}
+.form-input:focus{outline:none;border-color:var(--red);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.frete-box{background:rgba(255,204,0,0.06);border:1px solid rgba(255,204,0,0.25);border-radius:6px;padding:12px;margin-top:10px;display:none;}
+.frete-box.show{display:block;}
+.frete-box-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+.frete-box-val{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--yellow);}
+.frete-box-dist{font-size:12px;color:var(--muted);margin-top:2px;}
+.frete-loading{color:var(--muted);font-size:13px;padding:8px 0;display:none;}
+.frete-loading.show{display:block;}
+.fora-area{background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.3);border-radius:6px;padding:12px;margin-top:10px;color:#ff6666;font-size:13px;display:none;}
+.fora-area.show{display:block;}
+.retirada-info{background:rgba(255,204,0,0.06);border:1px solid rgba(255,204,0,0.2);border-radius:6px;padding:14px;margin-top:8px;display:none;}
+.pay-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.pay-opt{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:9px 12px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.pay-opt.active{background:var(--red);color:white;border-color:var(--red);}
+.pay-disabled-msg{background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.2);border-radius:6px;padding:10px 12px;font-size:13px;color:#ff8888;margin-bottom:10px;display:none;}
+.pay-disabled-msg.show{display:block;}
+.pix-box{background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.3);border-radius:6px;padding:12px;margin-bottom:10px;display:none;}
+.pix-box.show{display:block;}
+.pix-key{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--green);letter-spacing:1px;}
+.comp-upload{border:2px dashed var(--border);border-radius:6px;padding:16px;text-align:center;cursor:pointer;position:relative;margin-top:10px;}
+.comp-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.comp-upload-text{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.comp-ok{color:var(--green);font-size:13px;margin-top:6px;display:none;}
+.cart-footer{padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;}
+.total-row{display:flex;justify-content:space-between;font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.total-final{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--yellow);letter-spacing:1px;margin:6px 0 10px;}
+.footer-btns{display:flex;gap:8px;}
+.btn-back{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 14px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:none;}
+.btn-next{flex:1;background:var(--red);color:white;border:none;padding:12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-next:hover{background:var(--red-hot);}
+.btn-wpp{flex:1;background:var(--green);color:white;border:none;padding:12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-wpp:hover{background:#1fb855;}
+.closed-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;align-items:center;justify-content:center;padding:24px;}
+.closed-modal.show{display:flex;}
+.closed-modal-box{background:var(--dark);border:2px solid var(--red);border-radius:12px;padding:32px 28px;max-width:360px;width:100%;text-align:center;}
+.whatsapp-float{position:fixed;bottom:24px;right:24px;z-index:150;background:var(--green);color:white;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform 0.2s;}
+.whatsapp-float:hover{transform:scale(1.1);}
+footer{background:var(--dark);border-top:1px solid var(--border);text-align:center;padding:32px 24px;color:var(--muted);font-size:14px;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:8px;}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;margin-left:12px;}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+.mobile-menu{display:none;position:fixed;top:56px;left:0;right:0;background:rgba(10,10,10,0.98);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:99;padding:8px 20px 16px;flex-direction:column;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:var(--text);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:13px 0;border-bottom:1px solid var(--border);transition:color 0.2s;display:flex;align-items:center;gap:10px;}
+.mobile-menu a:last-child{border-bottom:none;}
+.products-empty{text-align:center;color:var(--muted);padding:60px 20px;font-size:15px;grid-column:1/-1;}
+@media(max-width:900px){section{padding:48px 20px;}.products{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}}
+@media(max-width:640px){header{padding:0 16px;height:56px;}.logo{font-size:22px;}nav{display:none;}.hamburger{display:flex;}.cart-btn{padding:8px 12px;gap:6px;}.hero{padding:40px 16px 32px;}.hero-btns{flex-direction:column;align-items:center;}.hero-btns>*{width:100%;max-width:300px;}.badges{gap:16px;padding:14px 16px;overflow-x:auto;flex-wrap:nowrap;}.badge{white-space:nowrap;flex-shrink:0;}section{padding:32px 16px;}.categories{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;}.cat-btn{flex-shrink:0;}.products{grid-template-columns:repeat(2,1fr);gap:12px;}.product-img{height:130px;font-size:40px;}.product-info{padding:10px;}.product-name{font-size:14px;}.product-price{font-size:18px;}.add-btn{width:30px;height:30px;font-size:16px;}.delivery-section{grid-template-columns:1fr;padding:20px;gap:16px;}footer{padding:24px 16px;}.cart-sidebar{width:100vw;}.form-row{grid-template-columns:1fr;}}
+@media(min-width:1400px){.hero h1{font-size:120px;}section{max-width:1400px;}.products{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));}}
 </style>
 </head>
 <body>
+
+<div class="closed-banner" id="closed-banner">
+  <div class="closed-banner-text">🔴 Loja fechada · Atendimento das 18:00 às 02:00</div>
+</div>
 
 <header>
   <div class="logo">Adega do Motta</div>
   <nav>
     <a href="#produtos">Produtos</a>
     <a href="#entrega">Entrega</a>
-    <a href="https://wa.me/5547984217666" target="_blank" style="display:flex;align-items:center;gap:6px;color:#25d366">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <a href="https://wa.me/5547984217666" target="_blank" style="color:var(--green)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       Contato
     </a>
     <a class="insta-btn" href="https://www.instagram.com/adega_domotta?igsh=MTlobWlrMHU0MTdzOA==" target="_blank">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       Instagram
     </a>
   </nav>
@@ -205,12 +182,12 @@
 <div class="mobile-menu" id="mobile-menu">
   <a href="#produtos" onclick="toggleMenu()">🍺 Produtos</a>
   <a href="#entrega" onclick="toggleMenu()">🚚 Entrega</a>
-  <a href="https://wa.me/5547984217666" target="_blank" onclick="toggleMenu()" style="display:flex;align-items:center;gap:10px">
+  <a href="https://wa.me/5547984217666" target="_blank" onclick="toggleMenu()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     WhatsApp
   </a>
-  <a href="https://www.instagram.com/adega_domotta?igsh=MTlobWlrMHU0MTdzOA==" target="_blank" onclick="toggleMenu()" style="display:flex;align-items:center;gap:10px">
-    <svg width="20" height="20" viewBox="0 0 24 24"><defs><linearGradient id="ig2" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#fcb045"/><stop offset="50%" stop-color="#fd1d1d"/><stop offset="100%" stop-color="#833ab4"/></linearGradient></defs><path fill="url(#ig2)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+  <a href="https://www.instagram.com/adega_domotta?igsh=MTlobWlrMHU0MTdzOA==" target="_blank" onclick="toggleMenu()">
+    <svg width="20" height="20" viewBox="0 0 24 24"><defs><linearGradient id="igm" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#fcb045"/><stop offset="50%" stop-color="#fd1d1d"/><stop offset="100%" stop-color="#833ab4"/></linearGradient></defs><path fill="url(#igm)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
     Instagram
   </a>
 </div>
@@ -221,10 +198,12 @@
   <p>As melhores bebidas da região. Cerveja, destilados, vinhos e muito mais.</p>
   <div class="hero-btns">
     <button class="btn-primary" onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">Ver produtos</button>
-    <a href="https://wa.me/5547984217666" target="_blank"><button class="btn-outline" style="display:flex;align-items:center;gap:8px;margin:0 auto">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffcc00"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      WhatsApp
-    </button></a>
+    <a href="https://wa.me/5547984217666" target="_blank">
+      <button class="btn-outline">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffcc00"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </button>
+    </a>
   </div>
 </div>
 
@@ -251,29 +230,26 @@
 <section id="entrega" style="padding-top:0">
   <div class="section-header"><h2 class="section-title">Como receber</h2><div class="section-line"></div></div>
   <div class="delivery-section">
-    <div class="delivery-option" onclick="selectDeliveryType('delivery')">
-      <div class="delivery-icon">🚚</div>
-      <div class="delivery-title">Delivery</div>
+    <div class="delivery-option" onclick="openCartDelivery('delivery')">
+      <div class="delivery-icon">🚚</div><div class="delivery-title">Delivery</div>
       <div class="delivery-desc">Entregamos na sua casa. Frete calculado pelo CEP automaticamente.</div>
     </div>
-    <div class="delivery-option" onclick="selectDeliveryType('retirada')">
-      <div class="delivery-icon">🏪</div>
-      <div class="delivery-title">Retirada</div>
-      <div class="delivery-desc">Retire sem taxa de entrega. Rua Sebastião Hermes, 243 — Nova Esperança.</div>
+    <div class="delivery-option" onclick="openCartDelivery('retirada')">
+      <div class="delivery-icon">🏪</div><div class="delivery-title">Retirada</div>
+      <div class="delivery-desc">Retire sem taxa. Rua Sebastião Hermes, 243 — Nova Esperança, Blumenau.</div>
     </div>
   </div>
 </section>
 
 <footer>
   <span class="footer-logo">Adega do Motta</span>
-  <div style="display:flex;justify-content:center;gap:16px;margin-bottom:12px;flex-wrap:wrap">
-    <a href="https://wa.me/5547984217666" target="_blank" style="color:#25d366;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;display:flex;align-items:center;gap:6px">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      WhatsApp
+  <div style="display:flex;justify-content:center;gap:20px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+    <a href="https://wa.me/5547984217666" target="_blank" style="text-decoration:none;color:#25d366;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;display:flex;align-items:center;gap:6px">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp
     </a>
     <a href="https://www.instagram.com/adega_domotta" target="_blank" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;display:flex;align-items:center;gap:6px">
-      <svg width="16" height="16" viewBox="0 0 24 24"><defs><linearGradient id="ig3" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#fcb045"/><stop offset="50%" stop-color="#fd1d1d"/><stop offset="100%" stop-color="#833ab4"/></linearGradient></defs><path fill="url(#ig3)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-      <span style="background:linear-gradient(135deg,#fcb045,#fd1d1d,#833ab4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">@adega_domotta</span>
+      <svg width="15" height="15" viewBox="0 0 24 24"><defs><linearGradient id="igf" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#fcb045"/><stop offset="50%" stop-color="#fd1d1d"/><stop offset="100%" stop-color="#833ab4"/></linearGradient></defs><path fill="url(#igf)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      <span style="background:linear-gradient(135deg,#fcb045,#fd1d1d,#833ab4);-webkit-background-clip:text;-webkit-text-fill-color:transparent">@adega_domotta</span>
     </a>
   </div>
   <p>© 2025 Adega do Motta · Todos os direitos reservados</p>
@@ -284,422 +260,281 @@
   <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<!-- CART SIDEBAR -->
+<!-- CART -->
 <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
 <div class="cart-sidebar" id="cart-sidebar">
   <div class="cart-header">
-    <span class="cart-title">🛒 Seu carrinho</span>
+    <span class="cart-title">🛒 Fazer Pedido</span>
     <button class="close-btn" onclick="toggleCart()">✕</button>
   </div>
-  <div class="cart-items" id="cart-items">
-    <div class="cart-empty">Seu carrinho está vazio.<br>Adicione produtos!</div>
+  <div class="cart-steps">
+    <div class="cart-step active" id="si1">1. Itens</div>
+    <div class="cart-step" id="si2">2. Entrega</div>
+    <div class="cart-step" id="si3">3. Dados</div>
+    <div class="cart-step" id="si4">4. Pagamento</div>
   </div>
-
-  <!-- CHECKOUT FORM -->
-  <div class="checkout-form" id="checkout-form" style="display:none">
-    <div class="checkout-section-title">📋 Seus dados</div>
-
-    <div class="form-field">
-      <label class="form-label">Nome completo</label>
-      <input class="form-input" id="f-nome" placeholder="Seu nome">
+  <div class="cart-body">
+    <div class="step-content active" id="sc1">
+      <div id="cart-items"><div class="cart-empty">Seu carrinho está vazio.<br>Adicione produtos!</div></div>
     </div>
-    <div class="form-field">
-      <label class="form-label">Telefone</label>
-      <input class="form-input" id="f-tel" placeholder="(47) 99999-9999" maxlength="15">
-    </div>
-
-    <div class="checkout-section-title" style="margin-top:14px">🚚 Entrega</div>
-    <div class="delivery-toggle">
-      <div class="delivery-toggle-btn active" id="toggle-delivery" onclick="setTipoEntrega('delivery')">🚚 Delivery</div>
-      <div class="delivery-toggle-btn" id="toggle-retirada" onclick="setTipoEntrega('retirada')">🏪 Retirada</div>
-    </div>
-
-    <div id="delivery-fields">
-      <div class="form-row">
-        <div class="form-field">
-          <label class="form-label">CEP</label>
-          <input class="form-input" id="f-cep" placeholder="89051-590" maxlength="9" oninput="formatCep(this)" onblur="calcularFrete()">
+    <div class="step-content" id="sc2">
+      <div class="step-title">🚚 Tipo de entrega</div>
+      <div class="dtoggle">
+        <div class="dtoggle-btn active" id="td" onclick="setEntrega('delivery')">🚚 Delivery</div>
+        <div class="dtoggle-btn" id="tr" onclick="setEntrega('retirada')">🏪 Retirada</div>
+      </div>
+      <div id="del-fields">
+        <div class="form-row">
+          <div class="form-field"><label class="form-label">CEP</label><input class="form-input" id="f-cep" placeholder="89051-590" maxlength="9" oninput="fmtCep(this)"></div>
+          <div class="form-field"><label class="form-label">Número</label><input class="form-input" id="f-num" placeholder="243"></div>
         </div>
-        <div class="form-field">
-          <label class="form-label">Número</label>
-          <input class="form-input" id="f-num" placeholder="123">
+        <div class="form-field"><label class="form-label">Rua / Bairro</label><input class="form-input" id="f-rua" placeholder="Preenchido pelo CEP" readonly></div>
+        <div class="form-field"><label class="form-label">Complemento</label><input class="form-input" id="f-comp" placeholder="Apto, bloco... (opcional)"></div>
+        <div class="frete-loading" id="fl">📍 Calculando frete...</div>
+        <div class="frete-box" id="fb">
+          <div class="frete-box-label">Taxa de entrega calculada</div>
+          <div class="frete-box-val" id="fv">R$ 0,00</div>
+          <div class="frete-box-dist" id="fd"></div>
         </div>
+        <div class="fora-area" id="fa">⚠️ Fora da área de entrega (máx. 15km). Entre em contato pelo WhatsApp.</div>
       </div>
-      <div class="form-field">
-        <label class="form-label">Rua / Bairro</label>
-        <input class="form-input" id="f-rua" placeholder="Preenchido pelo CEP">
-      </div>
-      <div class="frete-loading" id="frete-loading">📍 Calculando frete...</div>
-      <div class="frete-info" id="frete-info">
-        <div style="font-size:12px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Taxa de entrega</div>
-        <div class="frete-valor" id="frete-valor">R$ 0,00</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px" id="frete-dist"></div>
+      <div class="retirada-info" id="ri" style="display:none">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;margin-bottom:4px">📍 Endereço da loja</div>
+        <div style="color:var(--muted);font-size:14px">Rua Sebastião Hermes, 243<br>Nova Esperança, Blumenau - SC<br>CEP 89051-590</div>
       </div>
     </div>
-
-    <div class="checkout-section-title" style="margin-top:14px">💳 Pagamento</div>
-    <div class="payment-opts">
-      <div class="pay-btn active" onclick="setPagamento(this,'pix')">⚡ Pix</div>
-      <div class="pay-btn" onclick="setPagamento(this,'debito')">💳 Débito</div>
-      <div class="pay-btn" onclick="setPagamento(this,'credito')">💳 Crédito</div>
-      <div class="pay-btn" onclick="setPagamento(this,'dinheiro')">💵 Dinheiro</div>
+    <div class="step-content" id="sc3">
+      <div class="step-title">👤 Seus dados</div>
+      <div class="form-field"><label class="form-label">Nome completo</label><input class="form-input" id="f-nome" placeholder="Seu nome completo"></div>
+      <div class="form-field"><label class="form-label">Telefone / WhatsApp</label><input class="form-input" id="f-tel" placeholder="(47) 99999-9999" maxlength="15"></div>
+      <div class="form-field"><label class="form-label">Observação (opcional)</label><input class="form-input" id="f-obs" placeholder="Observações sobre o pedido"></div>
     </div>
-
-    <div class="pix-section show" id="pix-section">
-      <div class="pix-label">Chave Pix (CNPJ)</div>
-      <div class="pix-key">47.984.217/0001-66</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:6px">Envie o comprovante pelo WhatsApp após o pedido.</div>
-    </div>
-
-    <div class="form-field" id="troco-field" style="display:none">
-      <label class="form-label">Troco para quanto?</label>
-      <input class="form-input" id="f-troco" placeholder="Ex: R$ 100,00">
+    <div class="step-content" id="sc4">
+      <div class="step-title">💳 Pagamento</div>
+      <div class="pay-opts">
+        <div class="pay-opt active" id="pp" onclick="setPag(this,'pix')">⚡ Pix</div>
+        <div class="pay-opt" id="pd" onclick="setPagCartao(this,'debito')">💳 Débito</div>
+        <div class="pay-opt" id="pc" onclick="setPagCartao(this,'credito')">💳 Crédito</div>
+        <div class="pay-opt" id="pm" onclick="setPag(this,'dinheiro')">💵 Dinheiro</div>
+      </div>
+      <div class="pay-disabled-msg" id="pdm">⚠️ Pagamento por cartão indisponível. Escolha outra forma ou <a href="https://wa.me/5547984217666" target="_blank" style="color:var(--green)">fale conosco</a>.</div>
+      <div class="pix-box show" id="pix-box">
+        <div style="font-size:11px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Chave Pix (CNPJ)</div>
+        <div class="pix-key">66.816.202/0001-14</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">Realize o Pix e anexe o comprovante abaixo antes de finalizar.</div>
+        <label class="form-label" style="margin-top:12px">📎 Comprovante Pix (obrigatório)</label>
+        <div class="comp-upload" id="cu">
+          <input type="file" id="f-comp-pix" accept="image/*,application/pdf" onchange="onComp()">
+          <div class="comp-upload-text">📎 Toque para anexar foto ou PDF</div>
+        </div>
+        <div class="comp-ok" id="cok">✅ Comprovante anexado!</div>
+      </div>
+      <div id="troco-f" style="display:none">
+        <label class="form-label">Troco para quanto?</label>
+        <input class="form-input" id="f-troco" placeholder="Ex: R$ 100,00">
+      </div>
     </div>
   </div>
+  <div class="cart-footer">
+    <div class="total-row"><span>Subtotal</span><span id="sv">R$ 0,00</span></div>
+    <div class="total-row" id="fr-row" style="display:none"><span>Frete</span><span id="frv">R$ 0,00</span></div>
+    <div class="total-final" id="tf">R$ 0,00</div>
+    <div class="footer-btns">
+      <button class="btn-back" id="bbk" onclick="prevStep()">← Voltar</button>
+      <button class="btn-next" id="bnt" onclick="nextStep()">Continuar →</button>
+    </div>
+  </div>
+</div>
 
-  <!-- TOTALS -->
-  <div class="cart-totals" id="cart-totals">
-    <div class="total-row"><span>Subtotal</span><span id="subtotal-val">R$ 0,00</span></div>
-    <div class="total-row" id="frete-row" style="display:none"><span>Frete</span><span id="frete-total-val">R$ 0,00</span></div>
-    <div class="total-final" id="cart-total">R$ 0,00</div>
-    <button class="whatsapp-checkout" id="checkout-btn" onclick="handleCheckout()" style="display:flex;align-items:center;justify-content:center;gap:8px">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Finalizar pelo WhatsApp
-    </button>
+<!-- LOJA FECHADA MODAL -->
+<div class="closed-modal" id="cm">
+  <div class="closed-modal-box">
+    <div style="font-size:48px;margin-bottom:16px">🔴</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:var(--red);margin-bottom:8px">Loja Fechada</div>
+    <div style="color:var(--muted);font-size:15px;line-height:1.5;margin-bottom:12px" id="cm-msg">Estamos fechados no momento.</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--yellow);letter-spacing:1px" id="cm-time">18:00 às 02:00</div>
+    <button style="background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 24px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-top:16px" onclick="document.getElementById('cm').classList.remove('show')">Entendi</button>
   </div>
 </div>
 
 <script>
-// =====================
-// CONFIG
-// =====================
-const SUPABASE_URL = 'https://wxtuartqvtysntvrwwjl.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_y_dagzewnlnI6uTCyEJZxA_tcpzd6Vs';
-const WHATSAPP = '5547984217666';
-const LOJA_ENDERECO = 'Rua Sebastião Hermes, 243, Nova Esperança, Blumenau, SC';
-const GOOGLE_MAPS_KEY = 'AIzaSyD02Ygj57hd5ZQ42s-T-WdWZM0qMOQ';
-const PIX_KEY = '47.984.217/0001-66';
+const SB_URL='https://wxtuartqvtysntvrwwjl.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind4dHVhcnRxdnR5c250dnJ3d2psIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4Mjk0MjIsImV4cCI6MjA5NjQwNTQyMn0.aEIekm1PyetlnI6eBPCCxC2SSd5Ku4Zh66LFr0IQNfQ';
+const WPP='5547984217666';
+const LOJA_END='Rua Sebastião Hermes, 243, Nova Esperança, Blumenau, SC';
+const MAPS='AIzaSyD02Ygj57hd5ZQ42s-T-WdWZM0qMOQp_cc';
+const PIX='66.816.202/0001-14';
+const FRETE=[{max:4,p:9.99},{max:5,p:11.99},{max:6,p:13.99},{max:7,p:15.99},{max:8,p:17.99},{max:9,p:19.99},{max:10,p:21.99},{max:11,p:22.99},{max:12,p:24.99},{max:13,p:26.99},{max:14,p:27.99},{max:15,p:29.99}];
 
-// Tabela de frete por distância (km → preço)
-const FRETE_TABLE = [
-  { max: 4, price: 9.99 },
-  { max: 5, price: 11.99 },
-  { max: 6, price: 13.99 },
-  { max: 7, price: 15.99 },
-  { max: 8, price: 17.99 },
-  { max: 9, price: 19.99 },
-  { max: 10, price: 21.99 },
-  { max: 11, price: 22.99 },
-  { max: 12, price: 24.99 },
-  { max: 13, price: 26.99 },
-  { max: 14, price: 27.99 },
-  { max: 15, price: 29.99 },
-];
+let prods=[],cat='todos',cart={},step=1,entrega='delivery',pag='pix',frete=0,freteOk=false,lojaOk=true,cartaoOk=true,compFile=null,cfg={};
 
-// =====================
-// STATE
-// =====================
-let allProducts = [];
-let currentCat = 'todos';
-let cart = {};
-let tipoEntrega = 'delivery';
-let pagamento = 'pix';
-let freteValor = 0;
-let freteCalculado = false;
-let carrinhoAberto = false;
+const fmt=v=>'R$ '+Number(v).toFixed(2).replace('.',',');
+const sbH={'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`};
 
-function fmt(v) { return 'R$ ' + Number(v).toFixed(2).replace('.', ','); }
+async function sbGet(p){const r=await fetch(SB_URL+p,{headers:sbH});return r.json();}
+async function sbPost(p,b){return fetch(SB_URL+p,{method:'POST',headers:{...sbH,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(b)});}
 
-// =====================
-// SUPABASE
-// =====================
-async function sbFetch(path) {
-  return fetch(`${SUPABASE_URL}${path}`, {
-    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-  });
+async function loadCfg(){
+  try{
+    const d=await sbGet('/rest/v1/config_loja?id=eq.1&select=*');
+    if(d&&d[0]){cfg=d[0];cartaoOk=cfg.cartao_ativo!==false;lojaOk=calcAberta(cfg);
+      document.getElementById('closed-banner').classList.toggle('show',!lojaOk);
+      if(!lojaOk){document.getElementById('cm-msg').textContent=cfg.msg_fechada||'Estamos fechados.';document.getElementById('cm-time').textContent=`${cfg.hora_abertura||'18:00'} às ${cfg.hora_fechamento||'02:00'}`;}
+    }
+  }catch(e){}
 }
 
-// =====================
-// PRODUTOS
-// =====================
-async function loadProducts() {
-  showSkeletons();
-  try {
-    const res = await sbFetch('/rest/v1/produtos?select=*&order=id.asc');
-    if (!res.ok) throw new Error();
-    allProducts = await res.json();
-    renderProducts();
-  } catch(e) {
-    document.getElementById('products-grid').innerHTML =
-      '<div class="products-empty">😕 Não foi possível carregar os produtos.<br>Tente recarregar a página.</div>';
-  }
+function calcAberta(c){
+  if(c.abertura_manual!==undefined&&c.abertura_manual)return c.loja_aberta;
+  const h=new Date().getHours();const ab=parseInt((c.hora_abertura||'18:00'));const fe=parseInt((c.hora_fechamento||'2:00'));
+  return ab>fe?h>=ab||h<fe:h>=ab&&h<fe;
 }
 
-function showSkeletons() {
-  document.getElementById('products-grid').innerHTML = Array(8).fill(0).map(() => `
-    <div class="skeleton-card skeleton">
-      <div class="skeleton-img"></div>
-      <div class="skeleton-line" style="margin-top:14px"></div>
-      <div class="skeleton-line short"></div>
-      <div class="skeleton-line" style="margin-bottom:14px"></div>
-    </div>`).join('');
+async function loadProds(){
+  showSkel();
+  try{prods=await sbGet('/rest/v1/produtos?select=*&order=id.asc');renderProds();}
+  catch(e){document.getElementById('products-grid').innerHTML='<div class="products-empty">😕 Erro ao carregar. Recarregue a página.</div>';}
 }
 
-function renderProducts() {
-  const list = currentCat === 'todos' ? allProducts : allProducts.filter(p => p.cat === currentCat);
-  const grid = document.getElementById('products-grid');
-  if (!list.length) { grid.innerHTML = '<div class="products-empty">Nenhum produto nesta categoria.</div>'; return; }
-  grid.innerHTML = list.map(p => {
-    const imgHTML = p.img_url
-      ? `<img src="${p.img_url}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span>${p.emoji||'🍺'}</span>'">`
-      : `<span>${p.emoji || '🍺'}</span>`;
-    const comboTag = p.cat === 'combo' ? `<div class="combo-badge">🎁 Combo</div>` : '';
-    return `
-      <div class="product-card">
-        <div class="product-img">${imgHTML}</div>
-        <div class="product-info">
-          ${comboTag}
-          <div class="product-name">${p.name}</div>
-          <div class="product-vol">${p.vol || ''}</div>
-          <div class="product-bottom">
-            <span class="product-price">${fmt(p.price)}</span>
-            <button class="add-btn" onclick="addToCart(${p.id})">+</button>
-          </div>
-        </div>
-      </div>`;
+function showSkel(){document.getElementById('products-grid').innerHTML=Array(8).fill(0).map(()=>'<div class="skeleton-card skeleton"><div class="skeleton-img"></div><div class="skeleton-line" style="margin-top:14px"></div><div class="skeleton-line short"></div><div class="skeleton-line" style="margin-bottom:14px"></div></div>').join('');}
+
+function renderProds(){
+  const list=cat==='todos'?prods:prods.filter(p=>p.cat===cat);
+  const g=document.getElementById('products-grid');
+  if(!list.length){g.innerHTML='<div class="products-empty">Nenhum produto nesta categoria.</div>';return;}
+  g.innerHTML=list.map(p=>{
+    const img=p.img_url?`<img src="${p.img_url}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span>${p.emoji||'🍺'}</span>'">`:`<span>${p.emoji||'🍺'}</span>`;
+    const cb=p.cat==='combo'?'<div class="combo-badge">🎁 Combo</div>':'';
+    return `<div class="product-card"><div class="product-img">${img}</div><div class="product-info">${cb}<div class="product-name">${p.name}</div><div class="product-vol">${p.vol||''}</div><div class="product-bottom"><span class="product-price">${fmt(p.price)}</span><button class="add-btn" onclick="addCart(${p.id})">+</button></div></div></div>`;
   }).join('');
 }
 
-function filterCat(btn, cat) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentCat = cat;
-  renderProducts();
-}
+function filterCat(b,c){document.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');cat=c;renderProds();}
 
-// =====================
-// CARRINHO
-// =====================
-function addToCart(id) {
-  const p = allProducts.find(x => x.id === id);
-  if (!p) return;
-  if (!cart[id]) cart[id] = { ...p, qty: 0 };
-  cart[id].qty++;
-  updateCart();
-}
+function addCart(id){const p=prods.find(x=>x.id===id);if(!p)return;if(!cart[id])cart[id]={...p,qty:0};cart[id].qty++;updCart();}
+function remCart(id){if(!cart[id])return;cart[id].qty--;if(cart[id].qty<=0)delete cart[id];updCart();}
 
-function removeFromCart(id) {
-  if (!cart[id]) return;
-  cart[id].qty--;
-  if (cart[id].qty <= 0) delete cart[id];
-  updateCart();
-}
-
-function updateCart() {
-  const items = Object.values(cart);
-  const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const count = items.reduce((s, i) => s + i.qty, 0);
-  const total = subtotal + (tipoEntrega === 'delivery' && freteCalculado ? freteValor : 0);
-
-  document.getElementById('cart-count').textContent = count;
-  document.getElementById('subtotal-val').textContent = fmt(subtotal);
-  document.getElementById('cart-total').textContent = fmt(total);
-
-  // Show checkout form when items exist
-  const hasItems = items.length > 0;
-  document.getElementById('checkout-form').style.display = hasItems ? 'block' : 'none';
-
-  const container = document.getElementById('cart-items');
-  if (!hasItems) {
-    container.innerHTML = '<div class="cart-empty">Seu carrinho está vazio.<br>Adicione produtos!</div>';
-    return;
-  }
-
-  container.innerHTML = items.map(i => {
-    const thumb = i.img_url
-      ? `<div class="cart-item-thumb"><img src="${i.img_url}" alt="${i.name}"></div>`
-      : `<div class="cart-item-thumb">${i.emoji || '🍺'}</div>`;
-    return `
-      <div class="cart-item">
-        ${thumb}
-        <div class="cart-item-info">
-          <div class="cart-item-name">${i.name}</div>
-          <div class="cart-item-price">${fmt(i.price * i.qty)}</div>
-        </div>
-        <div class="cart-item-qty">
-          <button class="qty-btn" onclick="removeFromCart(${i.id})">−</button>
-          <span>${i.qty}</span>
-          <button class="qty-btn" onclick="addToCart(${i.id})">+</button>
-        </div>
-      </div>`;
+function updCart(){
+  const items=Object.values(cart);
+  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
+  const fr=entrega==='delivery'&&freteOk?frete:0;
+  const tot=sub+fr;
+  const cnt=items.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cart-count').textContent=cnt;
+  document.getElementById('sv').textContent=fmt(sub);
+  document.getElementById('tf').textContent=fmt(tot);
+  document.getElementById('fr-row').style.display=fr>0?'flex':'none';
+  document.getElementById('frv').textContent=fmt(fr);
+  const c=document.getElementById('cart-items');
+  if(!items.length){c.innerHTML='<div class="cart-empty">Seu carrinho está vazio.<br>Adicione produtos!</div>';return;}
+  c.innerHTML=items.map(i=>{
+    const t=i.img_url?`<div class="cart-item-thumb"><img src="${i.img_url}"></div>`:`<div class="cart-item-thumb">${i.emoji||'🍺'}</div>`;
+    return `<div class="cart-item">${t}<div class="cart-item-info"><div class="cart-item-name">${i.name}</div><div class="cart-item-price">${fmt(i.price*i.qty)}</div></div><div class="cart-item-qty"><button class="qty-btn" onclick="remCart(${i.id})">−</button><span>${i.qty}</span><button class="qty-btn" onclick="addCart(${i.id})">+</button></div></div>`;
   }).join('');
 }
 
-// =====================
-// ENTREGA
-// =====================
-function setTipoEntrega(tipo) {
-  tipoEntrega = tipo;
-  document.getElementById('toggle-delivery').classList.toggle('active', tipo === 'delivery');
-  document.getElementById('toggle-retirada').classList.toggle('active', tipo === 'retirada');
-  document.getElementById('delivery-fields').style.display = tipo === 'delivery' ? 'block' : 'none';
-  document.getElementById('frete-row').style.display = tipo === 'delivery' && freteCalculado ? 'flex' : 'none';
-  freteValor = tipo === 'retirada' ? 0 : freteValor;
-  updateCart();
+function goStep(n){
+  document.querySelectorAll('.step-content').forEach(s=>s.classList.remove('active'));
+  document.getElementById(`sc${n}`).classList.add('active');
+  ['si1','si2','si3','si4'].forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('active','done');if(i+1<n)el.classList.add('done');if(i+1===n)el.classList.add('active');});
+  step=n;
+  document.getElementById('bbk').style.display=n>1?'block':'none';
+  document.getElementById('bnt').textContent=n===4?'Finalizar →':'Continuar →';
 }
 
-function selectDeliveryType(tipo) {
-  setTipoEntrega(tipo);
-  toggleCart();
-  document.getElementById('produtos').scrollIntoView({ behavior: 'smooth' });
+function nextStep(){
+  if(step===1){if(!Object.keys(cart).length){alert('Adicione produtos!');return;}if(!lojaOk){document.getElementById('cm').classList.add('show');return;}goStep(2);}
+  else if(step===2){
+    if(entrega==='delivery'){const cep=document.getElementById('f-cep').value.replace(/\D/g,'');if(cep.length!==8){alert('Digite um CEP válido!');return;}if(!freteOk){alert('Aguarde o cálculo do frete!');return;}}
+    goStep(3);
+  }
+  else if(step===3){const n=document.getElementById('f-nome').value.trim();const t=document.getElementById('f-tel').value.trim();if(!n){alert('Digite seu nome!');return;}if(!t){alert('Digite seu telefone!');return;}goStep(4);}
+  else if(step===4){finalizar();}
+}
+function prevStep(){goStep(step-1);}
+
+function setEntrega(t){
+  entrega=t;
+  document.getElementById('td').classList.toggle('active',t==='delivery');
+  document.getElementById('tr').classList.toggle('active',t==='retirada');
+  document.getElementById('del-fields').style.display=t==='delivery'?'block':'none';
+  document.getElementById('ri').style.display=t==='retirada'?'block':'none';
+  if(t==='retirada'){freteOk=true;frete=0;}
+  updCart();
 }
 
-function formatCep(input) {
-  let v = input.value.replace(/\D/g,'');
-  if (v.length > 5) v = v.slice(0,5) + '-' + v.slice(5,8);
-  input.value = v;
+function openCartDelivery(t){setEntrega(t);toggleCart();}
+
+function fmtCep(el){
+  let v=el.value.replace(/\D/g,'');if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5,8);el.value=v;
+  if(v.replace('-','').length===8)calcFrete(v.replace('-',''));
 }
 
-async function calcularFrete() {
-  const cep = document.getElementById('f-cep').value.replace(/\D/g,'');
-  if (cep.length !== 8) return;
-
-  // Busca endereço pelo CEP
-  try {
-    const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-    const data = await res.json();
-    if (!data.erro) {
-      document.getElementById('f-rua').value = `${data.logradouro}, ${data.bairro}`;
+async function calcFrete(cep){
+  document.getElementById('fl').classList.add('show');
+  document.getElementById('fb').classList.remove('show');document.getElementById('fa').classList.remove('show');
+  freteOk=false;
+  try{const r=await fetch(`https://viacep.com.br/ws/${cep}/json/`);const d=await r.json();if(!d.erro)document.getElementById('f-rua').value=`${d.logradouro||''}, ${d.bairro||''}`.replace(/^, /);}catch(e){}
+  try{
+    const dest=`CEP ${cep}, Blumenau, SC, Brasil`;
+    const url=`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(LOJA_END)}&destinations=${encodeURIComponent(dest)}&key=${MAPS}&mode=driving`;
+    const r=await fetch(url);const d=await r.json();
+    const dm=d.rows?.[0]?.elements?.[0]?.distance?.value;
+    if(dm){const km=dm/1000;const fp=getFrete(km);
+      if(!fp){document.getElementById('fa').classList.add('show');}
+      else{frete=fp;freteOk=true;document.getElementById('fv').textContent=fmt(fp);document.getElementById('fd').textContent=`${km.toFixed(1)} km da loja`;document.getElementById('fb').classList.add('show');updCart();}
     }
-  } catch(e) {}
-
-  // Calcula distância via Google Maps
-  document.getElementById('frete-loading').classList.add('show');
-  document.getElementById('frete-info').classList.remove('show');
-
-  const num = document.getElementById('f-num').value || 'S/N';
-  const destino = `CEP ${cep}, Blumenau, SC, Brasil`;
-
-  try {
-    const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(LOJA_ENDERECO)}&destinations=${encodeURIComponent(destino)}&key=${GOOGLE_MAPS_KEY}&mode=driving`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const dist = data.rows?.[0]?.elements?.[0]?.distance?.value;
-
-    if (dist) {
-      const km = dist / 1000;
-      const frete = getFrete(km);
-      if (frete === null) {
-        document.getElementById('frete-valor').textContent = 'Fora da área';
-        document.getElementById('frete-dist').textContent = `${km.toFixed(1)} km — fora do raio de entrega`;
-        freteValor = 0;
-        freteCalculado = false;
-      } else {
-        freteValor = frete;
-        freteCalculado = true;
-        document.getElementById('frete-valor').textContent = fmt(frete);
-        document.getElementById('frete-dist').textContent = `${km.toFixed(1)} km de distância`;
-        document.getElementById('frete-row').style.display = 'flex';
-        document.getElementById('frete-total-val').textContent = fmt(frete);
-      }
-      document.getElementById('frete-info').classList.add('show');
-    }
-  } catch(e) {
-    document.getElementById('frete-valor').textContent = 'Erro ao calcular';
-  } finally {
-    document.getElementById('frete-loading').classList.remove('show');
-    updateCart();
-  }
+  }catch(e){freteOk=true;frete=0;}
+  document.getElementById('fl').classList.remove('show');
 }
 
-function getFrete(km) {
-  for (const row of FRETE_TABLE) {
-    if (km <= row.max) return row.price;
-  }
-  return null; // fora da área
+function getFrete(km){for(const r of FRETE)if(km<=r.max)return r.p;return null;}
+
+function setPag(el,t){
+  pag=t;document.querySelectorAll('.pay-opt').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  document.getElementById('pix-box').classList.toggle('show',t==='pix');
+  document.getElementById('troco-f').style.display=t==='dinheiro'?'block':'none';
+  document.getElementById('pdm').classList.remove('show');
+}
+function setPagCartao(el,t){if(!cartaoOk){document.getElementById('pdm').classList.add('show');return;}setPag(el,t);}
+function onComp(){compFile=document.getElementById('f-comp-pix').files[0];document.getElementById('cok').style.display=compFile?'block':'none';}
+
+async function finalizar(){
+  if(pag==='pix'&&!compFile){alert('Anexe o comprovante do Pix!');return;}
+  const items=Object.values(cart);
+  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
+  const fr=entrega==='delivery'&&freteOk?frete:0;
+  const tot=sub+fr;
+  const nome=document.getElementById('f-nome').value.trim();
+  const tel=document.getElementById('f-tel').value.trim();
+  const obs=document.getElementById('f-obs').value.trim();
+  const cep=document.getElementById('f-cep')?.value||'';
+  const rua=document.getElementById('f-rua')?.value||'';
+  const num=document.getElementById('f-num')?.value||'';
+  const comp=document.getElementById('f-comp')?.value||'';
+  const troco=document.getElementById('f-troco')?.value||'';
+  const end=entrega==='delivery'?`${rua}, ${num}${comp?' — '+comp:''}, CEP ${cep}`:'Retirada na loja';
+
+  try{await sbPost('/rest/v1/pedidos',{nome,telefone:tel,tipo_entrega:entrega,endereco:end,cep,frete:fr,pagamento:pag,status:'aguardando',subtotal:sub,total:tot,itens:items.map(i=>({id:i.id,name:i.name,qty:i.qty,price:i.price})),observacao:obs});}catch(e){}
+
+  let msg=`🛒 *Pedido — Adega do Motta*\n━━━━━━━━━━━━━━━\n👤 *Cliente:* ${nome}\n📞 *Telefone:* ${tel}\n📍 *Entrega:* ${end}\n💳 *Pagamento:* ${pag.charAt(0).toUpperCase()+pag.slice(1)}`;
+  if(pag==='dinheiro'&&troco)msg+=` (troco para ${troco})`;
+  msg+=`\n━━━━━━━━━━━━━━━\n*Itens:*\n`;
+  items.forEach(i=>{msg+=`• ${i.name} x${i.qty} — ${fmt(i.price*i.qty)}\n`;});
+  msg+=`━━━━━━━━━━━━━━━\n🧾 *Subtotal:* ${fmt(sub)}\n`;
+  if(fr>0)msg+=`🚚 *Frete:* ${fmt(fr)}\n`;
+  msg+=`💰 *TOTAL: ${fmt(tot)}*`;
+  if(pag==='pix')msg+=`\n⚡ *Pix enviado!* Comprovante em anexo.`;
+  if(obs)msg+=`\n📝 *Obs:* ${obs}`;
+
+  window.open(`https://wa.me/${WPP}?text=${encodeURIComponent(msg)}`,'_blank');
+  cart={};updCart();toggleCart();goStep(1);compFile=null;document.getElementById('cok').style.display='none';
 }
 
-// =====================
-// PAGAMENTO
-// =====================
-function setPagamento(btn, tipo) {
-  pagamento = tipo;
-  document.querySelectorAll('.pay-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('pix-section').classList.toggle('show', tipo === 'pix');
-  document.getElementById('troco-field').style.display = tipo === 'dinheiro' ? 'block' : 'none';
-}
+function toggleCart(){document.getElementById('cart-overlay').classList.toggle('open');document.getElementById('cart-sidebar').classList.toggle('open');}
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobile-menu').classList.toggle('open');}
 
-// =====================
-// CHECKOUT
-// =====================
-function handleCheckout() {
-  const items = Object.values(cart);
-  if (!items.length) { alert('Adicione produtos ao carrinho!'); return; }
-
-  const nome = document.getElementById('f-nome').value.trim();
-  const tel = document.getElementById('f-tel').value.trim();
-
-  if (!nome) { alert('Digite seu nome!'); return; }
-  if (!tel) { alert('Digite seu telefone!'); return; }
-
-  if (tipoEntrega === 'delivery') {
-    const cep = document.getElementById('f-cep').value.trim();
-    const rua = document.getElementById('f-rua').value.trim();
-    const num = document.getElementById('f-num').value.trim();
-    if (!cep || cep.length < 9) { alert('Digite seu CEP!'); return; }
-    if (!freteCalculado) { alert('Aguarde o cálculo do frete!'); return; }
-  }
-
-  const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
-  const frete = tipoEntrega === 'delivery' ? freteValor : 0;
-  const total = subtotal + frete;
-  const troco = document.getElementById('f-troco')?.value;
-
-  let msg = `🛒 *Pedido — Adega do Motta*\n`;
-  msg += `━━━━━━━━━━━━━━━━\n`;
-  msg += `👤 *Cliente:* ${nome}\n`;
-  msg += `📞 *Telefone:* ${tel}\n`;
-
-  if (tipoEntrega === 'delivery') {
-    const cep = document.getElementById('f-cep').value;
-    const rua = document.getElementById('f-rua').value;
-    const num = document.getElementById('f-num').value;
-    msg += `📍 *Endereço:* ${rua}, ${num} — CEP ${cep}\n`;
-    msg += `🚚 *Entrega:* Delivery\n`;
-  } else {
-    msg += `🏪 *Entrega:* Retirada na loja\n`;
-  }
-
-  msg += `💳 *Pagamento:* ${pagamento.charAt(0).toUpperCase() + pagamento.slice(1)}`;
-  if (pagamento === 'dinheiro' && troco) msg += ` (troco para ${troco})`;
-  msg += `\n━━━━━━━━━━━━━━━━\n`;
-  msg += `*Itens:*\n`;
-  items.forEach(i => { msg += `• ${i.name} x${i.qty} — ${fmt(i.price * i.qty)}\n`; });
-  msg += `━━━━━━━━━━━━━━━━\n`;
-  msg += `🧾 *Subtotal:* ${fmt(subtotal)}\n`;
-  if (frete > 0) msg += `🚚 *Frete:* ${fmt(frete)}\n`;
-  msg += `💰 *Total: ${fmt(total)}*\n`;
-  if (pagamento === 'pix') msg += `\n⚡ *Chave Pix:* ${PIX_KEY}\nEnvie o comprovante por aqui!`;
-
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-}
-
-// =====================
-// UI
-// =====================
-function toggleCart() {
-  document.getElementById('cart-overlay').classList.toggle('open');
-  document.getElementById('cart-sidebar').classList.toggle('open');
-}
-
-function toggleMenu() {
-  document.getElementById('hamburger').classList.toggle('open');
-  document.getElementById('mobile-menu').classList.toggle('open');
-}
-
-// Init
-loadProducts();
+loadCfg();loadProds();
 </script>
 </body>
 </html>
