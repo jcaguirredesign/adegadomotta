@@ -494,11 +494,30 @@ async function calcFrete(cep){
       return;
     }
 
+    // Lê como texto primeiro (evita erro de parse em redirects do Apps Script)
     const resp=await fetch(`${PROXY_URL}?cep=${cep}`,{redirect:'follow'});
-    if(!resp.ok)throw new Error('HTTP '+resp.status);
-    const dados=await resp.json();
+    const texto=await resp.text();
+    console.log('[Frete] Status HTTP:', resp.status);
+    console.log('[Frete] Resposta bruta:', texto);
+
+    // Extrai o JSON da resposta (Apps Script às vezes envolve em HTML após redirect)
+    let dados;
+    try{
+      // Tenta parse direto
+      dados=JSON.parse(texto);
+    }catch(parseErr){
+      // Se falhou, tenta extrair JSON de dentro do HTML
+      const match=texto.match(/\{[\s\S]*\}/);
+      if(match){
+        dados=JSON.parse(match[0]);
+        console.log('[Frete] JSON extraído do HTML:', dados);
+      }else{
+        throw new Error('Resposta inválida do proxy: '+texto.substring(0,200));
+      }
+    }
 
     document.getElementById('fl').classList.remove('show');
+    console.log('[Frete] Dados parseados:', JSON.stringify(dados));
 
     if(dados.erro==='fora_area'){
       const fa=document.getElementById('fa');
@@ -507,7 +526,7 @@ async function calcFrete(cep){
       return;
     }
     if(dados.erro||!dados.ok){
-      // Se o proxy falhar, mostra mensagem amigável
+      console.error('[Frete] Erro retornado pelo proxy:', dados);
       document.getElementById('fa').textContent='⚠️ Não foi possível calcular o frete. Tente novamente ou fale pelo WhatsApp.';
       document.getElementById('fa').classList.add('show');
       return;
@@ -525,7 +544,7 @@ async function calcFrete(cep){
     document.getElementById('fl').classList.remove('show');
     document.getElementById('fa').textContent='⚠️ Erro ao calcular frete. Verifique o CEP ou tente novamente.';
     document.getElementById('fa').classList.add('show');
-    console.error('Erro calcFrete proxy:',err);
+    console.error('[Frete] Erro no catch:', err.message);
   }
 }
 
