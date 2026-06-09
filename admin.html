@@ -363,8 +363,8 @@ const SB='https://wxtuartqvtysntvrwwjl.supabase.co';
 const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind4dHVhcnRxdnR5c250dnJ3d2psIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4Mjk0MjIsImV4cCI6MjA5NjQwNTQyMn0.aEIekm1PyetlnI6eBPCCxC2SSd5Ku4Zh66LFr0IQNfQ';
 const H={'apikey':SK,'Authorization':`Bearer ${SK}`};
 const USERS=[
-  {user:'Motta',passHash:'0bbe522753978d6524807e5338f5362c9da4ed737f24e3d2da363a5dd377ddfa',role:'dono',name:'Motta (Proprietário)'},
-  {user:'Jv.dev',passHash:'422360f98ed5af367a095c61b77ea781715b3c9679575bf270391b096d11d469',role:'funcionario',name:'Jv.dev (Desenvolvedor)'},
+  {user:'Motta',passHash:'0bbe522753978d6524807e5338f5362c9da4ed737f24e3d2da363a5dd377ddfa',role:'proprietario',name:'Motta (Proprietário)'},
+  {user:'Jv.dev',passHash:'422360f98ed5af367a095c61b77ea781715b3c9679575bf270391b096d11d469',role:'desenvolvedor',name:'Jv.dev (Desenvolvedor)'},
 ];
 
 let currentUser=null,prods=[],combos=[],pedidos=[],pedFilt='todos',editProdId=null,editComboId=null,currentComboId=null,currentEtapaId=null,cfg={};
@@ -393,9 +393,9 @@ async function doLogin(){
   if(!found){g('le').style.display='block';return;}
   currentUser=found;
   g('login-screen').style.display='none';g('admin-screen').style.display='block';
-  const b=g('role-badge');b.textContent=found.role==='dono'?'👑 Dono':'👤 Funcionário';
-  b.className='user-badge '+(found.role==='dono'?'dono':'func');
-  if(found.role!=='dono')g('tab-users-btn').style.display='none';
+  const b=g('role-badge');b.textContent=found.role==='proprietario'?'👑 Proprietário':'🛠️ Desenvolvedor';
+  b.className='user-badge '+(found.role==='proprietario'?'dono':'func');
+  // Both roles can see users tab
   loadAll();
 }
 
@@ -412,7 +412,7 @@ function renderProds(){
   const tot=prods.length,av=prods.filter(p=>p.available).length;
   const cats=[...new Set(prods.map(p=>p.cat))].length;
   g('prod-stats').innerHTML=`<div class="stat-card"><div class="stat-num">${tot}</div><div class="stat-label">Total</div></div><div class="stat-card"><div class="stat-num">${av}</div><div class="stat-label">Disponíveis</div></div><div class="stat-card"><div class="stat-num">${tot-av}</div><div class="stat-label">Sem estoque</div></div><div class="stat-card"><div class="stat-num">${cats}</div><div class="stat-label">Categorias</div></div>`;
-  g('btn-add-prod').style.display=currentUser.role==='dono'?'inline-flex':'none';
+  g('btn-add-prod').style.display=currentUser.role==='proprietario'?'inline-flex':'none';
   if(!prods.length){g('product-list').innerHTML='<div class="empty">Nenhum produto.</div>';return;}
   g('product-list').innerHTML=prods.map(p=>`
     <div class="product-row" style="opacity:${p.available?1:0.5}">
@@ -421,7 +421,7 @@ function renderProds(){
       <div class="p-price">${fmt(p.price)}</div>
       <div class="p-actions">
         <button class="act-btn" onclick="openProdModal(${p.id})">✏️</button>
-        ${currentUser.role==='dono'?`<button class="act-btn del-btn" onclick="delProd(${p.id})">🗑️</button>`:''}
+        ${currentUser.role==='proprietario'?`<button class="act-btn del-btn" onclick="delProd(${p.id})">🗑️</button>`:''}
       </div>
     </div>`).join('');
 }
@@ -628,8 +628,36 @@ async function saveCfg(){
 }
 
 // ===================== USUÁRIOS =====================
-function renderUsers(){
-  g('user-list').innerHTML=USERS.map(u=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="font-size:26px">${u.role==='dono'?'👑':'👤'}</span><div style="flex:1"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px">${u.name}</div><div style="font-size:13px;color:${u.role==='dono'?'var(--yellow)':'#4488ff'};margin-top:2px">${u.role==='dono'?'Dono — acesso total':'Funcionário — acesso limitado'}</div></div></div>`).join('');
+async function renderUsers(){
+  // Load current site_ativo status
+  let siteAtivo=true;
+  try{const d=await sbGet('/rest/v1/config_loja?id=eq.1&select=site_ativo');if(d&&d[0])siteAtivo=d[0].site_ativo!==false;}catch(e){}
+  const devSection=currentUser.role==='desenvolvedor'?`
+    <div style="background:var(--card);border:1px solid rgba(204,0,0,0.4);border-radius:8px;padding:18px 16px;margin-bottom:16px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:6px;color:var(--red)">🛠️ Controle do Desenvolvedor</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px">Ative ou inative o site para manutenção. Enquanto inativo, clientes verão mensagem de manutenção.</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border)">
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px">Site ativo</div>
+          <div style="color:var(--muted);font-size:12px;margin-top:2px">Desative para bloquear acesso ao site</div>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" id="site-ativo-toggle" ${siteAtivo?'checked':''} onchange="toggleSiteAtivo()"><span class="slider"></span></label>
+      </div>
+      <div id="site-status-msg" style="margin-top:10px;font-size:13px;text-align:center;display:none;color:var(--green)"></div>
+    </div>`:'';
+  g('user-list').innerHTML=devSection+USERS.map(u=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px"><span style="font-size:26px">${u.role==='proprietario'?'👑':'🛠️'}</span><div style="flex:1"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px">${u.name}</div><div style="font-size:13px;color:${u.role==='proprietario'?'var(--yellow)':'#4488ff'};margin-top:2px">${u.role==='proprietario'?'Proprietário — acesso total':'Desenvolvedor — acesso técnico'}</div></div></div>`).join('');
+}
+
+async function toggleSiteAtivo(){
+  const ativo=g('site-ativo-toggle').checked;
+  try{
+    await sbPatch('/rest/v1/config_loja?id=eq.1',{site_ativo:ativo});
+    const msg=g('site-status-msg');
+    msg.textContent=ativo?'✅ Site ativado com sucesso!':'⚠️ Site inativado. Clientes verão mensagem de manutenção.';
+    msg.style.color=ativo?'var(--green)':'#ffaa00';
+    msg.style.display='block';
+    setTimeout(()=>msg.style.display='none',3000);
+  }catch(e){alert('Erro ao alterar status do site!');}
 }
 
 function switchTab(btn,name){
