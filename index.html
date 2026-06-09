@@ -363,6 +363,8 @@ const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const WPP='5547984217666';
 const LOJA_END='Rua Sebastião Hermes, 243, Nova Esperança, Blumenau, SC';
 const MAPS='AIzaSyD02Ygj57hd5ZQ42s-T-WdWZM0qMOQp_cc';
+// 🔗 URL do Apps Script proxy — cole aqui após fazer o deploy
+const PROXY_URL='https://script.google.com/macros/s/AKfycbyQGVs_Wh_d5IesFfB7K4rwT_7MscP4krzVkXzgMxwzk31epMYLVMBW25vvaI5ajMQfgw/exec';
 const PIX='66.816.202/0001-14';
 const FRETE=[{max:4,p:9.99},{max:5,p:11.99},{max:6,p:13.99},{max:7,p:15.99},{max:8,p:17.99},{max:9,p:19.99},{max:10,p:21.99},{max:11,p:22.99},{max:12,p:24.99},{max:13,p:26.99},{max:14,p:27.99},{max:15,p:29.99}];
 
@@ -466,9 +468,11 @@ function fmtCep(el){
 
 async function calcFrete(cep){
   document.getElementById('fl').classList.add('show');
-  document.getElementById('fb').classList.remove('show');document.getElementById('fa').classList.remove('show');
+  document.getElementById('fb').classList.remove('show');
+  document.getElementById('fa').classList.remove('show');
   freteOk=false;
-  // Busca endereço pelo ViaCEP
+
+  // Passo 1 — busca endereço via ViaCEP (só para preencher o campo Rua/Bairro)
   try{
     const r=await fetch(`https://viacep.com.br/ws/${cep}/json/`);
     const d=await r.json();
@@ -478,33 +482,48 @@ async function calcFrete(cep){
       document.getElementById('f-rua').value=[rua,bairro].filter(Boolean).join(', ');
     }
   }catch(e){}
-  // Calcula frete por faixa de CEP (Blumenau - SC)
-  const cn=parseInt(cep,10);
-  let km=null;
-  if(cn>=89051000&&cn<=89052999)km=2;
-  else if(cn>=89053000&&cn<=89054999)km=3;
-  else if(cn>=89055000&&cn<=89057999)km=4;
-  else if(cn>=89058000&&cn<=89061999)km=5;
-  else if(cn>=89062000&&cn<=89064999)km=6;
-  else if(cn>=89065000&&cn<=89067999)km=7;
-  else if(cn>=89068000&&cn<=89070999)km=8;
-  else if(cn>=89071000&&cn<=89073999)km=9;
-  else if(cn>=89074000&&cn<=89077999)km=10;
-  else if(cn>=89078000&&cn<=89081999)km=11;
-  else if(cn>=89082000&&cn<=89085999)km=12;
-  else if(cn>=89086000&&cn<=89090999)km=13;
-  else if(cn>=89091000&&cn<=89095999)km=14;
-  else if(cn>=89096000&&cn<=89115999)km=15;
-  else if(cn>=89000000&&cn<=89199999)km=15; // demais CEPs de Blumenau
-  document.getElementById('fl').classList.remove('show');
-  if(km===null){document.getElementById('fa').classList.add('show');return;}
-  const fp=getFrete(km);
-  if(!fp){document.getElementById('fa').classList.add('show');return;}
-  frete=fp;freteOk=true;
-  document.getElementById('fv').textContent=fmt(fp);
-  document.getElementById('fd').textContent=`Aprox. ${km} km da loja`;
-  document.getElementById('fb').classList.add('show');
-  updCart();
+
+  // Passo 2 — consulta o Apps Script proxy para obter km e frete reais
+  try{
+    if(!PROXY_URL||PROXY_URL==='COLE_AQUI_A_URL_DO_APPS_SCRIPT'){
+      // Fallback: proxy não configurado ainda — avisa no console e usa tabela de CEP
+      console.warn('PROXY_URL não configurada. Configure o Apps Script e cole a URL.');
+      document.getElementById('fa').classList.add('show');
+      document.getElementById('fa').textContent='⚠️ Proxy de frete não configurado. Fale com o administrador.';
+      document.getElementById('fl').classList.remove('show');
+      return;
+    }
+
+    const resp=await fetch(`${PROXY_URL}?cep=${cep}`);
+    const dados=await resp.json();
+
+    document.getElementById('fl').classList.remove('show');
+
+    if(dados.erro==='fora_area'){
+      document.getElementById('fa').classList.add('show');
+      return;
+    }
+    if(dados.erro||!dados.ok){
+      // Se o proxy falhar, mostra mensagem amigável
+      document.getElementById('fa').textContent='⚠️ Não foi possível calcular o frete. Tente novamente ou fale pelo WhatsApp.';
+      document.getElementById('fa').classList.add('show');
+      return;
+    }
+
+    // Sucesso — exibe frete real calculado pelo Google Maps
+    frete=dados.frete;
+    freteOk=true;
+    document.getElementById('fv').textContent=fmt(dados.frete);
+    document.getElementById('fd').textContent=`${dados.distancia_txt} da loja · ${dados.duracao_txt}`;
+    document.getElementById('fb').classList.add('show');
+    updCart();
+
+  }catch(err){
+    document.getElementById('fl').classList.remove('show');
+    document.getElementById('fa').textContent='⚠️ Erro ao calcular frete. Verifique o CEP ou tente novamente.';
+    document.getElementById('fa').classList.add('show');
+    console.error('Erro calcFrete proxy:',err);
+  }
 }
 
 function getFrete(km){for(const r of FRETE)if(km<=r.max)return r.p;return null;}
