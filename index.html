@@ -398,17 +398,6 @@ async function loadProds(){
 
 function showSkel(){document.getElementById('products-grid').innerHTML=Array(8).fill(0).map(()=>'<div class="skeleton-card skeleton"><div class="skeleton-img"></div><div class="skeleton-line" style="margin-top:14px"></div><div class="skeleton-line short"></div><div class="skeleton-line" style="margin-bottom:14px"></div></div>').join('');}
 
-function renderProds(){
-  const list=cat==='todos'?prods:prods.filter(p=>p.cat===cat);
-  const g=document.getElementById('products-grid');
-  if(!list.length){g.innerHTML='<div class="products-empty">Nenhum produto nesta categoria.</div>';return;}
-  g.innerHTML=list.map(p=>{
-    const img=p.img_url?`<img src="${p.img_url}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span>${p.emoji||'🍺'}</span>'">`:`<span>${p.emoji||'🍺'}</span>`;
-    const cb=p.cat==='combo'?'<div class="combo-badge">🎁 Combo</div>':'';
-    return `<div class="product-card"><div class="product-img">${img}</div><div class="product-info">${cb}<div class="product-name">${p.name}</div><div class="product-vol">${p.vol||''}</div><div class="product-bottom"><span class="product-price">${fmt(p.price)}</span><button class="add-btn" onclick="addCart(${p.id})">+</button></div></div></div>`;
-  }).join('');
-}
-
 function filterCat(b,c){document.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');cat=c;renderProds();}
 
 function addCart(id){const p=prods.find(x=>x.id===id);if(!p)return;if(!cart[id])cart[id]={...p,qty:0};cart[id].qty++;updCart();}
@@ -534,7 +523,141 @@ async function finalizar(){
 function toggleCart(){document.getElementById('cart-overlay').classList.toggle('open');document.getElementById('cart-sidebar').classList.toggle('open');}
 function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobile-menu').classList.toggle('open');}
 
-loadCfg();loadProds();
+// ===================== COMBOS =====================
+let allCombos=[];
+
+async function loadCombos(){
+  try{
+    allCombos=await sbGet('/rest/v1/combos?select=*,combo_etapas(id,titulo,obrigatorio,ordem,combo_opcoes(id,nome,img_url,preco_extra))&available=eq.true&order=id.asc');
+  }catch(e){}
+}
+
+function renderProdsWithCombos(){
+  const grid=document.getElementById('products-grid');
+  let list=[];
+  if(cat==='todos'){list=[...prods,...allCombos.map(c=>({...c,_isCombo:true,cat:'combo'}))];}
+  else if(cat==='combo'){list=allCombos.map(c=>({...c,_isCombo:true,cat:'combo'}));}
+  else{list=prods.filter(p=>p.cat===cat);}
+  if(!list.length){grid.innerHTML='<div class="products-empty">Nenhum produto nesta categoria.</div>';return;}
+  grid.innerHTML=list.map(p=>{
+    if(p._isCombo){
+      const img=p.img_url?`<img src="${p.img_url}" alt="${p.name}" loading="lazy">`:'<span>🎁</span>';
+      return `<div class="product-card"><div class="product-img">${img}</div><div class="product-info"><div class="combo-badge">🎁 Combo</div><div class="product-name">${p.name}</div><div class="product-vol">${p.description||''}</div><div class="product-bottom"><span class="product-price">${fmt(p.price)}</span><button class="add-btn" onclick="openComboBuilder(${p.id})">+</button></div></div></div>`;
+    }
+    const img=p.img_url?`<img src="${p.img_url}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span>${p.emoji||'🍺'}</span>'">`:`<span>${p.emoji||'🍺'}</span>`;
+    return `<div class="product-card"><div class="product-img">${img}</div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-vol">${p.vol||''}</div><div class="product-bottom"><span class="product-price">${fmt(p.price)}</span><button class="add-btn" onclick="addCart(${p.id})">+</button></div></div></div>`;
+  }).join('');
+}
+
+// Override renderProds to use combo version
+function renderProds(){renderProdsWithCombos();}
+
+// COMBO BUILDER
+let comboBuilderData={combo:null,etapaIdx:0,selections:{}};
+
+function openComboBuilder(comboId){
+  const combo=allCombos.find(c=>c.id===comboId);
+  if(!combo)return;
+  comboBuilderData={combo,etapaIdx:0,selections:{}};
+  renderComboBuilderStep();
+  document.getElementById('combo-builder-overlay').style.display='flex';
+}
+
+function renderComboBuilderStep(){
+  const {combo,etapaIdx,selections}=comboBuilderData;
+  const etapas=combo.combo_etapas||[];
+  const modal=document.getElementById('combo-builder-modal');
+
+  if(etapaIdx>=etapas.length){
+    // Resumo final
+    let totalExtra=Object.values(selections).reduce((s,o)=>s+(o.preco_extra||0),0);
+    let resumo=Object.entries(selections).map(([tid,o])=>{
+      const et=etapas.find(e=>e.id==tid);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        ${o.img_url?`<img src="${o.img_url}" style="width:40px;height:40px;object-fit:cover;border-radius:6px">`:''}
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700">${et?.titulo||''}</div><div style="color:var(--yellow)">${o.nome}${o.preco_extra>0?` +${fmt(o.preco_extra)}`:''}</div></div>
+      </div>`;
+    }).join('');
+    modal.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">${combo.name}</div>
+        <button onclick="closeComboBuilder()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button>
+      </div>
+      <div style="margin-bottom:16px">${resumo}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Total</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--yellow)">${fmt(combo.price+totalExtra)}</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="comboBuilderData.etapaIdx--;renderComboBuilderStep()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">← Voltar</button>
+        <button onclick="addComboToCart()" style="flex:1;background:var(--red);color:white;border:none;padding:12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">🛒 Adicionar ao carrinho</button>
+      </div>`;
+    return;
+  }
+
+  const etapa=etapas[etapaIdx];
+  const opcoes=etapa.combo_opcoes||[];
+  const sel=selections[etapa.id];
+
+  modal.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">${combo.name}</div>
+      <button onclick="closeComboBuilder()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button>
+    </div>
+    <div style="color:var(--muted);font-size:12px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px">Etapa ${etapaIdx+1} de ${etapas.length}</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;margin-bottom:4px">${etapa.titulo}</div>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:14px">${etapa.obrigatorio?'Escolha uma opção (obrigatório)':'Opcional — pode pular'}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:16px">
+      ${opcoes.map(o=>`
+        <div onclick="selectOpcao(${etapa.id},${o.id})" style="border:2px solid ${sel?.id===o.id?'var(--red)':'var(--border)'};border-radius:8px;padding:10px;text-align:center;cursor:pointer;background:${sel?.id===o.id?'rgba(204,0,0,0.08)':'var(--card)'};transition:all 0.2s">
+          ${o.img_url?`<img src="${o.img_url}" style="width:100%;height:70px;object-fit:cover;border-radius:6px;margin-bottom:6px">`:''}
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px">${o.nome}</div>
+          ${o.preco_extra>0?`<div style="color:var(--yellow);font-size:12px">+${fmt(o.preco_extra)}</div>`:''}
+        </div>`).join('')}
+    </div>
+    <div style="display:flex;gap:8px">
+      ${etapaIdx>0?`<button onclick="comboBuilderData.etapaIdx--;renderComboBuilderStep()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">← Voltar</button>`:''}
+      ${!etapa.obrigatorio?`<button onclick="skipEtapa(${etapa.id})" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">Pular</button>`:''}
+      <button onclick="nextComboStep(${etapa.id},${etapa.obrigatorio?1:0})" style="flex:1;background:var(--red);color:white;border:none;padding:12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">Próximo →</button>
+    </div>`;
+}
+
+function selectOpcao(etapaId,opcaoId){
+  const etapa=comboBuilderData.combo.combo_etapas.find(e=>e.id===etapaId);
+  const opcao=etapa?.combo_opcoes.find(o=>o.id===opcaoId);
+  comboBuilderData.selections[etapaId]=opcao;
+  renderComboBuilderStep();
+}
+
+function skipEtapa(etapaId){
+  delete comboBuilderData.selections[etapaId];
+  comboBuilderData.etapaIdx++;
+  renderComboBuilderStep();
+}
+
+function nextComboStep(etapaId,obrig){
+  if(obrig&&!comboBuilderData.selections[etapaId]){alert('Selecione uma opção!');return;}
+  comboBuilderData.etapaIdx++;
+  renderComboBuilderStep();
+}
+
+function addComboToCart(){
+  const {combo,selections}=comboBuilderData;
+  const totalExtra=Object.values(selections).reduce((s,o)=>s+(o.preco_extra||0),0);
+  const cartKey=`combo_${combo.id}_${Date.now()}`;
+  const selDesc=Object.values(selections).map(o=>o.nome).join(', ');
+  cart[cartKey]={id:cartKey,name:combo.name+(selDesc?` (${selDesc})`:''),price:combo.price+totalExtra,qty:1,img_url:combo.img_url,emoji:'🎁',_isCombo:true};
+  updCart();closeComboBuilder();toggleCart();
+}
+
+function closeComboBuilder(){document.getElementById('combo-builder-overlay').style.display='none';}
+
+loadCfg();loadProds();loadCombos();
 </script>
+
+<!-- COMBO BUILDER MODAL -->
+<div id="combo-builder-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)">
+  <div id="combo-builder-modal" style="background:var(--dark);border:1px solid var(--border);border-radius:12px;padding:24px 20px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto"></div>
+</div>
 </body>
 </html>
