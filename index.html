@@ -324,11 +324,6 @@ footer{background:var(--dark);border-top:1px solid var(--border);text-align:cent
         <div style="font-size:12px;color:var(--muted);margin-top:6px">Realize o Pix e anexe o comprovante abaixo antes de finalizar.</div>
         <label class="form-label" style="margin-top:12px">📎 Comprovante Pix (obrigatório)</label>
         <div class="comp-upload" id="cu">
-          <input type="file" id="f-comp-pix" accept="image/*,application/pdf" onchange="onComp()">
-          <div class="comp-upload-text">📎 Toque para anexar foto ou PDF</div>
-        </div>
-        <div class="comp-ok" id="cok">✅ Comprovante anexado!</div>
-      </div>
       <div id="troco-f" style="display:none">
         <label class="form-label">Troco para quanto?</label>
         <input class="form-input" id="f-troco" placeholder="Ex: R$ 100,00">
@@ -363,7 +358,6 @@ const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const WPP='5547984217666';
 const LOJA_END='Rua Sebastião Hermes, 243, Nova Esperança, Blumenau, SC';
 const MAPS='AIzaSyD02Ygj57hd5ZQ42s-T-WdWZM0qMOQp_cc';
-// 🔗 URL do Apps Script proxy — cole aqui após fazer o deploy
 const PROXY_URL='https://script.google.com/macros/s/AKfycbyQGVs_Wh_d5IesFfB7K4rwT_7MscP4krzVkXzgMxwzk31epMYLVMBW25vvaI5ajMQfgw/exec';
 const PIX='66.816.202/0001-14';
 const FRETE=[{max:4,p:9.99},{max:5,p:11.99},{max:6,p:13.99},{max:7,p:15.99},{max:8,p:17.99},{max:9,p:19.99},{max:10,p:21.99},{max:11,p:22.99},{max:12,p:24.99},{max:13,p:26.99},{max:14,p:27.99},{max:15,p:29.99}];
@@ -400,7 +394,7 @@ function calcAberta(c){
 async function loadProds(){
   showSkel();
   try{prods=await sbGet('/rest/v1/produtos?select=*&order=id.asc');renderProds();}
-  catch(e){document.getElementById('products-grid').innerHTML='<div class="products-empty">😕 Erro ao carregar. Recarregue a página.</div>';}
+  catch(e){document.getElementById('products-grid').innerHTML='<div class="products-empty"> Erro ao carregar. Recarregue a página.</div>';}
 }
 
 function showSkel(){document.getElementById('products-grid').innerHTML=Array(8).fill(0).map(()=>'<div class="skeleton-card skeleton"><div class="skeleton-img"></div><div class="skeleton-line" style="margin-top:14px"></div><div class="skeleton-line short"></div><div class="skeleton-line" style="margin-bottom:14px"></div></div>').join('');}
