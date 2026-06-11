@@ -195,7 +195,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);text-align:cent
 <div class="hero">
   <span class="hero-tag">🔥 Delivery & Retirada</span>
   <h1>ADEGA<br><span>DO MOTTA</span></h1>
-  <p>As melhores bebidas da região. Cerveja, destilados, vinhos e muito mais.</p>
+  <p>As melhores bebidas da região, entregues na sua porta.</p>
   <div class="hero-btns">
     <button class="btn-primary" onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">Ver produtos</button>
     <a href="https://wa.me/5547984217666" target="_blank" style="text-decoration:none;display:block;width:100%;max-width:300px">
@@ -231,7 +231,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);text-align:cent
   <div class="section-header"><h2 class="section-title">Como receber</h2><div class="section-line"></div></div>
   <div class="delivery-section">
     <div class="delivery-option" onclick="openCartDelivery('delivery')">
-      <div class="delivery-icon">🚚</div><div class="delivery-title">Delivery</div>
+      <div class="delivery-icon">🏍️</div><div class="delivery-title">Delivery</div>
       <div class="delivery-desc">Entregamos na sua casa. Frete calculado pelo CEP automaticamente.</div>
     </div>
     <div class="delivery-option" onclick="openCartDelivery('retirada')">
@@ -278,7 +278,7 @@ footer{background:var(--dark);border-top:1px solid var(--border);text-align:cent
       <div id="cart-items"><div class="cart-empty">Seu carrinho está vazio.<br>Adicione produtos!</div></div>
     </div>
     <div class="step-content" id="sc2">
-      <div class="step-title">🚚 Tipo de entrega</div>
+      <div class="step-title">🏍️ Tipo de entrega</div>
       <div class="dtoggle">
         <div class="dtoggle-btn active" id="td" onclick="setEntrega('delivery')">🚚 Delivery</div>
         <div class="dtoggle-btn" id="tr" onclick="setEntrega('retirada')">🏪 Retirada</div>
@@ -561,7 +561,7 @@ async function finalizar(){
   msg+=`\n━━━━━━━━━━━━━━━\n*Itens:*\n`;
   items.forEach(i=>{msg+=`• ${i.name} x${i.qty} — ${fmt(i.price*i.qty)}\n`;});
   msg+=`━━━━━━━━━━━━━━━\n🧾 *Subtotal:* ${fmt(sub)}\n`;
-  if(fr>0)msg+=`🚚 *Frete:* ${fmt(fr)}\n`;
+  if(fr>0)msg+=`🏍️ *Frete:* ${fmt(fr)}\n`;
   msg+=`💰 *TOTAL: ${fmt(tot)}*`;
   if(pag==='pix')msg+=`\n⚡ *Pix enviado!* Comprovante em anexo.`;
   if(obs)msg+=`\n📝 *Obs:* ${obs}`;
