@@ -1,301 +1,640 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adega do Motta</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --red: #cc0000;
-            --red-hot: #ff2200;
-            --yellow: #ffcc00;
-            --black: #0a0a0a;
-            --dark: #111111;
-            --card: #1a1a1a;
-            --border: #2a2a2a;
-            --text: #f0f0f0;
-            --muted: #888;
-            --green: #25d366;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--black ); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; overflow-x: hidden; }
-
-        .closed-banner { background: #1a0000; border-bottom: 2px solid var(--red); padding: 12px 24px; text-align: center; display: none; }
-        .closed-banner.show { display: block; }
-        .closed-banner-text { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1px; color: #ff6666; }
-
-        header { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-        .logo { display: flex; align-items: center; }
-        nav { display: flex; gap: 20px; align-items: center; }
-        nav > a { color: var(--muted); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
-        nav > a:hover { color: var(--yellow); }
-        
-        .insta-btn { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: white !important; padding: 6px 14px; border-radius: 4px; }
-        .cart-btn { background: var(--red); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; }
-        .cart-btn:hover { background: var(--red-hot); }
-        .cart-count { background: var(--yellow); color: var(--black); font-size: 11px; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-
-        .hero { position: relative; padding: 80px 24px 60px; text-align: center; overflow: hidden; }
-        .hero-tag { display: inline-block; background: var(--red); color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 4px 14px; border-radius: 2px; margin-bottom: 20px; }
-        .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 10vw, 100px); line-height: 0.95; letter-spacing: 3px; margin-bottom: 8px; }
-        .hero h1 span { background: linear-gradient(135deg, var(--red-hot), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .hero p { color: var(--muted); font-size: 16px; margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; }
-
-        .btn-primary { background: var(--red); color: white; padding: 14px 32px; border: none; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
-        .btn-outline { background: transparent; color: var(--yellow); padding: 14px 32px; border: 2px solid var(--yellow); border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
-
-        .badges { display: flex; justify-content: center; gap: 32px; padding: 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-        .badge { display: flex; align-items: center; gap: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
-        .badge-icon { color: var(--yellow); font-size: 18px; }
-
-        section { padding: 60px 24px; max-width: 1200px; margin: 0 auto; }
-        .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 32px; }
-        .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; }
-        .section-line { flex: 1; height: 1px; background: var(--border); }
-
-        .categories { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
-        .cat-btn { background: var(--card); color: var(--muted); border: 1px solid var(--border); padding: 8px 18px; border-radius: 3px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
-        .cat-btn.active { background: var(--red); color: white; border-color: var(--red); }
-
-        .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-        .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
-        .product-card:hover { border-color: var(--red); transform: translateY(-3px); }
-        .product-img { width: 100%; height: 180px; background: #222; display: flex; align-items: center; justify-content: center; font-size: 56px; overflow: hidden; position: relative; }
-        .product-img img { width: 100%; height: 100%; object-fit: cover; }
-        .product-info { padding: 14px; }
-        .product-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 4px; }
-        .product-price { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--yellow); }
-        .add-btn { background: var(--red); color: white; border: none; width: 34px; height: 34px; border-radius: 4px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; backdrop-filter: blur(4px); }
-        .cart-overlay.open { display: block; }
-        .cart-sidebar { position: fixed; right: 0; top: 0; height: 100%; width: 420px; max-width: 100vw; background: var(--dark); border-left: 1px solid var(--border); z-index: 201; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s ease; }
-        .cart-sidebar.open { transform: translateX(0); }
-        
-        .cart-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-        .cart-body { flex: 1; overflow-y: auto; padding: 20px; }
-        .cart-footer { padding: 20px; border-top: 1px solid var(--border); background: var(--dark); }
-        
-        .step-content { display: none; }
-        .step-content.active { display: block; }
-        
-        .form-field { margin-bottom: 15px; }
-        .form-label { display: block; font-size: 12px; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; }
-        .form-input { width: 100%; background: var(--card); border: 1px solid var(--border); color: white; padding: 10px; border-radius: 4px; }
-        
-        .pay-opts { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-        .pay-opt { flex: 1; background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 10px; border-radius: 4px; cursor: pointer; text-align: center; }
-        .pay-opt.active { background: var(--red); color: white; border-color: var(--red); }
-
-        .pix-box { background: rgba(37,211,102,0.1); border: 1px solid var(--green); padding: 15px; border-radius: 6px; display: none; margin-bottom: 15px; }
-        .pix-box.show { display: block; }
-        .comp-upload { border: 2px dashed var(--border); padding: 15px; text-align: center; cursor: pointer; margin-top: 10px; position: relative; }
-        .comp-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-
-        .btn-next { width: 100%; background: var(--red); color: white; border: none; padding: 14px; border-radius: 4px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
-        .btn-back { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 14px; border-radius: 4px; cursor: pointer; margin-right: 10px; display: none; }
-        
-        .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: var(--black); padding: 20px; z-index: 99; flex-direction: column; gap: 15px; border-bottom: 1px solid var(--border); }
-        .mobile-menu.open { display: flex; }
-        .mobile-menu a { color: white; text-decoration: none; font-size: 18px; text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-
-        @media(max-width: 640px) {
-            .cart-sidebar { width: 100vw; }
-            .products { grid-template-columns: 1fr 1fr; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adega do Motta</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--red:#cc0000;--red-hot:#ff2200;--yellow:#ffcc00;--black:#0a0a0a;--dark:#111111;--card:#1a1a1a;--border:#2a2a2a;--text:#f0f0f0;--muted:#888;--green:#25d366;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--black );color:var(--text);font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;}
+.closed-banner{background:#1a0000;border-bottom:2px solid var(--red);padding:12px 24px;text-align:center;display:none;}
+.closed-banner.show{display:block;}
+.closed-banner-text{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;letter-spacing:1px;color:#ff6666;}
+header{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.logo{display:flex;align-items:center;}
+nav{display:flex;gap:20px;align-items:center;}
+nav>a{color:var(--muted);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:color 0.2s;display:flex;align-items:center;gap:6px;}
+nav>a:hover{color:var(--yellow);}
+.insta-btn{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:white!important;padding:6px 14px;border-radius:4px;}
+.cart-btn{background:var(--red);color:white;border:none;padding:8px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s;}
+.cart-btn:hover{background:var(--red-hot);}
+.cart-count{background:var(--yellow);color:var(--black);font-size:11px;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.hero{position:relative;padding:80px 24px 60px;text-align:center;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(204,0,0,0.25) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{display:inline-block;background:var(--red);color:white;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:4px 14px;border-radius:2px;margin-bottom:20px;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,10vw,100px);line-height:0.95;letter-spacing:3px;margin-bottom:8px;}
+.hero h1 span{background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{color:var(--muted);font-size:16px;margin-bottom:32px;max-width:400px;margin-left:auto;margin-right:auto;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--red);color:white;padding:14px 32px;border:none;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
+.btn-primary:hover{background:var(--red-hot);}
+.btn-outline{background:transparent;color:var(--yellow);padding:14px 32px;border:2px solid var(--yellow);border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;}
+.badges{display:flex;justify-content:center;gap:32px;padding:24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.badge{display:flex;align-items:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.badge-icon{color:var(--yellow);font-size:18px;}
+section{padding:60px 24px;max-width:1200px;margin:0 auto;}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:32px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;}
+.section-line{flex:1;height:1px;background:var(--border);}
+.categories{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap;}
+.cat-btn{background:var(--card);color:var(--muted);border:1px solid var(--border);padding:8px 18px;border-radius:3px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.cat-btn:hover,.cat-btn.active{background:var(--red);color:white;border-color:var(--red);}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.product-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color 0.2s,transform 0.2s;}
+.product-card:hover{border-color:var(--red);transform:translateY(-3px);}
+.product-img{width:100%;height:180px;background:#222;display:flex;align-items:center;justify-content:center;font-size:56px;overflow:hidden;}
+.product-img img{width:100%;height:100%;object-fit:cover;}
+.product-info{padding:14px;}
+.combo-badge{background:var(--yellow);color:var(--black);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-bottom:6px;display:inline-block;}
+.product-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.5px;margin-bottom:4px;}
+.product-vol{color:var(--muted);font-size:13px;margin-bottom:10px;}
+.product-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.product-price{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--yellow);letter-spacing:1px;}
+.add-btn{background:var(--red);color:white;border:none;width:34px;height:34px;border-radius:4px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;font-weight:700;}
+.add-btn:hover{background:var(--red-hot);}
+.skeleton{animation:pulse 1.5s ease-in-out infinite;}
+.skeleton-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.skeleton-img{width:100%;height:180px;background:#222;}
+.skeleton-line{height:14px;background:#2a2a2a;border-radius:4px;margin:8px 14px;}
+.skeleton-line.short{width:60%;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.delivery-section{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+.delivery-option{border:1px solid var(--border);border-radius:6px;padding:20px;text-align:center;transition:border-color 0.2s;cursor:pointer;}
+.delivery-option:hover{border-color:var(--red);}
+.delivery-icon{font-size:36px;margin-bottom:10px;}
+.delivery-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:6px;}
+.delivery-desc{color:var(--muted);font-size:14px;}
+.cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;backdrop-filter:blur(4px);}
+.cart-overlay.open{display:block;}
+.cart-sidebar{position:fixed;right:0;top:0;height:100%;width:420px;max-width:100vw;background:var(--dark);border-left:1px solid var(--border);z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease;}
+.cart-sidebar.open{transform:translateX(0);}
+.cart-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.cart-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;}
+.close-btn{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;}
+.cart-steps{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;}
+.cart-step{flex:1;padding:8px 2px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;}
+.cart-step.active{color:var(--yellow);border-bottom-color:var(--yellow);}
+.cart-step.done{color:var(--green);}
+.cart-body{flex:1;overflow-y:auto;}
+.step-content{display:none;padding:16px 20px;}
+.step-content.active{display:block;}
+.cart-items-list{margin:0 -20px;padding:0 20px;}
+.cart-empty{text-align:center;color:var(--muted);padding:40px 0;font-size:14px;}
+.cart-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:center;}
+.cart-item-thumb{width:44px;height:44px;border-radius:4px;overflow:hidden;background:#222;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.cart-item-thumb img{width:100%;height:100%;object-fit:cover;}
+.cart-item-info{flex:1;min-width:0;}
+.cart-item-name{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cart-item-price{color:var(--yellow);font-size:13px;}
+.cart-item-qty{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.qty-btn{background:var(--border);border:none;color:white;width:24px;height:24px;border-radius:3px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.qty-btn:hover{background:var(--red);}
+.step-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--yellow);margin-bottom:14px;}
+.dtoggle{display:flex;gap:8px;margin-bottom:14px;}
+.dtoggle-btn{flex:1;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:10px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-align:center;}
+.dtoggle-btn.active{background:var(--red);color:white;border-color:var(--red);}
+.form-field{margin-bottom:10px;}
+.form-label{display:block;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.form-input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:4px;font-size:14px;font-family:'Barlow',sans-serif;transition:border-color 0.2s;}
+.form-input:focus{outline:none;border-color:var(--red);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.frete-box{background:rgba(255,204,0,0.06);border:1px solid rgba(255,204,0,0.25);border-radius:6px;padding:12px;margin-top:10px;display:none;}
+.frete-box.show{display:block;}
+.frete-box-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+.frete-box-val{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--yellow);}
+.frete-box-dist{font-size:12px;color:var(--muted);margin-top:2px;}
+.frete-loading{color:var(--muted);font-size:13px;padding:8px 0;display:none;}
+.frete-loading.show{display:block;}
+.fora-area{background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.3);border-radius:6px;padding:12px;margin-top:10px;color:#ff6666;font-size:13px;display:none;}
+.fora-area.show{display:block;}
+.retirada-info{background:rgba(255,204,0,0.06);border:1px solid rgba(255,204,0,0.2);border-radius:6px;padding:14px;margin-top:8px;display:none;}
+.pay-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.pay-opt{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:9px 12px;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.pay-opt.active{background:var(--red);color:white;border-color:var(--red);}
+.pay-disabled-msg{background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.2);border-radius:6px;padding:10px 12px;font-size:13px;color:#ff8888;margin-bottom:10px;display:none;}
+.pay-disabled-msg.show{display:block;}
+.pix-box{background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.3);border-radius:6px;padding:12px;margin-bottom:10px;display:none;}
+.pix-box.show{display:block;}
+.pix-key{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--green);letter-spacing:1px;}
+.comp-upload{border:2px dashed var(--border);border-radius:6px;padding:16px;text-align:center;cursor:pointer;position:relative;margin-top:10px;}
+.comp-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.comp-upload-text{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.comp-ok{color:var(--green);font-size:13px;margin-top:6px;display:none;}
+.cart-footer{padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;}
+.total-row{display:flex;justify-content:space-between;font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.total-final{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--yellow);letter-spacing:1px;margin:6px 0 10px;}
+.footer-btns{display:flex;gap:8px;}
+.btn-back{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 14px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:none;}
+.btn-next{flex:1;background:var(--red);color:white;border:none;padding:12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-next:hover{background:var(--red-hot);}
+.btn-wpp{flex:1;background:var(--green);color:white;border:none;padding:12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-wpp:hover{background:#1fb855;}
+.closed-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;align-items:center;justify-content:center;padding:24px;}
+.closed-modal.show{display:flex;}
+.closed-modal-box{background:var(--dark);border:2px solid var(--red);border-radius:12px;padding:32px 28px;max-width:360px;width:100%;text-align:center;}
+.whatsapp-float{position:fixed;bottom:24px;right:24px;z-index:150;background:var(--green);color:white;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform 0.2s;}
+.whatsapp-float:hover{transform:scale(1.1);}
+footer{background:var(--dark);border-top:1px solid var(--border);text-align:center;padding:32px 24px;color:var(--muted);font-size:14px;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:8px;}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;margin-left:12px;}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:0.3s;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-menu{position:fixed;top:64px;left:0;width:100%;height:calc(100% - 64px);background:var(--black);z-index:99;padding:32px 24px;display:none;flex-direction:column;gap:24px;border-top:1px solid var(--border);}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{color:var(--text);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:12px;}
+@media (max-width:768px){header{padding:0 16px;}nav{display:none;}.hamburger{display:flex;}.hero{padding:60px 20px 40px;}.hero h1{font-size:64px;}.badges{gap:16px;}.delivery-section{grid-template-columns:1fr;}.cart-sidebar{width:100%;}}
+</style>
 </head>
 <body>
+<div class="closed-banner" id="cb"><div class="closed-banner-text">🌙 NO MOMENTO ESTAMOS FECHADOS. ABRIREMOS EM BREVE!</div></div>
 <header>
-    <div class="logo">
-        <img src="https://via.placeholder.com/150x50?text=Adega+do+Motta" alt="Logo" style="height:40px;">
-    </div>
-    <nav>
-        <a href="#" onclick="filterCat(this,'todos' )">🍻 Produtos</a>
-        <a href="#" onclick="openCartDelivery('delivery')">🏍️ Entrega</a>
-        <a href="https://wa.me/5547984217666" target="_blank">💬 WhatsApp</a>
-    </nav>
-    <button class="cart-btn" onclick="toggleCart( )">🛒 Carrinho <span class="cart-count" id="cart-count">0</span></button>
-    <div class="hamburger" onclick="toggleMenu()" style="cursor:pointer; font-size: 24px;">☰</div>
+<div class="logo"><img src="https://jcaquirredesign.github.io/adegadomotta/logotipo.png" alt="Adega do Motta" style="height:44px"></div>
+<nav>
+<a href="#produtos">🍺 Produtos</a>
+<a href="#entrega">🏍️ Entrega</a>
+<a href="https://wa.me/5547984217666" target="_blank">💬 WhatsApp</a>
+<a href="https://instagram.com/adegadomotta" target="_blank" class="insta-btn">📸 Instagram</a>
+</nav>
+<div style="display:flex;align-items:center;">
+<button class="cart-btn" onclick="toggleCart( )">🛒 Carrinho <span class="cart-count" id="cc">0</span></button>
+<button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</div>
 </header>
-
 <div class="mobile-menu" id="mobile-menu">
-    <a href="#" onclick="toggleMenu()">🍻 Produtos</a>
-    <a href="#" onclick="toggleMenu(); openCartDelivery('delivery')">🏍️ Entrega</a>
-    <a href="https://wa.me/5547984217666" target="_blank">💬 WhatsApp</a>
+<a href="#produtos" onclick="toggleMenu()">🍺 Produtos</a>
+<a href="#entrega" onclick="toggleMenu()">🏍️ Entrega</a>
+<a href="https://wa.me/5547984217666" target="_blank" onclick="toggleMenu( )">💬 WhatsApp</a>
+<a href="https://instagram.com/adegadomotta" target="_blank" onclick="toggleMenu( )">📸 Instagram</a>
 </div>
-
-<div class="hero">
-    <div class="hero-tag">Entrega Rápida em Blumenau</div>
-    <h1>Adega <span>do Motta</span></h1>
-    <p>As melhores bebidas da região, entregues na sua porta.</p>
-    <button class="btn-primary" onclick="document.getElementById('produtos' ).scrollIntoView()">Fazer Pedido</button>
+<main>
+<section class="hero">
+<div class="hero-tag">Sede de quê hoje?</div>
+<h1>ADÉGA DO <span>MOTTA</span></h1>
+<p>As melhores bebidas da região, entregues na sua porta.</p>
+<div class="hero-btns">
+<button class="btn-primary" onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">Ver Produtos</button>
+<a href="https://wa.me/5547984217666" target="_blank" class="btn-outline">💬 WhatsApp</a>
 </div>
-
-<section id="produtos">
-    <div class="section-header">
-        <h2 class="section-title">Produtos</h2>
-        <div class="section-line"></div>
-    </div>
-    <div class="categories">
-        <button class="cat-btn active" onclick="filterCat(this,'todos')">Todos</button>
-        <button class="cat-btn" onclick="filterCat(this,'cerveja')">Cervejas</button>
-        <button class="cat-btn" onclick="filterCat(this,'combo')">Combos</button>
-    </div>
-    <div class="products" id="products-grid"></div>
 </section>
-
-<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="badges">
+<div class="badge"><span class="badge-icon">🏍️</span> Delivery Rápido</div>
+<div class="badge"><span class="badge-icon">🏠</span> Retirada na Loja</div>
+<div class="badge"><span class="badge-icon">💳</span> Cartão & Pix</div>
+<div class="badge"><span class="badge-icon">🔒</span> +500 Pedidos</div>
+</div>
+<section id="produtos">
+<div class="section-header"><h2 class="section-title">Produtos</h2><div class="section-line"></div></div>
+<div class="categories" id="cats-grid">
+<button class="cat-btn active" onclick="filterCat(this,'todos' )">Todos</button>
+<button class="cat-btn" onclick="filterCat(this,'combo')">🎁 Combos</button>
+<button class="cat-btn" onclick="filterCat(this,'cervejas')">🍺 Cervejas</button>
+<button class="cat-btn" onclick="filterCat(this,'destilados')">🍸 Destilados</button>
+<button class="cat-btn" onclick="filterCat(this,'vinhos')">🍷 Vinhos</button>
+<button class="cat-btn" onclick="filterCat(this,'sem-alcool')">🥤 Sem Álcool</button>
+<button class="cat-btn" onclick="filterCat(this,'gelo-carvao')">❄️ Gelo & Carvão</button>
+</div>
+<div class="products" id="products-grid"></div>
+</section>
+<section id="entrega">
+<div class="section-header"><h2 class="section-title">Entrega</h2><div class="section-line"></div></div>
+<div class="delivery-section">
+<div class="delivery-option" onclick="openCartDelivery('delivery')">
+<div class="delivery-icon">🏍️</div><div class="delivery-title">Delivery</div>
+<div class="delivery-desc">Receba em casa com agilidade. Taxa calculada por distância.</div>
+</div>
+<div class="delivery-option" onclick="openCartDelivery('retirada')">
+<div class="delivery-icon">🏠</div><div class="delivery-title">Retirada</div>
+<div class="delivery-desc">Faça o pedido e retire direto na nossa loja sem taxas.</div>
+</div>
+</div>
+</section>
+</main>
+<a href="https://wa.me/5547984217666" target="_blank" class="whatsapp-float">💬</a>
+<footer>
+<span class="footer-logo">Adega do Motta</span>
+<p>© 2024 Adega do Motta. Todos os direitos reservados.</p>
+</footer>
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart( )"></div>
 <div class="cart-sidebar" id="cart-sidebar">
-    <div class="cart-header">
-        <h2 style="font-family: 'Bebas Neue';">Seu Pedido</h2>
-        <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size: 24px; cursor:pointer;">✕</button>
-    </div>
-    <div class="cart-body">
-        <div id="sc1" class="step-content active">
-            <div id="cart-items"></div>
-        </div>
-        <div id="sc2" class="step-content">
-            <h3 class="form-label">Endereço de Entrega</h3>
-            <div class="form-field">
-                <input type="text" id="f-rua" class="form-input" placeholder="Rua e Número">
-            </div>
-            <div class="form-field">
-                <input type="text" id="f-bairro" class="form-input" placeholder="Bairro">
-            </div>
-        </div>
-        <div id="sc3" class="step-content">
-            <h3 class="form-label">Pagamento</h3>
-            <div class="pay-opts">
-                <div class="pay-opt active" onclick="setPag(this,'pix')">Pix</div>
-                <div class="pay-opt" onclick="setPag(this,'dinheiro')">Dinheiro</div>
-                <div class="pay-opt" onclick="setPag(this,'cartao')">Cartão</div>
-            </div>
-            <div id="pix-box" class="pix-box show">
-                <p style="font-size: 14px; margin-bottom: 10px;">Chave Pix (CNPJ):  
-<strong>66.816.202/0001-14</strong></p>
-                <div class="comp-upload">
-                    <input type="file" id="f-comp-pix" onchange="onComp()">
-                    <div id="comp-text">📄 Anexar Comprovante</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="cart-footer">
-        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-            <span>Total:</span>
-            <strong id="tf" style="color:var(--yellow); font-size: 24px;">R$ 0,00</strong>
-        </div>
-        <div style="display:flex;">
-            <button class="btn-back" id="bbk" onclick="prevStep()">Voltar</button>
-            <button class="btn-next" id="bnt" onclick="nextStep()">Prosseguir</button>
-        </div>
-    </div>
+<div class="cart-header"><span class="cart-title">Meu Carrinho</span><button class="close-btn" onclick="toggleCart()">✕</button></div>
+<div class="cart-steps">
+<div class="cart-step active" id="s1">1. Itens</div>
+<div class="cart-step" id="s2">2. Entrega</div>
+<div class="cart-step" id="s3">3. Pagamento</div>
+</div>
+<div class="cart-body">
+<div class="step-content active" id="c1"><div id="cart-list"></div></div>
+<div class="step-content" id="c2">
+<div class="step-title">🏍️ Tipo de entrega</div>
+<div class="dtoggle">
+<div class="dtoggle-btn active" id="td" onclick="setEntrega('delivery')">🏍️ Delivery</div>
+<div class="dtoggle-btn" id="tr" onclick="setEntrega('retirada')">🏠 Retirada</div>
+</div>
+<div id="f-delivery">
+<div class="form-field"><label class="form-label">CEP</label><input type="text" class="form-input" id="f-cep" placeholder="00000-000" onblur="calcFrete()"></div>
+<div class="frete-loading" id="fl">Calculando frete...</div>
+<div class="fora-area" id="fa"></div>
+<div class="frete-box" id="fb">
+<div class="frete-box-label">Taxa de Entrega</div>
+<div class="frete-box-val" id="fv">R$ 0,00</div>
+<div class="frete-box-dist" id="fd"></div>
+</div>
+<div class="form-row">
+<div class="form-field"><label class="form-label">Rua</label><input type="text" class="form-input" id="f-rua"></div>
+<div class="form-field"><label class="form-label">Número</label><input type="text" class="form-input" id="f-num"></div>
+</div>
+<div class="form-field"><label class="form-label">Complemento / Ref.</label><input type="text" class="form-input" id="f-comp"></div>
+</div>
+<div id="f-retirada" style="display:none;">
+<div class="retirada-info" style="display:block;">
+<strong>Retirada na Loja:</strong>  
+Rua Sebastião Hermes, 243, Nova Esperança, Blumenau, SC
+</div>
+</div>
+<div class="form-field" style="margin-top:16px;"><label class="form-label">Seu Nome</label><input type="text" class="form-input" id="f-nome"></div>
+<div class="form-field"><label class="form-label">WhatsApp</label><input type="text" class="form-input" id="f-tel" placeholder="(00) 00000-0000"></div>
+</div>
+<div class="step-content" id="c3">
+<div class="step-title">💳 Forma de pagamento</div>
+<div class="pay-opts">
+<div class="pay-opt active" onclick="setPag(this,'pix')">Pix</div>
+<div class="pay-opt" onclick="setPagCartao(this,'cartao-entrega')">Cartão (na entrega)</div>
+<div class="pay-opt" onclick="setPag(this,'dinheiro')">Dinheiro</div>
+</div>
+<div class="pay-disabled-msg" id="pdm">⚠️ Pagamento em cartão disponível apenas para pedidos acima de R$ 50,00.</div>
+<div class="pix-box" id="pix-box">
+<div class="form-label">Chave Pix (CNPJ)</div>
+<div class="pix-key">66.816.202/0001-14</div>
+<div class="comp-upload">
+<input type="file" id="f-comp-pix" accept="image/*,application/pdf" onchange="onComp()">
+<div class="comp-upload-text">📁 Anexar Comprovante</div>
+<div class="comp-ok" id="cok">✅ Comprovante anexado!</div>
+</div>
+</div>
+<div class="form-field" id="troco-f" style="display:none;"><label class="form-label">Troco para quanto?</label><input type="text" class="form-input" id="f-troco"></div>
+<div class="form-field"><label class="form-label">Observações</label><textarea class="form-input" id="f-obs" rows="2" placeholder="Ex: Sem gelo, bater no portão..."></textarea></div>
+</div>
+</div>
+<div class="cart-footer">
+<div class="total-row"><span>Subtotal</span><span id="ts">R$ 0,00</span></div>
+<div class="total-row" id="tf-row"><span>Entrega</span><span id="tfv">R$ 0,00</span></div>
+<div class="total-final" id="tf">R$ 0,00</div>
+<div class="footer-btns">
+<button class="btn-back" id="btb" onclick="prevStep()">← Voltar</button>
+<button class="btn-next" id="bnt" onclick="nextStep()">Continuar →</button>
+<button class="btn-wpp" id="btw" onclick="finalizar()" style="display:none;">Finalizar Pedido 🏍️</button>
+</div>
+</div>
+</div>
+<div class="closed-modal" id="cm">
+<div class="closed-modal-box">
+<div style="font-size:48px;margin-bottom:16px;">🌙</div>
+<h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--red);margin-bottom:12px;">ESTAMOS FECHADOS</h2>
+<p style="color:var(--muted);margin-bottom:24px;">Nosso horário de atendimento é das 18:00 às 02:00. Volte em breve!</p>
+<a href="https://wa.me/5547984217666" target="_blank" class="btn-outline" style="border-color:var(--red );color:var(--red);">Falar no WhatsApp</a>
+</div>
 </div>
 <script>
-    const WPP = "5547984217666";
-    let cart = {};
-    let step = 1;
-    let pag = "pix";
+const SB_URL='https://wxtuartqvtysntvrwwjl.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind4dHVhcnRxdnR5c250dnJ3d2psIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4Mjk0MjIsImV4cCI6MjA5NjQwNTQyMn0.aEIekm1PyetlnI6eBPCCxC2SSd5Ku4Zh66LFr0IQNfQ';
+const WPP='5547984217666';
+const LOJA_END='Rua Sebastião Hermes, 243, Nova Esperança, Blumenau, SC';
+const MAPS='AIzaSyD02Ygj57hd5ZQ42s-T-WdWZM0qMOQp_cc';
+const PROXY_URL='https://script.google.com/macros/s/AKfycbyQGVs_Wh_d5IesFfB7K4rwT_7MscP4krzVkXzgMxwzk31epMYLVMBW25vvaI5ajMQfgw/exec';
+const PIX='66.816.202/0001-14';
+const FRETE=[{max:4,p:9.99},{max:5,p:11.99},{max:6,p:13.99},{max:7,p:15.99},{max:8,p:17.99},{max:9,p:19.99},{max:10,p:21.99},{max:11,p:22.99},{max:12,p:24.99},{max:13,p:26.99},{max:14,p:27.99},{max:15,p:29.99}];
 
-    const prods = [
-        { id: 1, name: "Cerveja Brahma 350ml", price: 5.50, cat: "cerveja", emoji: "🍺" },
-        { id: 2, name: "Combo Gin Tanqueray", price: 180.00, cat: "combo", emoji: "🎁" },
-        { id: 3, name: "Cerveja Heineken 330ml", price: 8.50, cat: "cerveja", emoji: "🍺" }
-    ];
+let prods=[],cat='todos',cart={},step=1,entrega='delivery',pag='pix',frete=0,freteOk=false,lojaOk=true,cartaoOk=true,compFile=null,cfg={};
 
-    function renderProds() {
-        const grid = document.getElementById('products-grid');
-        grid.innerHTML = prods.map(p => `
-            <div class="product-card">
-                <div class="product-img">${p.emoji}</div>
-                <div class="product-info">
-                    <div class="product-name">${p.name}</div>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span class="product-price">R$ ${p.price.toFixed(2)}</span>
-                        <button class="add-btn" onclick="addCart(${p.id})">+</button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
+const fmt=v=>'R$ '+Number(v ).toFixed(2).replace('.',',');
+const sbH={'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`};
+
+async function sbGet(p){const r=await fetch(SB_URL+p,{headers:sbH});return r.json();}
+async function sbPost(p,b){return fetch(SB_URL+p,{method:'POST',headers:{...sbH,'Content-Type':'application/json','Prefer':'return=representation'},body:JSON.stringify(b)});}
+
+async function loadCfg(){
+  try{
+    const d=await sbGet('/rest/v1/configuracoes?select=*');
+    if(d&&d[0]){
+      cfg=d[0];
+      if(!cfg.loja_aberta){document.getElementById('cb').classList.add('show');document.getElementById('cm').classList.add('show');lojaOk=false;}
+      else{const h=new Date().getHours();if(h>=2&&h<18){document.getElementById('cb').classList.add('show');document.getElementById('cm').classList.add('show');lojaOk=false;}}
     }
+  }catch(e){}
+}
 
-    function addCart(id) {
-        const p = prods.find(x => x.id === id);
-        if (!cart[id]) cart[id] = { ...p, qty: 0 };
-        cart[id].qty++;
-        updCart();
-    }
-
-    function updCart() {
-        const items = Object.values(cart);
-        const total = items.reduce((s, i) => s + (i.price * i.qty), 0);
-        document.getElementById('cart-count').textContent = items.reduce((s, i) => s + i.qty, 0);
-        document.getElementById('tf').textContent = `R$ ${total.toFixed(2)}`;
-        
-        const list = document.getElementById('cart-items');
-        if (items.length === 0) {
-            list.innerHTML = '<p style="text-align:center; color:gray;">Carrinho vazio</p>';
-            return;
-        }
-        list.innerHTML = items.map(i => `
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #2a2a2a; padding-bottom:5px;">
-                <span>${i.name} (x${i.qty})</span>
-                <span>R$ ${(i.price * i.qty).toFixed(2)}</span>
-            </div>
-        `).join('');
-    }
-
-    function nextStep() {
-        if (step === 1 && Object.keys(cart).length === 0) return alert("Adicione itens!");
-        if (step === 3) return finalizar();
-        
-        document.getElementById(`sc${step}`).classList.remove('active');
-        step++;
-        document.getElementById(`sc${step}`).classList.add('active');
-        document.getElementById('bbk').style.display = "block";
-        if (step === 3) document.getElementById('bnt').textContent = "Finalizar Pedido";
-    }
-
-    function prevStep() {
-        document.getElementById(`sc${step}`).classList.remove('active');
-        step--;
-        document.getElementById(`sc${step}`).classList.add('active');
-        if (step === 1) document.getElementById('bbk').style.display = "none";
-        document.getElementById('bnt').textContent = "Prosseguir";
-    }
-
-    function setPag(el, type) {
-        pag = type;
-        document.querySelectorAll('.pay-opt').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-        document.getElementById('pix-box').classList.toggle('show', type === 'pix');
-    }
-
-    function onComp() {
-        document.getElementById('comp-text').textContent = "✅ Comprovante Anexado";
-        document.getElementById('comp-text').style.color = "#25d366";
-    }
-
-    function finalizar() {
-        const items = Object.values(cart).map(i => `${i.name} x${i.qty}`).join('\n');
-        const total = document.getElementById('tf').textContent;
-        const msg = `🛒 *Novo Pedido - Adega do Motta*\n\n*Itens:*\n${items}\n\n*Total:* ${total}\n*Pagamento:* ${pag}`;
-        window.open(`https://wa.me/${WPP}?text=${encodeURIComponent(msg )}`, '_blank');
-    }
-
-    function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); document.getElementById('cart-overlay').classList.toggle('open'); }
-    function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
-    function openCartDelivery(t) { toggleCart(); nextStep(); }
-    function filterCat(btn, cat) {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        // Lógica de filtro aqui
-    }
-
+async function loadProds(){
+  try{
+    prods=await sbGet('/rest/v1/produtos?select=*&available=eq.true&order=name.asc');
     renderProds();
+  }catch(e){}
+}
+
+function renderProds(){
+  const grid=document.getElementById('products-grid');
+  const list=cat==='todos'?prods:prods.filter(p=>p.cat===cat);
+  if(!list.length){grid.innerHTML='<div class="products-empty">Nenhum produto nesta categoria.</div>';return;}
+  grid.innerHTML=list.map(p=>{
+    const img=p.img_url?`<img src="${p.img_url}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span>${p.emoji||"🍺"}</span>'">`:`<span>${p.emoji||'🍺'}</span>`;
+    const unavail=p.available===false;
+    return `<div class="product-card" style="${unavail?'opacity:0.65':''}"><div class="product-img" style="position:relative">${img}${unavail?'<div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#ff6666;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px">Sem estoque</div>':''}</div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-vol">${p.vol||''}</div><div class="product-bottom"><span class="product-price">${fmt(p.price)}</span><button class="add-btn" onclick="addCart(${p.id})" ${unavail?'disabled style="opacity:0.4;cursor:not-allowed"':''}>+</button></div></div></div>`;
+  }).join('');
+}
+
+function filterCat(btn,c){cat=c;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderProds();}
+
+function addCart(id){
+  const p=prods.find(x=>x.id===id);
+  if(cart[id]){cart[id].qty++;}else{cart[id]={...p,qty:1};}
+  updCart();if(Object.keys(cart).length===1)toggleCart();
+}
+
+function updQty(id,n){if(cart[id].qty+n<=0){delete cart[id];}else{cart[id].qty+=n;}updCart();}
+
+function updCart(){
+  const list=document.getElementById('cart-list');
+  const items=Object.values(cart);
+  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('cc').textContent=items.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('ts').textContent=fmt(sub);
+  cartaoOk=sub>=50;
+  if(!cartaoOk&&pag==='cartao-entrega')setPag(document.querySelector('.pay-opt'),'pix');
+  
+  const fr=entrega==='delivery'&&freteOk?frete:0;
+  document.getElementById('tfv').textContent=fmt(fr);
+  document.getElementById('tf').textContent=fmt(sub+fr);
+
+  if(!items.length){list.innerHTML='<div class="cart-empty">Seu carrinho está vazio.</div>';return;}
+  list.innerHTML=items.map(i=>`<div class="cart-item"><div class="cart-item-thumb">${i.img_url?`<img src="${i.img_url}">`:`<span>${i.emoji||'🍺'}</span>`}</div><div class="cart-item-info"><div class="cart-item-name">${i.name}</div><div class="cart-item-price">${fmt(i.price)}</div></div><div class="cart-item-qty"><button class="qty-btn" onclick="updQty('${i.id}',-1)">-</button><span>${i.qty}</span><button class="qty-btn" onclick="updQty('${i.id}',1)">+</button></div></div>`).join('');
+}
+
+function goStep(s){
+  step=s;
+  document.querySelectorAll('.cart-step').forEach((el,i)=>el.classList.toggle('active',i+1===s));
+  document.querySelectorAll('.step-content').forEach((el,i)=>el.classList.toggle('active',i+1===s));
+  document.getElementById('btb').style.display=s>1?'block':'none';
+  document.getElementById('bnt').style.display=s<3?'flex':'none';
+  document.getElementById('btw').style.display=s===3?'flex':'none';
+}
+
+function nextStep(){
+  if(step===1){if(!Object.keys(cart).length){alert('Carrinho vazio!');return;}goStep(2);}
+  else if(step===2){
+    const n=document.getElementById('f-nome').value.trim();
+    const t=document.getElementById('f-tel').value.trim();
+    if(!n||!t){alert('Preencha seu nome e WhatsApp!');return;}
+    if(entrega==='delivery'&&!freteOk){alert('Informe um CEP válido!');return;}
+    goStep(3);
+  }
+}
+function prevStep(){goStep(step-1);}
+
+function setEntrega(t){
+  entrega=t;
+  document.getElementById('td').classList.toggle('active',t==='delivery');
+  document.getElementById('tr').classList.toggle('active',t==='retirada');
+  document.getElementById('f-delivery').style.display=t==='delivery'?'block':'none';
+  document.getElementById('f-retirada').style.display=t==='retirada'?'block':'none';
+  document.getElementById('tf-row').style.display=t==='delivery'?'flex':'none';
+  updCart();
+}
+
+async function calcFrete(){
+  const cep=document.getElementById('f-cep').value.replace(/\D/g,'');
+  if(cep.length!==8){freteOk=false;updCart();return;}
+  
+  document.getElementById('fl').classList.add('show');
+  document.getElementById('fb').classList.remove('show');
+  document.getElementById('fa').classList.remove('show');
+
+  try{
+    const r=await fetch(`${PROXY_URL}?origin=${encodeURIComponent(LOJA_END)}&destination=${cep}`);
+    const d=await r.json();
+    document.getElementById('fl').classList.remove('show');
+
+    if(d.status!=='OK'||!d.rows[0].elements[0].distance){
+      document.getElementById('fa').textContent='⚠️ CEP não encontrado. Verifique e tente novamente.';
+      document.getElementById('fa').classList.add('show');
+      return;
+    }
+
+    const elem=d.rows[0].elements[0];
+    if(elem.status==='NOT_FOUND'){
+      document.getElementById('fa').textContent='⚠️ CEP não encontrado. Verifique e tente novamente.';
+      document.getElementById('fa').classList.add('show');
+      return;
+    }
+
+    const km=elem.distance.value/1000;
+    const fp=getFrete(km);
+    if(fp===null){
+      document.getElementById('fa').textContent=`⚠️ Endereço fora da área de entrega (${km.toFixed(1)}km). Máx. 15km. Fale pelo WhatsApp.`;
+      document.getElementById('fa').classList.add('show');
+      return;
+    }
+
+    frete=fp;
+    freteOk=true;
+    document.getElementById('fv').textContent=fmt(fp);
+    document.getElementById('fd').textContent=`${km.toFixed(1)} km da loja · ${elem.duration.text}`;
+    document.getElementById('fb').classList.add('show');
+    updCart();
+
+  }catch(err){
+    document.getElementById('fl').classList.remove('show');
+    document.getElementById('fa').textContent='⚠️ Erro ao calcular frete. Verifique o CEP ou tente novamente.';
+    document.getElementById('fa').classList.add('show');
+    console.error('[Frete] Erro:', err.message);
+  }
+}
+
+function getFrete(km){for(const r of FRETE)if(km<=r.max)return r.p;return null;}
+
+function setPag(el,t){
+  pag=t;document.querySelectorAll('.pay-opt').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  document.getElementById('pix-box').classList.toggle('show',t==='pix');
+  document.getElementById('troco-f').style.display=t==='dinheiro'?'block':'none';
+  document.getElementById('pdm').classList.remove('show');
+}
+function setPagCartao(el,t){if(!cartaoOk){document.getElementById('pdm').classList.add('show');return;}setPag(el,t);}
+function onComp(){compFile=document.getElementById('f-comp-pix').files[0];document.getElementById('cok').style.display=compFile?'block':'none';}
+
+async function finalizar(){
+  if(pag==='pix'&&!compFile){alert('Anexe o comprovante do Pix!');return;}
+  const items=Object.values(cart);
+  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
+  const fr=entrega==='delivery'&&freteOk?frete:0;
+  const tot=sub+fr;
+  const nome=document.getElementById('f-nome').value.trim();
+  const tel=document.getElementById('f-tel').value.trim();
+  const obs=document.getElementById('f-obs').value.trim();
+  const cep=document.getElementById('f-cep')?.value||'';
+  const rua=document.getElementById('f-rua')?.value||'';
+  const num=document.getElementById('f-num')?.value||'';
+  const comp=document.getElementById('f-comp')?.value||'';
+  const troco=document.getElementById('f-troco')?.value||'';
+  const end=entrega==='delivery'?`${rua}, ${num}${comp?' — '+comp:''}, CEP ${cep}`:'Retirada na loja';
+
+  try{await sbPost('/rest/v1/pedidos',{nome,telefone:tel,tipo_entrega:entrega,endereco:end,cep,frete:fr,pagamento:pag,status:'aguardando',subtotal:sub,total:tot,itens:items.map(i=>({id:i.id,name:i.name,qty:i.qty,price:i.price})),observacao:obs});}catch(e){}
+
+  let msg=`🛒 *Pedido — Adega do Motta*\n━━━━━━━━━━━━━━━\n👤 *Cliente:* ${nome}\n📞 *Telefone:* ${tel}\n📍 *Entrega:* ${end}\n💳 *Pagamento:* ${pag.charAt(0).toUpperCase()+pag.slice(1)}`;
+  if(pag==='dinheiro'&&troco)msg+=` (troco para ${troco})`;
+  msg+=`\n━━━━━━━━━━━━━━━\n*Itens:*\n`;
+  items.forEach(i=>{msg+=`• ${i.name} x${i.qty} — ${fmt(i.price*i.qty)}\n`;});
+  msg+=`━━━━━━━━━━━━━━━\n🧾 *Subtotal:* ${fmt(sub)}\n`;
+  if(fr>0)msg+=`🏍️ *Frete:* ${fmt(fr)}\n`;
+  msg+=`💰 *TOTAL: ${fmt(tot)}*`;
+  if(pag==='pix')msg+=`\n⚡ *Pix enviado!* Comprovante em anexo.`;
+  if(obs)msg+=`\n📝 *Obs:* ${obs}`;
+
+  window.open(`https://wa.me/${WPP}?text=${encodeURIComponent(msg )}`,'_blank');
+  cart={};updCart();toggleCart();goStep(1);compFile=null;document.getElementById('cok').style.display='none';
+}
+
+function toggleCart(){document.getElementById('cart-overlay').classList.toggle('open');document.getElementById('cart-sidebar').classList.toggle('open');}
+function toggleMenu(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobile-menu').classList.toggle('open');}
+
+// ===================== COMBOS =====================
+let allCombos=[];
+
+async function loadCombos(){
+  try{
+    allCombos=await sbGet('/rest/v1/combos?select=*,combo_etapas(id,titulo,obrigatorio,ordem,combo_opcoes(id,nome,img_url,preco_extra))&available=eq.true&order=id.asc');
+  }catch(e){}
+}
+
+function renderProdsWithCombos(){
+  const grid=document.getElementById('products-grid');
+  let list=[];
+  if(cat==='todos'){list=[...prods,...allCombos.map(c=>({...c,_isCombo:true,cat:'combo'}))];}
+  else if(cat==='combo'){list=allCombos.map(c=>({...c,_isCombo:true,cat:'combo'}));}
+  else{list=prods.filter(p=>p.cat===cat);}
+  if(!list.length){grid.innerHTML='<div class="products-empty">Nenhum produto nesta categoria.</div>';return;}
+  grid.innerHTML=list.map(p=>{
+    if(p._isCombo){
+      const img=p.img_url?`<img src="${p.img_url}" alt="${p.name}" loading="lazy">`:'<span>🎁</span>';
+      const unavail=p.available===false;
+      return `<div class="product-card" style="${unavail?'opacity:0.6':''}"><div class="product-img">${img}${unavail?'<div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#ff6666;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px">Indisponível</div>':''}</div><div class="product-info"><div class="combo-badge">🎁 Combo</div><div class="product-name">${p.name}</div><div class="product-vol">${p.description||''}</div><div class="product-bottom"><span class="product-price">${fmt(p.price)}</span><button class="add-btn" onclick="openComboBuilder(${p.id})" ${unavail?'disabled style="opacity:0.4;cursor:not-allowed"':''}>+</button></div></div></div>`;
+    }
+    const img=p.img_url?`<img src="${p.img_url}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML='<span>${p.emoji||"🍺"}</span>'">`:`<span>${p.emoji||'🍺'}</span>`;
+    const unavail=p.available===false;
+    return `<div class="product-card" style="${unavail?'opacity:0.65':''}"><div class="product-img" style="position:relative">${img}${unavail?'<div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#ff6666;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px">Sem estoque</div>':''}</div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-vol">${p.vol||''}</div><div class="product-bottom"><span class="product-price">${fmt(p.price)}</span><button class="add-btn" onclick="addCart(${p.id})" ${unavail?'disabled style="opacity:0.4;cursor:not-allowed"':''}>+</button></div></div></div>`;
+  }).join('');
+}
+
+// Override renderProds to use combo version
+function renderProds(){renderProdsWithCombos();}
+
+// COMBO BUILDER
+let comboBuilderData={combo:null,etapaIdx:0,selections:{}};
+
+function openComboBuilder(comboId){
+  const combo=allCombos.find(c=>c.id===comboId);
+  if(!combo)return;
+  comboBuilderData={combo,etapaIdx:0,selections:{}};
+  renderComboBuilderStep();
+  document.getElementById('combo-builder-overlay').style.display='flex';
+}
+
+function renderComboBuilderStep(){
+  const {combo,etapaIdx,selections}=comboBuilderData;
+  const etapas=combo.combo_etapas||[];
+  const modal=document.getElementById('combo-builder-modal');
+
+  if(etapaIdx>=etapas.length){
+    // Resumo final
+    let totalExtra=Object.values(selections).reduce((s,o)=>s+(o.preco_extra||0),0);
+    let resumo=Object.entries(selections).map(([tid,o])=>{
+      const et=etapas.find(e=>e.id==tid);
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        ${o.img_url?`<img src="${o.img_url}" style="width:40px;height:40px;object-fit:cover;border-radius:6px">`:''}
+        <div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700">${et?.titulo||''}</div><div style="color:var(--yellow)">${o.nome}${o.preco_extra>0?` +${fmt(o.preco_extra)}`:''}</div></div>
+      </div>`;
+    }).join('');
+    modal.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">${combo.name}</div>
+        <button onclick="closeComboBuilder()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button>
+      </div>
+      <div style="margin-bottom:16px">${resumo}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Total</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--yellow)">${fmt(combo.price+totalExtra)}</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="comboBuilderData.etapaIdx--;renderComboBuilderStep()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">← Voltar</button>
+        <button onclick="addComboToCart()" style="flex:1;background:var(--red);color:white;border:none;padding:12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">🛒 Adicionar ao carrinho</button>
+      </div>`;
+    return;
+  }
+
+  const etapa=etapas[etapaIdx];
+  const opcoes=etapa.combo_opcoes||[];
+  const sel=selections[etapa.id];
+
+  modal.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">${combo.name}</div>
+      <button onclick="closeComboBuilder()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button>
+    </div>
+    <div style="color:var(--muted);font-size:12px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px">Etapa ${etapaIdx+1} de ${etapas.length}</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;margin-bottom:4px">${etapa.titulo}</div>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:14px">${etapa.obrigatorio?'Escolha uma opção (obrigatório)':'Opcional — pode pular'}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:16px">
+      ${opcoes.map(o=>`
+        <div onclick="selectOpcao(${etapa.id},${o.id})" style="border:2px solid ${sel?.id===o.id?'var(--red)':'var(--border)'};border-radius:8px;padding:10px;text-align:center;cursor:pointer;background:${sel?.id===o.id?'rgba(204,0,0,0.08)':'var(--card)'};transition:all 0.2s">
+          ${o.img_url?`<img src="${o.img_url}" style="width:100%;height:70px;object-fit:cover;border-radius:6px;margin-bottom:6px">`:''}
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px">${o.nome}</div>
+          ${o.preco_extra>0?`<div style="color:var(--yellow);font-size:12px">+${fmt(o.preco_extra)}</div>`:''}
+        </div>`).join('')}
+    </div>
+    <div style="display:flex;gap:8px">
+      ${etapaIdx>0?`<button onclick="comboBuilderData.etapaIdx--;renderComboBuilderStep()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">← Voltar</button>`:''}
+      ${!etapa.obrigatorio?`<button onclick="skipEtapa(${etapa.id})" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 16px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">Pular</button>`:''}
+      <button onclick="nextComboStep(${etapa.id},${etapa.obrigatorio?1:0})" style="flex:1;background:var(--red);color:white;border:none;padding:12px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">Próximo →</button>
+    </div>`;
+}
+
+function selectOpcao(etapaId,opcaoId){
+  const etapa=comboBuilderData.combo.combo_etapas.find(e=>e.id===etapaId);
+  const opcao=etapa?.combo_opcoes.find(o=>o.id===opcaoId);
+  comboBuilderData.selections[etapaId]=opcao;
+  renderComboBuilderStep();
+}
+
+function skipEtapa(etapaId){
+  delete comboBuilderData.selections[etapaId];
+  comboBuilderData.etapaIdx++;
+  renderComboBuilderStep();
+}
+
+function nextComboStep(etapaId,obrig){
+  if(obrig&&!comboBuilderData.selections[etapaId]){alert('Selecione uma opção!');return;}
+  comboBuilderData.etapaIdx++;
+  renderComboBuilderStep();
+}
+
+function addComboToCart(){
+  const {combo,selections}=comboBuilderData;
+  const totalExtra=Object.values(selections).reduce((s,o)=>s+(o.preco_extra||0),0);
+  const cartKey=`combo_${combo.id}_${Date.now()}`;
+  const selDesc=Object.values(selections).map(o=>o.nome).join(', ');
+  cart[cartKey]={id:cartKey,name:combo.name+(selDesc?` (${selDesc})`:''),price:combo.price+totalExtra,qty:1,img_url:combo.img_url,emoji:'🎁',_isCombo:true};
+  updCart();closeComboBuilder();toggleCart();
+}
+
+function closeComboBuilder(){document.getElementById('combo-builder-overlay').style.display='none';}
+
+loadCfg();loadProds();loadCombos();
 </script>
+
+<!-- COMBO BUILDER MODAL -->
+<div id="combo-builder-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)">
+  <div id="combo-builder-modal" style="background:var(--dark);border:1px solid var(--border);border-radius:12px;padding:24px 20px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto"></div>
+</div>
 </body>
 </html>
