@@ -108,3 +108,194 @@
     </style>
 </head>
 <body>
+<header>
+    <div class="logo">
+        <img src="https://via.placeholder.com/150x50?text=Adega+do+Motta" alt="Logo" style="height:40px;">
+    </div>
+    <nav>
+        <a href="#" onclick="filterCat(this,'todos' )">🍻 Produtos</a>
+        <a href="#" onclick="openCartDelivery('delivery')">🏍️ Entrega</a>
+        <a href="https://wa.me/5547984217666" target="_blank">💬 WhatsApp</a>
+    </nav>
+    <button class="cart-btn" onclick="toggleCart( )">🛒 Carrinho <span class="cart-count" id="cart-count">0</span></button>
+    <div class="hamburger" onclick="toggleMenu()" style="cursor:pointer; font-size: 24px;">☰</div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu">
+    <a href="#" onclick="toggleMenu()">🍻 Produtos</a>
+    <a href="#" onclick="toggleMenu(); openCartDelivery('delivery')">🏍️ Entrega</a>
+    <a href="https://wa.me/5547984217666" target="_blank">💬 WhatsApp</a>
+</div>
+
+<div class="hero">
+    <div class="hero-tag">Entrega Rápida em Blumenau</div>
+    <h1>Adega <span>do Motta</span></h1>
+    <p>As melhores bebidas da região, entregues na sua porta.</p>
+    <button class="btn-primary" onclick="document.getElementById('produtos' ).scrollIntoView()">Fazer Pedido</button>
+</div>
+
+<section id="produtos">
+    <div class="section-header">
+        <h2 class="section-title">Produtos</h2>
+        <div class="section-line"></div>
+    </div>
+    <div class="categories">
+        <button class="cat-btn active" onclick="filterCat(this,'todos')">Todos</button>
+        <button class="cat-btn" onclick="filterCat(this,'cerveja')">Cervejas</button>
+        <button class="cat-btn" onclick="filterCat(this,'combo')">Combos</button>
+    </div>
+    <div class="products" id="products-grid"></div>
+</section>
+
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+        <h2 style="font-family: 'Bebas Neue';">Seu Pedido</h2>
+        <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size: 24px; cursor:pointer;">✕</button>
+    </div>
+    <div class="cart-body">
+        <div id="sc1" class="step-content active">
+            <div id="cart-items"></div>
+        </div>
+        <div id="sc2" class="step-content">
+            <h3 class="form-label">Endereço de Entrega</h3>
+            <div class="form-field">
+                <input type="text" id="f-rua" class="form-input" placeholder="Rua e Número">
+            </div>
+            <div class="form-field">
+                <input type="text" id="f-bairro" class="form-input" placeholder="Bairro">
+            </div>
+        </div>
+        <div id="sc3" class="step-content">
+            <h3 class="form-label">Pagamento</h3>
+            <div class="pay-opts">
+                <div class="pay-opt active" onclick="setPag(this,'pix')">Pix</div>
+                <div class="pay-opt" onclick="setPag(this,'dinheiro')">Dinheiro</div>
+                <div class="pay-opt" onclick="setPag(this,'cartao')">Cartão</div>
+            </div>
+            <div id="pix-box" class="pix-box show">
+                <p style="font-size: 14px; margin-bottom: 10px;">Chave Pix (CNPJ):  
+<strong>66.816.202/0001-14</strong></p>
+                <div class="comp-upload">
+                    <input type="file" id="f-comp-pix" onchange="onComp()">
+                    <div id="comp-text">📄 Anexar Comprovante</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cart-footer">
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+            <span>Total:</span>
+            <strong id="tf" style="color:var(--yellow); font-size: 24px;">R$ 0,00</strong>
+        </div>
+        <div style="display:flex;">
+            <button class="btn-back" id="bbk" onclick="prevStep()">Voltar</button>
+            <button class="btn-next" id="bnt" onclick="nextStep()">Prosseguir</button>
+        </div>
+    </div>
+</div>
+<script>
+    const WPP = "5547984217666";
+    let cart = {};
+    let step = 1;
+    let pag = "pix";
+
+    const prods = [
+        { id: 1, name: "Cerveja Brahma 350ml", price: 5.50, cat: "cerveja", emoji: "🍺" },
+        { id: 2, name: "Combo Gin Tanqueray", price: 180.00, cat: "combo", emoji: "🎁" },
+        { id: 3, name: "Cerveja Heineken 330ml", price: 8.50, cat: "cerveja", emoji: "🍺" }
+    ];
+
+    function renderProds() {
+        const grid = document.getElementById('products-grid');
+        grid.innerHTML = prods.map(p => `
+            <div class="product-card">
+                <div class="product-img">${p.emoji}</div>
+                <div class="product-info">
+                    <div class="product-name">${p.name}</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span class="product-price">R$ ${p.price.toFixed(2)}</span>
+                        <button class="add-btn" onclick="addCart(${p.id})">+</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function addCart(id) {
+        const p = prods.find(x => x.id === id);
+        if (!cart[id]) cart[id] = { ...p, qty: 0 };
+        cart[id].qty++;
+        updCart();
+    }
+
+    function updCart() {
+        const items = Object.values(cart);
+        const total = items.reduce((s, i) => s + (i.price * i.qty), 0);
+        document.getElementById('cart-count').textContent = items.reduce((s, i) => s + i.qty, 0);
+        document.getElementById('tf').textContent = `R$ ${total.toFixed(2)}`;
+        
+        const list = document.getElementById('cart-items');
+        if (items.length === 0) {
+            list.innerHTML = '<p style="text-align:center; color:gray;">Carrinho vazio</p>';
+            return;
+        }
+        list.innerHTML = items.map(i => `
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #2a2a2a; padding-bottom:5px;">
+                <span>${i.name} (x${i.qty})</span>
+                <span>R$ ${(i.price * i.qty).toFixed(2)}</span>
+            </div>
+        `).join('');
+    }
+
+    function nextStep() {
+        if (step === 1 && Object.keys(cart).length === 0) return alert("Adicione itens!");
+        if (step === 3) return finalizar();
+        
+        document.getElementById(`sc${step}`).classList.remove('active');
+        step++;
+        document.getElementById(`sc${step}`).classList.add('active');
+        document.getElementById('bbk').style.display = "block";
+        if (step === 3) document.getElementById('bnt').textContent = "Finalizar Pedido";
+    }
+
+    function prevStep() {
+        document.getElementById(`sc${step}`).classList.remove('active');
+        step--;
+        document.getElementById(`sc${step}`).classList.add('active');
+        if (step === 1) document.getElementById('bbk').style.display = "none";
+        document.getElementById('bnt').textContent = "Prosseguir";
+    }
+
+    function setPag(el, type) {
+        pag = type;
+        document.querySelectorAll('.pay-opt').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('pix-box').classList.toggle('show', type === 'pix');
+    }
+
+    function onComp() {
+        document.getElementById('comp-text').textContent = "✅ Comprovante Anexado";
+        document.getElementById('comp-text').style.color = "#25d366";
+    }
+
+    function finalizar() {
+        const items = Object.values(cart).map(i => `${i.name} x${i.qty}`).join('\n');
+        const total = document.getElementById('tf').textContent;
+        const msg = `🛒 *Novo Pedido - Adega do Motta*\n\n*Itens:*\n${items}\n\n*Total:* ${total}\n*Pagamento:* ${pag}`;
+        window.open(`https://wa.me/${WPP}?text=${encodeURIComponent(msg )}`, '_blank');
+    }
+
+    function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); document.getElementById('cart-overlay').classList.toggle('open'); }
+    function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+    function openCartDelivery(t) { toggleCart(); nextStep(); }
+    function filterCat(btn, cat) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // Lógica de filtro aqui
+    }
+
+    renderProds();
+</script>
+</body>
+</html>
