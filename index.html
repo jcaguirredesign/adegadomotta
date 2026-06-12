@@ -1,758 +1,110 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adega do Motta</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{--red:#cc0000;--red-hot:#ff2200;--yellow:#ffcc00;--black:#0a0a0a;--dark:#111111;--card:#1a1a1a;--border:#2a2a2a;--text:#f0f0f0;--muted:#888;--green:#25d366;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--black );color:var(--text);font-family:
-'Barlow',sans-serif;min-height:100vh;overflow-x:hidden;}
-.closed-banner{background:#1a0000;border-bottom:2px solid var(--red);padding:12px 24px;text-align:center;display:none;}
-.closed-banner.show{display:block;}
-.closed-banner-text{font-family:
-'Barlow Condensed',sans-serif;font-size:16px;font-weight:600;letter-spacing:1px;color:#ff6666;}
-header{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px;}
-.logo{display:flex;align-items:center;}
-nav{display:flex;gap:20px;align-items:center;}
-nav>a{color:var(--muted);text-decoration:none;font-family:
-'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:color 0.2s;display:flex;align-items:center;gap:6px;}
-nav>a:hover{color:var(--yellow);}
-.insta-btn{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:white!important;padding:6px 14px;border-radius:4px;}
-.cart-btn{background:var(--red);color:white;border:none;padding:8px 16px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background 0.2s;}
-.cart-btn:hover{background:var(--red-hot);}
-.cart-count{background:var(--yellow);color:var(--black);font-size:11px;font-weight:800;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.hero{position:relative;padding:80px 24px 60px;text-align:center;overflow:hidden;}
-.hero::before{content:
-'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(204,0,0,0.25) 0%,transparent 70%);pointer-events:none;}
-.hero-tag{display:inline-block;background:var(--red);color:white;font-family:
-'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:4px 14px;border-radius:2px;margin-bottom:20px;}
-.hero h1{font-family:
-'Bebas Neue',sans-serif;font-size:clamp(56px,10vw,100px);line-height:0.95;letter-spacing:3px;margin-bottom:8px;}
-.hero h1 span{background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero p{color:var(--muted);font-size:16px;margin-bottom:32px;max-width:400px;margin-left:auto;margin-right:auto;}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-.btn-primary{background:var(--red);color:white;padding:14px 32px;border:none;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;}
-.btn-primary:hover{background:var(--red-hot);}
-.btn-outline{background:transparent;color:var(--yellow);padding:14px 32px;border:2px solid var(--yellow);border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;}
-.badges{display:flex;justify-content:center;gap:32px;padding:24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);flex-wrap:wrap;}
-.badge{display:flex;align-items:center;gap:8px;font-family:
-'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
-.badge-icon{color:var(--yellow);font-size:18px;}
-section{padding:60px 24px;max-width:1200px;margin:0 auto;}
-.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:32px;}
-.section-title{font-family:
-'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;}
-.section-line{flex:1;height:1px;background:var(--border);}
-.categories{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap;}
-.cat-btn{background:var(--card);color:var(--muted);border:1px solid var(--border);padding:8px 18px;border-radius:3px;font-family:
-'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
-.cat-btn:hover,.cat-btn.active{background:var(--red);color:white;border-color:var(--red);}
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
-.product-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:border-color 0.2s,transform 0.2s;}
-.product-card:hover{border-color:var(--red);transform:translateY(-3px);}
-.product-img{width:100%;height:180px;background:#222;display:flex;align-items:center;justify-content:center;font-size:56px;overflow:hidden;}
-.product-img img{width:100%;height:100%;object-fit:cover;}
-.product-info{padding:14px;}
-.combo-badge{background:var(--yellow);color:var(--black);font-family:
-'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-bottom:6px;display:inline-block;}
-.product-name{font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;letter-spacing:0.5px;margin-bottom:4px;}
-.product-vol{color:var(--muted);font-size:13px;margin-bottom:10px;}
-.product-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.product-price{font-family:
-'Bebas Neue',sans-serif;font-size:22px;color:var(--yellow);letter-spacing:1px;}
-.add-btn{background:var(--red);color:white;border:none;width:34px;height:34px;border-radius:4px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;font-weight:700;}
-.add-btn:hover{background:var(--red-hot);}
-.skeleton{animation:pulse 1.5s ease-in-out infinite;}
-.skeleton-card{background:var(--card);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
-.skeleton-img{width:100%;height:180px;background:#222;}
-.skeleton-line{height:14px;background:#2a2a2a;border-radius:4px;margin:8px 14px;}
-.skeleton-line.short{width:60%;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-.delivery-section{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-.delivery-option{border:1px solid var(--border);border-radius:6px;padding:20px;text-align:center;transition:border-color 0.2s;cursor:pointer;}
-.delivery-option:hover{border-color:var(--red);}
-.delivery-icon{font-size:36px;margin-bottom:10px;}
-.delivery-title{font-family:
-'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:6px;}
-.delivery-desc{color:var(--muted);font-size:14px;}
-.cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;backdrop-filter:blur(4px);}
-.cart-overlay.open{display:block;}
-.cart-sidebar{position:fixed;right:0;top:0;height:100%;width:420px;max-width:100vw;background:var(--dark);border-left:1px solid var(--border);z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.3s ease;}
-.cart-sidebar.open{transform:translateX(0);}
-.cart-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.cart-title{font-family:
-'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;}
-.close-btn{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;}
-.cart-steps{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;}
-.cart-step{flex:1;padding:8px 2px;text-align:center;font-family:
-'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;}
-.cart-step.active{color:var(--yellow);border-bottom-color:var(--yellow);}
-.cart-step.done{color:var(--green);}
-.cart-body{flex:1;overflow-y:auto;}
-.step-content{display:none;padding:16px 20px;}
-.step-content.active{display:block;}
-.cart-items-list{margin:0 -20px;padding:0 20px;}
-.cart-empty{text-align:center;color:var(--muted);padding:40px 0;font-size:14px;}
-.cart-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:center;}
-.cart-item-thumb{width:44px;height:44px;border-radius:4px;overflow:hidden;background:#222;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.cart-item-thumb img{width:100%;height:100%;object-fit:cover;}
-.cart-item-info{flex:1;min-width:0;}
-.cart-item-name{font-family:
-'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.cart-item-price{color:var(--yellow);font-size:13px;}
-.cart-item-qty{display:flex;align-items:center;gap:6px;flex-shrink:0;}
-.qty-btn{background:var(--border);border:none;color:white;width:24px;height:24px;border-radius:3px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
-.qty-btn:hover{background:var(--red);}
-.step-title{font-family:
-'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--yellow);margin-bottom:14px;}
-.dtoggle{display:flex;gap:8px;margin-bottom:14px;}
-.dtoggle-btn{flex:1;background:var(--card);border:1px solid var(--border);color:var(--muted);padding:10px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-align:center;}
-.dtoggle-btn.active{background:var(--red);color:white;border-color:var(--red);}
-.form-field{margin-bottom:10px;}
-.form-label{display:block;font-family:
-'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-.form-input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:4px;font-size:14px;font-family:
-'Barlow',sans-serif;transition:border-color 0.2s;}
-.form-input:focus{outline:none;border-color:var(--red);}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.frete-box{background:rgba(255,204,0,0.06);border:1px solid rgba(255,204,0,0.25);border-radius:6px;padding:12px;margin-top:10px;display:none;}
-.frete-box.show{display:block;}
-.frete-box-label{font-family:
-'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
-.frete-box-val{font-family:
-'Bebas Neue',sans-serif;font-size:24px;color:var(--yellow);}
-.frete-box-dist{font-size:12px;color:var(--muted);margin-top:2px;}
-.frete-loading{color:var(--muted);font-size:13px;padding:8px 0;display:none;}
-.frete-loading.show{display:block;}
-.fora-area{background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.3);border-radius:6px;padding:12px;margin-top:10px;color:#ff6666;font-size:13px;display:none;}
-.fora-area.show{display:block;}
-.retirada-info{background:rgba(255,204,0,0.06);border:1px solid rgba(255,204,0,0.2);border-radius:6px;padding:14px;margin-top:8px;display:none;}
-.pay-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-.pay-opt{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:9px 12px;border-radius:6px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
-.pay-opt.active{background:var(--red);color:white;border-color:var(--red);}
-.pay-disabled-msg{background:rgba(204,0,0,0.08);border:1px solid rgba(204,0,0,0.2);border-radius:6px;padding:10px 12px;font-size:13px;color:#ff8888;margin-bottom:10px;display:none;}
-.pay-disabled-msg.show{display:block;}
-.pix-box{background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.3);border-radius:6px;padding:12px;margin-bottom:10px;display:none;}
-.pix-box.show{display:block;}
-.pix-key{font-family:
-'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--green);letter-spacing:1px;}
-.comp-upload{border:2px dashed var(--border);border-radius:6px;padding:16px;text-align:center;cursor:pointer;position:relative;margin-top:10px;}
-.comp-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.comp-upload-text{font-family:
-'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
-.comp-ok{color:var(--green);font-size:13px;margin-top:6px;display:none;}
-.cart-footer{padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0;}
-.total-row{display:flex;justify-content:space-between;font-family:
-'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
-.total-final{font-family:
-'Bebas Neue',sans-serif;font-size:28px;color:var(--yellow);letter-spacing:1px;margin:6px 0 10px;}
-.footer-btns{display:flex;gap:8px;}
-.btn-back{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 14px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;display:none;}
-.btn-next{flex:1;background:var(--red);color:white;border:none;padding:12px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
-.btn-next:hover{background:var(--red-hot);}
-.btn-wpp{flex:1;background:var(--green);color:white;border:none;padding:12px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
-.btn-wpp:hover{background:#1fb855;}
-.closed-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;align-items:center;justify-content:center;padding:24px;}
-.closed-modal.show{display:flex;}
-.closed-modal-box{background:var(--dark);border:2px solid var(--red);border-radius:12px;padding:32px 28px;max-width:360px;width:100%;text-align:center;}
-.whatsapp-float{position:fixed;bottom:24px;right:24px;z-index:150;background:var(--green);color:white;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform 0.2s;}
-.whatsapp-float:hover{transform:scale(1.1);}
-footer{background:var(--dark);border-top:1px solid var(--border);text-align:center;padding:32px 24px;color:var(--muted);font-size:14px;}
-.footer-logo{font-family:
-'Bebas Neue',sans-serif;font-size:24px;background:linear-gradient(135deg,var(--red-hot),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:8px;}
-.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;margin-left:12px;}
-.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all 0.3s;}
-.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
-.hamburger.open span:nth-child(2){opacity:0;}
-.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
-.mobile-menu{display:none;position:fixed;top:56px;left:0;right:0;background:rgba(10,10,10,0.98);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:99;padding:8px 20px 16px;flex-direction:column;}
-.mobile-menu.open{display:flex;}
-.mobile-menu a{color:var(--text);text-decoration:none;font-family:
-'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:13px 0;border-bottom:1px solid var(--border);transition:color 0.2s;display:flex;align-items:center;gap:10px;}
-.mobile-menu a:last-child{border-bottom:none;}
-.products-empty{text-align:center;color:var(--muted);padding:60px 20px;font-size:15px;grid-column:1/-1;}
-@media(max-width:900px){section{padding:48px 20px;}.products{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}}
-@media(max-width:640px){header{padding:0 16px;height:56px;}.logo{font-size:22px;}nav{display:none;}.hamburger{display:flex;}.cart-btn{padding:8px 12px;gap:6px;}.hero{padding:40px 16px 32px;}.hero-btns{flex-direction:column;align-items:center;}.hero-btns>*{width:100%;max-width:300px;}.hero-btns>a{display:block;width:100%;max-width:300px;}.btn-primary{width:100%;}.badges{gap:16px;padding:14px 16px;overflow-x:auto;flex-wrap:nowrap;}.badge{white-space:nowrap;flex-shrink:0;}section{padding:32px 16px;}.categories{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;}.cat-btn{flex-shrink:0;}.products{grid-template-columns:repeat(2,1fr);gap:12px;}.product-img{height:130px;font-size:40px;}.product-info{padding:10px;}.product-name{font-size:14px;}.product-price{font-size:18px;}.add-btn{width:30px;height:30px;font-size:16px;}.delivery-section{grid-template-columns:1fr;padding:20px;gap:16px;}footer{padding:24px 16px;}.cart-sidebar{width:100vw;}.form-row{grid-template-columns:1fr;}}
-@media(min-width:1400px){.hero h1{font-size:120px;}section{max-width:1400px;}.products{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adega do Motta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #cc0000;
+            --red-hot: #ff2200;
+            --yellow: #ffcc00;
+            --black: #0a0a0a;
+            --dark: #111111;
+            --card: #1a1a1a;
+            --border: #2a2a2a;
+            --text: #f0f0f0;
+            --muted: #888;
+            --green: #25d366;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--black ); color: var(--text); font-family: 'Barlow', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+        .closed-banner { background: #1a0000; border-bottom: 2px solid var(--red); padding: 12px 24px; text-align: center; display: none; }
+        .closed-banner.show { display: block; }
+        .closed-banner-text { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 1px; color: #ff6666; }
+
+        header { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+        .logo { display: flex; align-items: center; }
+        nav { display: flex; gap: 20px; align-items: center; }
+        nav > a { color: var(--muted); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
+        nav > a:hover { color: var(--yellow); }
+        
+        .insta-btn { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: white !important; padding: 6px 14px; border-radius: 4px; }
+        .cart-btn { background: var(--red); color: white; border: none; padding: 8px 16px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; }
+        .cart-btn:hover { background: var(--red-hot); }
+        .cart-count { background: var(--yellow); color: var(--black); font-size: 11px; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        .hero { position: relative; padding: 80px 24px 60px; text-align: center; overflow: hidden; }
+        .hero-tag { display: inline-block; background: var(--red); color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 4px 14px; border-radius: 2px; margin-bottom: 20px; }
+        .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 10vw, 100px); line-height: 0.95; letter-spacing: 3px; margin-bottom: 8px; }
+        .hero h1 span { background: linear-gradient(135deg, var(--red-hot), var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { color: var(--muted); font-size: 16px; margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; }
+
+        .btn-primary { background: var(--red); color: white; padding: 14px 32px; border: none; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+        .btn-outline { background: transparent; color: var(--yellow); padding: 14px 32px; border: 2px solid var(--yellow); border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+
+        .badges { display: flex; justify-content: center; gap: 32px; padding: 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+        .badge { display: flex; align-items: center; gap: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+        .badge-icon { color: var(--yellow); font-size: 18px; }
+
+        section { padding: 60px 24px; max-width: 1200px; margin: 0 auto; }
+        .section-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 32px; }
+        .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; }
+        .section-line { flex: 1; height: 1px; background: var(--border); }
+
+        .categories { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
+        .cat-btn { background: var(--card); color: var(--muted); border: 1px solid var(--border); padding: 8px 18px; border-radius: 3px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+        .cat-btn.active { background: var(--red); color: white; border-color: var(--red); }
+
+        .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+        .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+        .product-card:hover { border-color: var(--red); transform: translateY(-3px); }
+        .product-img { width: 100%; height: 180px; background: #222; display: flex; align-items: center; justify-content: center; font-size: 56px; overflow: hidden; position: relative; }
+        .product-img img { width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 14px; }
+        .product-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+        .product-price { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--yellow); }
+        .add-btn { background: var(--red); color: white; border: none; width: 34px; height: 34px; border-radius: 4px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .cart-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; backdrop-filter: blur(4px); }
+        .cart-overlay.open { display: block; }
+        .cart-sidebar { position: fixed; right: 0; top: 0; height: 100%; width: 420px; max-width: 100vw; background: var(--dark); border-left: 1px solid var(--border); z-index: 201; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.3s ease; }
+        .cart-sidebar.open { transform: translateX(0); }
+        
+        .cart-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .cart-body { flex: 1; overflow-y: auto; padding: 20px; }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border); background: var(--dark); }
+        
+        .step-content { display: none; }
+        .step-content.active { display: block; }
+        
+        .form-field { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 12px; color: var(--muted); text-transform: uppercase; margin-bottom: 5px; }
+        .form-input { width: 100%; background: var(--card); border: 1px solid var(--border); color: white; padding: 10px; border-radius: 4px; }
+        
+        .pay-opts { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .pay-opt { flex: 1; background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 10px; border-radius: 4px; cursor: pointer; text-align: center; }
+        .pay-opt.active { background: var(--red); color: white; border-color: var(--red); }
+
+        .pix-box { background: rgba(37,211,102,0.1); border: 1px solid var(--green); padding: 15px; border-radius: 6px; display: none; margin-bottom: 15px; }
+        .pix-box.show { display: block; }
+        .comp-upload { border: 2px dashed var(--border); padding: 15px; text-align: center; cursor: pointer; margin-top: 10px; position: relative; }
+        .comp-upload input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+        .btn-next { width: 100%; background: var(--red); color: white; border: none; padding: 14px; border-radius: 4px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
+        .btn-back { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 14px; border-radius: 4px; cursor: pointer; margin-right: 10px; display: none; }
+        
+        .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: var(--black); padding: 20px; z-index: 99; flex-direction: column; gap: 15px; border-bottom: 1px solid var(--border); }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a { color: white; text-decoration: none; font-size: 18px; text-transform: uppercase; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+
+        @media(max-width: 640px) {
+            .cart-sidebar { width: 100vw; }
+            .products { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
 </head>
 <body>
-
-<div class="closed-banner" id="closed-banner">
-  <div class="closed-banner-text">🔴 Loja fechada · Atendimento das 18:00 às 02:00</div>
-</div>
-
-<header>
-  <div class="logo"><img src="data:image/jpeg;base64,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
-<script>
-const SB_URL=
-'https://wxtuartqvtysntvrwwjl.supabase.co';
-const SB_KEY=
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind4dHVhcnRxdnR5c250dnJ3d2psIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4Mjk0MjIsImV4cCI6MjA5NjQwNTQyMn0.aEIekm1PyetlnI6eBPCCxC2SSd5Ku4Zh66LFr0IQNfQ';
-const WPP=
-'5547984217666';
-const LOJA_END=
-'Rua Sebastião Hermes, 243, Nova Esperança, Blumenau, SC';
-const MAPS=
-'AIzaSyD02Ygj57hd5ZQ42s-T-WdWZM0qMOQp_cc';
-const PROXY_URL=
-'https://script.google.com/macros/s/AKfycbyQGVs_Wh_d5IesFfB7K4rwT_7MscP4krzVkXzgMxwzk31epMYLVMBW25vvaI5ajMQfgw/exec';
-const PIX=
-'66.816.202/0001-14';
-const FRETE=[{max:4,p:9.99},{max:5,p:11.99},{max:6,p:13.99},{max:7,p:15.99},{max:8,p:17.99},{max:9,p:19.99},{max:10,p:21.99},{max:11,p:22.99},{max:12,p:24.99},{max:13,p:26.99},{max:14,p:27.99},{max:15,p:29.99}];
-
-let prods=[],cat=
-'todos',cart={},step=1,entrega=
-'delivery',pag=
-'pix',frete=0,freteOk=false,lojaOk=true,cartaoOk=true,compFile=null,cfg={};
-
-const fmt=v=>
-'R$ '
-+Number(v ).toFixed(2).replace(
-'.',
-',
-');
-const sbH={
-'apikey':SB_KEY,
-'Authorization':`Bearer ${SB_KEY}`};
-
-async function sbGet(p){const r=await fetch(SB_URL+p,{headers:sbH});return r.json();}
-async function sbPost(p,b){return fetch(SB_URL+p,{method:
-'POST',
-headers:{...sbH,
-'Content-Type':
-'application/json',
-'Prefer':
-'return=representation'},
-body:JSON.stringify(b)});}
-
-async function loadCfg(){
-  try{
-    const d=await sbGet(
-'/rest/v1/config_loja?id=eq.1&select=*');
-    if(d&&d[0]){cfg=d[0];cartaoOk=cfg.cartao_ativo!==false;lojaOk=calcAberta(cfg);
-      if(cfg.site_ativo===false){
-        document.body.innerHTML=
-'<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0a0a;font-family:Barlow Condensed,sans-serif;text-align:center;padding:24px"><div><div style="font-size:56px;margin-bottom:16px">🛠️</div><div style="font-family:Bebas Neue,sans-serif;font-size:48px;color:#cc0000;letter-spacing:3px;margin-bottom:8px">Em Manutenção</div><div style="color:#888;font-size:18px;letter-spacing:1px">Estamos fazendo melhorias. Volte em breve!</div></div></div>';
-        return;
-      }
-      document.getElementById(
-'closed-banner').classList.toggle(
-'show',!lojaOk);
-      if(!lojaOk){document.getElementById(
-'cm-msg').textContent=cfg.msg_fechada||
-'Estamos fechados.';document.getElementById(
-'cm-time').textContent=`${cfg.hora_abertura||
-'18:00'} às ${cfg.hora_fechamento||
-'02:00'}`;}
-    }
-  }catch(e){}
-}
-
-function calcAberta(c){
-  if(c.abertura_manual!==undefined&&c.abertura_manual)return c.loja_aberta;
-  const h=new Date().getHours();const ab=parseInt((c.hora_abertura||
-'18:00'));const fe=parseInt((c.hora_fechamento||
-'2:00'));
-  return ab>fe?h>=ab||h<fe:h>=ab&&h<fe;
-}
-
-async function loadProds(){
-  showSkel();
-  try{prods=await sbGet(
-'/rest/v1/produtos?select=*&order=id.asc');renderProds();}
-  catch(e){document.getElementById(
-'products-grid').innerHTML=
-'<div class="products-empty">😕 Erro ao carregar. Recarregue a página.</div>';}
-}
-
-function showSkel(){document.getElementById(
-'products-grid').innerHTML=Array(8).fill(0).map(()=>
-'<div class="skeleton-card skeleton"><div class="skeleton-img"></div><div class="skeleton-line" style="margin-top:14px"></div><div class="skeleton-line short"></div><div class="skeleton-line" style="margin-bottom:14px"></div></div>').join(
-'');}
-
-function filterCat(b,c){document.querySelectorAll(
-'.cat-btn').forEach(x=>x.classList.remove(
-'active'));b.classList.add(
-'active');cat=c;renderProds();}
-
-function addCart(id){const p=prods.find(x=>x.id===id);if(!p)return;if(!cart[id])cart[id]={...p,qty:0};cart[id].qty++;updCart();}
-function remCart(id){if(!cart[id])return;cart[id].qty--;if(cart[id].qty<=0)delete cart[id];updCart();}
-
-function updCart(){
-  const items=Object.values(cart);
-  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
-  const fr=entrega===
-'delivery'&&freteOk?frete:0;
-  const tot=sub+fr;
-  const cnt=items.reduce((s,i)=>s+i.qty,0);
-  document.getElementById(
-'cart-count').textContent=cnt;
-  document.getElementById(
-'sv').textContent=fmt(sub);
-  document.getElementById(
-'tf').textContent=fmt(tot);
-  document.getElementById(
-'fr-row').style.display=fr>0?
-'flex':
-'none';
-  document.getElementById(
-'frv').textContent=fmt(fr);
-  const c=document.getElementById(
-'cart-items');
-  if(!items.length){c.innerHTML=
-'<div class="cart-empty">Seu carrinho está vazio.  
-Adicione produtos!</div>';return;}
-  c.innerHTML=items.map(i=>{
-    const t=i.img_url?`<div class="cart-item-thumb"><img src="${i.img_url}"></div>`:`<div class="cart-item-thumb">${i.emoji||
-'🍺'}</div>`;
-    return `<div class="cart-item">${t}<div class="cart-item-info"><div class="cart-item-name">${i.name}</div><div class="cart-item-price">${fmt(i.price*i.qty)}</div></div><div class="cart-item-qty"><button class="qty-btn" onclick="remCart(${i.id})">−</button><span>${i.qty}</span><button class="qty-btn" onclick="addCart(${i.id})">+</button></div></div>`;
-  }).join(
-'');
-}
-
-function goStep(n){
-  document.querySelectorAll(
-'.step-content').forEach(s=>s.classList.remove(
-'active'));
-  document.getElementById(`sc${n}`).classList.add(
-'active');
-  [
-'si1',
-'si2',
-'si3',
-'si4'].forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove(
-'active',
-'done');if(i+1<n)el.classList.add(
-'done');if(i+1===n)el.classList.add(
-'active');});
-  step=n;
-  document.getElementById(
-'bbk').style.display=n>1?
-'block':
-'none';
-  document.getElementById(
-'bnt').textContent=n===4?
-'Finalizar →':
-'Continuar →';
-}
-
-function nextStep(){
-  if(step===1){if(!Object.keys(cart).length){alert(
-'Adicione produtos!');return;}if(!lojaOk){document.getElementById(
-'cm').classList.add(
-'show');return;}goStep(2);}
-  else if(step===2){
-    if(entrega===
-'delivery'){const cep=document.getElementById(
-'f-cep').value.replace(/\D/g,
-'');if(cep.length!==8){alert(
-'Digite um CEP válido!');return;}if(!freteOk){alert(
-'Aguarde o cálculo do frete!');return;}}
-    goStep(3);
-  }
-  else if(step===3){const n=document.getElementById(
-'f-nome').value.trim();const t=document.getElementById(
-'f-tel').value.trim();if(!n){alert(
-'Digite seu nome!');return;}if(!t){alert(
-'Digite seu telefone!');return;}goStep(4);}
-  else if(step===4){finalizar();}
-}
-function prevStep(){goStep(step-1);}
-
-function setEntrega(t){
-  entrega=t;
-  document.getElementById(
-'td').classList.toggle(
-'active',t===
-'delivery');
-  document.getElementById(
-'tr').classList.toggle(
-'active',t===
-'retirada');
-  document.getElementById(
-'del-fields').style.display=t===
-'delivery'?
-'block':
-'none';
-  document.getElementById(
-'ri').style.display=t===
-'retirada'?
-'block':
-'none';
-  if(t===
-'retirada'){freteOk=true;frete=0;}
-  updCart();
-}
-
-function openCartDelivery(t){setEntrega(t);toggleCart();}
-
-function fmtCep(el){
-  let v=el.value.replace(/\D/g,
-'');if(v.length>5)v=v.slice(0,5)+
-'-
-'+v.slice(5,8);el.value=v;
-  if(v.replace(
-'-
-',
-'').length===8)calcFrete(v.replace(
-'-
-',
-''));
-}
-
-async function calcFrete(cep){
-  document.getElementById(
-'fl').classList.add(
-'show');
-  document.getElementById(
-'fb').classList.remove(
-'show');
-  document.getElementById(
-'fa').classList.remove(
-'show');
-  freteOk=false;
-  try{
-    const r=await fetch(`https://viacep.com.br/ws/${cep}/json/` );
-    const d=await r.json();
-    if(!d.erro){
-      const rua=(d.logradouro||
-'').trim();
-      const bairro=(d.bairro||
-'').trim();
-      document.getElementById(
-'f-rua').value=[rua,bairro].filter(Boolean).join(
-', '
-);
-    }
-  }catch(e){}
-  try{
-    const dest=encodeURIComponent(`CEP ${cep}, Blumenau, SC, Brasil`);
-    const orig=encodeURIComponent(LOJA_END);
-    const url=`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${orig}&destinations=${dest}&key=${MAPS}&mode=driving&language=pt-BR`;
-    const r=await fetch(url );
-    const d=await r.json();
-    document.getElementById(
-'fl').classList.remove(
-'show');
-    if(d.status!==
-'OK') throw new Error(
-'Maps retornou status: '
-+d.status);
-    const elem=d.rows?.[0]?.elements?.[0];
-    if(!elem||elem.status!==
-'OK'){
-      document.getElementById(
-'fa').textContent=
-'⚠️ CEP não encontrado. Verifique e tente novamente.';
-      document.getElementById(
-'fa').classList.add(
-'show');
-      return;
-    }
-    const km=elem.distance.value/1000;
-    const fp=getFrete(km);
-    if(fp===null){
-      document.getElementById(
-'fa').textContent=`⚠️ Endereço fora da área de entrega (${km.toFixed(1)}km). Máx. 15km. Fale pelo WhatsApp.`;
-      document.getElementById(
-'fa').classList.add(
-'show');
-      return;
-    }
-    frete=fp;
-    freteOk=true;
-    document.getElementById(
-'fv').textContent=fmt(fp);
-    document.getElementById(
-'fd').textContent=`${km.toFixed(1)} km da loja · ${elem.duration.text}`;
-    document.getElementById(
-'fb').classList.add(
-'show');
-    updCart();
-  }catch(err){
-    document.getElementById(
-'fl').classList.remove(
-'show');
-    document.getElementById(
-'fa').textContent=
-'⚠️ Erro ao calcular frete. Verifique o CEP ou tente novamente.';
-    document.getElementById(
-'fa').classList.add(
-'show');
-  }
-}
-
-function getFrete(km){for(const r of FRETE)if(km<=r.max)return r.p;return null;}
-
-function setPag(el,t){
-  pag=t;document.querySelectorAll(
-'.pay-opt').forEach(b=>b.classList.remove(
-'active'));el.classList.add(
-'active');
-  document.getElementById(
-'pix-box').classList.toggle(
-'show',t===
-'pix');
-  document.getElementById(
-'troco-f').style.display=t===
-'dinheiro'?
-'block':
-'none';
-  document.getElementById(
-'pdm').classList.remove(
-'show');
-}
-function setPagCartao(el,t){if(!cartaoOk){document.getElementById(
-'pdm').classList.add(
-'show');return;}setPag(el,t);}
-function onComp(){compFile=document.getElementById(
-'f-comp-pix').files[0];document.getElementById(
-'cok').style.display=compFile?
-'block':
-'none';}
-
-async function finalizar(){
-  if(pag===
-'pix'&&!compFile){alert(
-'Anexe o comprovante do Pix!');return;}
-  const items=Object.values(cart);
-  const sub=items.reduce((s,i)=>s+i.price*i.qty,0);
-  const fr=entrega===
-'delivery'&&freteOk?frete:0;
-  const tot=sub+fr;
-  const nome=document.getElementById(
-'f-nome').value.trim();
-  const tel=document.getElementById(
-'f-tel').value.trim();
-  const obs=document.getElementById(
-'f-obs').value.trim();
-  const cep=document.getElementById(
-'f-cep')?.value||
-'';
-  const rua=document.getElementById(
-'f-rua')?.value||
-'';
-  const num=document.getElementById(
-'f-num')?.value||
-'';
-  const comp=document.getElementById(
-'f-comp')?.value||
-'';
-  const troco=document.getElementById(
-'f-troco')?.value||
-'';
-  const end=entrega===
-'delivery'?`${rua}, ${num}${comp?
-' — '
-+comp:
-''},
- CEP ${cep}`:
-'Retirada na loja';
-  try{await sbPost(
-'/rest/v1/pedidos',{nome,telefone:tel,tipo_entrega:entrega,endereco:end,cep,frete:fr,pagamento:pag,status:
-'aguardando',subtotal:sub,total:tot,itens:items.map(i=>({id:i.id,name:i.name,qty:i.qty,price:i.price})),observacao:obs});}catch(e){}
-  let msg=`🛒 *Pedido — Adega do Motta*\n━━━━━━━━━━━━━━━\n👤 *Cliente:* ${nome}\n📞 *Telefone:* ${tel}\n📍 *Entrega:* ${end}\n💳 *Pagamento:* ${pag.charAt(0).toUpperCase()+pag.slice(1)}`;
-  if(pag===
-'dinheiro'&&troco)msg+=` (troco para ${troco})`;
-  msg+=`\n━━━━━━━━━━━━━━━\n*Itens:*\n`;
-  items.forEach(i=>{msg+=`• ${i.name} x${i.qty} — ${fmt(i.price*i.qty)}\n`;});
-  msg+=`━━━━━━━━━━━━━━━\n🧾 *Subtotal:* ${fmt(sub)}\n`;
-  if(fr>0)msg+=`🏍️ *Frete:* ${fmt(fr)}\n`;
-  msg+=`💰 *TOTAL: ${fmt(tot)}*`;
-  if(pag===
-'pix')msg+=`\n⚡ *Pix enviado!* Comprovante em anexo.`;
-  if(obs)msg+=`\n📝 *Obs:* ${obs}`;
-  window.open(`https://wa.me/${WPP}?text=${encodeURIComponent(msg )}`,
-'_blank');
-  cart={};updCart();toggleCart();goStep(1);compFile=null;document.getElementById(
-'cok').style.display=
-'none';
-}
-
-function toggleCart(){document.getElementById(
-'cart-overlay').classList.toggle(
-'open');document.getElementById(
-'cart-sidebar').classList.toggle(
-'open');}
-function toggleMenu(){document.getElementById(
-'hamburger').classList.toggle(
-'open');document.getElementById(
-'mobile-menu').classList.toggle(
-'open');}
-
-let allCombos=[];
-async function loadCombos(){
-  try{allCombos=await sbGet(
-'/rest/v1/combos?select=*,combo_etapas(id,titulo,obrigatorio,ordem,combo_opcoes(id,nome,img_url,preco_extra))&available=eq.true&order=id.asc');}catch(e){}
-}
-
-function renderProdsWithCombos(){
-  const grid=document.getElementById(
-'products-grid');
-  let list=[];
-  if(cat===
-'todos'){list=[...prods,...allCombos.map(c=>({...c,_isCombo:true,cat:
-'combo'}))];}
-  else if(cat===
-'combo'){list=allCombos.map(c=>({...c,_isCombo:true,cat:
-'combo'}))];}
-  else{list=prods.filter(p=>p.cat===cat);}
-  if(!list.length){grid.innerHTML=
-'<div class="products-empty">Nenhum produto nesta categoria.</div>';return;}
-  grid.innerHTML=list.map(p=>{
-    if(p._isCombo){
-      const img=p.img_url?`<img src="${p.img_url}" alt="${p.name}" loading="lazy">`:
-'<span>🎁</span>';
-      const unavail=p.available===false;
-      return `<div class="product-card" style="${unavail?
-'opacity:0.6':
-''}"><div class="product-img">${img}${unavail?
-'<div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#ff6666;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px">Indisponível</div>':
-''}
-</div><div class="product-info"><div class="combo-badge">🎁 Combo</div><div class="product-name">${p.name}</div><div class="product-vol">${p.description||
-''}
-</div><div class="product-bottom"><span class="product-price">${fmt(p.price)}</span><button class="add-btn" onclick="openComboBuilder(${p.id})" ${unavail?
-'disabled style="opacity:0.4;cursor:not-allowed"':
-''}
->+</button></div></div></div>`;
-    }
-    const img=p.img_url?`<img src="${p.img_url}" alt="${p.name}" loading="lazy" onerror="this.parentElement.innerHTML=
-'<span>${p.emoji||
-"🍺"}</span>'
-">`:`<span>${p.emoji||
-'🍺'}</span>`;
-    const unavail=p.available===false;
-    return `<div class="product-card" style="${unavail?
-'opacity:0.65':
-''}"><div class="product-img" style="position:relative">${img}${unavail?
-'<div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.75);color:#ff6666;font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px">Sem estoque</div>':
-''}
-</div><div class="product-info"><div class="product-name">${p.name}</div><div class="product-vol">${p.vol||
-''}
-</div><div class="product-bottom"><span class="product-price">${fmt(p.price)}</span><button class="add-btn" onclick="addCart(${p.id})" ${unavail?
-'disabled style="opacity:0.4;cursor:not-allowed"':
-''}
->+</button></div></div></div>`;
-  }).join(
-'');
-}
-
-function renderProds(){renderProdsWithCombos();}
-
-let comboBuilderData={combo:null,etapaIdx:0,selections:{}};
-function openComboBuilder(comboId){
-  const combo=allCombos.find(c=>c.id===comboId);
-  if(!combo)return;
-  comboBuilderData={combo,etapaIdx:0,selections:{}};
-  renderComboBuilderStep();
-  document.getElementById(
-'combo-builder-overlay').style.display=
-'flex';
-}
-
-function renderComboBuilderStep(){
-  const {combo,etapaIdx,selections}=comboBuilderData;
-  const etapas=combo.combo_etapas||[];
-  const modal=document.getElementById(
-'combo-builder-modal');
-  if(etapaIdx>=etapas.length){
-    let totalExtra=Object.values(selections).reduce((s,o)=>s+(o.preco_extra||0),0);
-    let resumo=Object.entries(selections).map(([tid,o])=>{
-      const et=etapas.find(e=>e.id==tid);
-      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">${o.img_url?`<img src="${o.img_url}" style="width:40px;height:40px;object-fit:cover;border-radius:6px">`:
-''}
-<div><div style="font-family:
-'Barlow Condensed',sans-serif;font-weight:700">${et?.titulo||
-''}
-</div><div style="color:var(--yellow)">${o.nome}${o.preco_extra>0?` +${fmt(o.preco_extra)}`:
-''}
-</div></div></div>`;
-    }).join(
-'');
-    modal.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-family:
-'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">${combo.name}</div><button onclick="closeComboBuilder()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button></div><div style="margin-bottom:16px">${resumo}</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><span style="font-family:
-'Barlow Condensed',sans-serif;font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Total</span><span style="font-family:
-'Bebas Neue',sans-serif;font-size:28px;color:var(--yellow)">${fmt(combo.price+totalExtra)}</span></div><div style="display:flex;gap:8px"><button onclick="comboBuilderData.etapaIdx--;renderComboBuilderStep()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 16px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">← Voltar</button><button onclick="addComboToCart()" style="flex:1;background:var(--red);color:white;border:none;padding:12px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">🛒 Adicionar ao carrinho</button></div>`;
-    return;
-  }
-  const etapa=etapas[etapaIdx];
-  const opcoes=etapa.combo_opcoes||[];
-  const sel=selections[etapa.id];
-  modal.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><div style="font-family:
-'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px">${combo.name}</div><button onclick="closeComboBuilder()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer">✕</button></div><div style="color:var(--muted);font-size:12px;font-family:
-'Barlow Condensed',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px">Etapa ${etapaIdx+1} de ${etapas.length}</div><div style="font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;margin-bottom:4px">${etapa.titulo}</div><div style="color:var(--muted);font-size:13px;margin-bottom:14px">${etapa.obrigatorio?
-'Escolha uma opção (obrigatório)':
-'Opcional — pode pular'}
-</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:16px">${opcoes.map(o=>`<div onclick="selectOpcao(${etapa.id},${o.id})" style="border:2px solid ${sel?.id===o.id?
-'var(--red)':
-'var(--border)'};
-border-radius:8px;padding:10px;text-align:center;cursor:pointer;background:${sel?.id===o.id?
-'rgba(204,0,0,0.08)':
-'var(--card)'};
-transition:all 0.2s">${o.img_url?`<img src="${o.img_url}" style="width:100%;height:70px;object-fit:cover;border-radius:6px;margin-bottom:6px">`:
-''}
-<div style="font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:14px">${o.nome}</div>${o.preco_extra>0?`<div style="color:var(--yellow);font-size:12px">+${fmt(o.preco_extra)}</div>`:
-''}
-</div>`).join(
-'')}
-</div><div style="display:flex;gap:8px">${etapaIdx>0?`<button onclick="comboBuilderData.etapaIdx--;renderComboBuilderStep()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 16px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">← Voltar</button>`:
-''}
-${!etapa.obrigatorio?`<button onclick="skipEtapa(${etapa.id})" style="background:var(--card);border:1px solid var(--border);color:var(--muted);padding:12px 16px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">Pular</button>`:
-''}
-<button onclick="nextComboStep(${etapa.id},${etapa.obrigatorio?1:0})" style="flex:1;background:var(--red);color:white;border:none;padding:12px;border-radius:4px;font-family:
-'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:1px;text-transform:uppercase;cursor:pointer">Próximo →</button></div>`;
-}
-
-function selectOpcao(etapaId,opcaoId){
-  const etapa=comboBuilderData.combo.combo_etapas.find(e=>e.id===etapaId);
-  const opcao=etapa?.combo_opcoes.find(o=>o.id===opcaoId);
-  comboBuilderData.selections[etapaId]=opcao;
-  renderComboBuilderStep();
-}
-function skipEtapa(etapaId){ delete comboBuilderData.selections[etapaId]; comboBuilderData.etapaIdx++; renderComboBuilderStep(); }
-function nextComboStep(etapaId,obrig){ if(obrig&&!comboBuilderData.selections[etapaId]){alert(
-'Selecione uma opção!');return;} comboBuilderData.etapaIdx++; renderComboBuilderStep(); }
-
-function addComboToCart(){
-  const {combo,selections}=comboBuilderData;
-  const totalExtra=Object.values(selections).reduce((s,o)=>s+(o.preco_extra||0),0);
-  const cartKey=`combo_${combo.id}_${Date.now()}`;
-  const selDesc=Object.values(selections).map(o=>o.nome).join(
-', '
-);
-  cart[cartKey]={id:cartKey,name:combo.name+(selDesc?` (${selDesc})`:
-''),price:combo.price+totalExtra,qty:1,img_url:combo.img_url,emoji:
-'🎁',_isCombo:true};
-  updCart();closeComboBuilder();toggleCart();
-}
-function closeComboBuilder(){document.getElementById(
-'combo-builder-overlay').style.display=
-'none';}
-loadCfg();loadProds();loadCombos();
-</script>
-
-<!-- COMBO BUILDER MODAL -->
-<div id="combo-builder-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)">
-  <div id="combo-builder-modal" style="background:var(--dark);border:1px solid var(--border);border-radius:12px;padding:24px 20px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto"></div>
-</div>
-</body>
-</html>
